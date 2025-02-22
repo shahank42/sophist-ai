@@ -18,10 +18,15 @@ import {
   findPathToNode,
   getNodeLevel,
   updateNodeAndChildrenCompletion,
+  updateParentNodesCompletion,
 } from "./utils";
 import MindmapNode from "./mind-map-node";
 import { updateTreeNodeChildren } from "./utils";
-import { appendNodesFn, generateNodeChildrenFn } from "@/lib/server/rpc/nodes";
+import {
+  appendNodesFn,
+  generateNodeChildrenFn,
+  setNodeAndParentsCompletedFn,
+} from "@/lib/server/rpc/nodes";
 import { useArticleContent } from "@/hooks/use-article-content";
 import { getRouteApi } from "@tanstack/react-router";
 import { set } from "zod";
@@ -129,14 +134,82 @@ const Mindmap: React.FC<MindmapProps> = ({
 
   const handleNodeCompletion = useCallback(
     async (nodeId: string, completed: boolean) => {
-      setData(
-        (prevData) =>
-          prevData &&
-          updateNodeAndChildrenCompletion(prevData, nodeId, completed)
-      );
+      setData((prevData) => {
+        if (!prevData) return prevData;
+
+        // Get the path to the current node
+        const path = findPathToNode(prevData, nodeId)?.slice(0, -1) || [];
+
+        // First update the node and its children
+        const updatedData = updateNodeAndChildrenCompletion(
+          prevData,
+          nodeId,
+          completed
+        );
+
+        // Then update parent nodes
+        const finalData = updateParentNodesCompletion(
+          updatedData,
+          nodeId,
+          path
+        );
+
+        // Collect all affected nodes and their new completion states
+        interface NodeUpdate {
+          nodeId: string;
+          completed: boolean;
+        }
+        const nodeUpdates: NodeUpdate[] = [];
+
+        // Add the target node and all its children
+        const collectChildUpdates = (node: HeadingNode) => {
+          nodeUpdates.push({ nodeId: node.id, completed: node.data.completed });
+          node.children?.forEach(collectChildUpdates);
+        };
+
+        // Find and add the target node and its subtree
+        const findAndCollectUpdates = (node: HeadingNode) => {
+          if (node.id === nodeId) {
+            collectChildUpdates(node);
+            return true;
+          }
+          return node.children?.some(findAndCollectUpdates) || false;
+        };
+        findAndCollectUpdates(finalData);
+
+        // Add parent nodes
+        path.forEach((parentId) => {
+          const parentNode = findNodeById(finalData, parentId);
+          if (parentNode) {
+            nodeUpdates.push({
+              nodeId: parentId,
+              completed: parentNode.data.completed,
+            });
+          }
+        });
+
+        // Sync with database
+        setNodeAndParentsCompletedFn({ data: { nodeUpdates } });
+
+        return finalData;
+      });
     },
     [setData]
   );
+
+  // Add this helper function at the component level or in utils.ts
+  const findNodeById = (
+    tree: HeadingNode,
+    nodeId: string
+  ): HeadingNode | null => {
+    if (tree.id === nodeId) return tree;
+    if (!tree.children) return null;
+    for (const child of tree.children) {
+      const found = findNodeById(child, nodeId);
+      if (found) return found;
+    }
+    return null;
+  };
 
   useEffect(() => {
     setSelectedNode(nodes[0]);

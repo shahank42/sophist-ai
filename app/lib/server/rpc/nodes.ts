@@ -184,3 +184,37 @@ export const setNodeCompletedFn = createServerFn({ method: "POST" })
     );
     await setNodesCompleted(allIds, completed);
   });
+
+export const setNodeAndParentsCompletedFn = createServerFn({ method: "POST" })
+  .validator((data: unknown) =>
+    z
+      .object({
+        nodeUpdates: z.array(
+          z.object({
+            nodeId: z.string(),
+            completed: z.boolean(),
+          })
+        ),
+      })
+      .parse(data)
+  )
+  .handler(async ({ data: { nodeUpdates } }) => {
+    // Group node IDs by completion status
+    const completedIds = nodeUpdates
+      .filter((update) => update.completed)
+      .map((update) => update.nodeId);
+    const uncompletedIds = nodeUpdates
+      .filter((update) => !update.completed)
+      .map((update) => update.nodeId);
+
+    // Update nodes in parallel if needed
+    const updatePromises = [];
+    if (completedIds.length > 0) {
+      updatePromises.push(setNodesCompleted(completedIds, true));
+    }
+    if (uncompletedIds.length > 0) {
+      updatePromises.push(setNodesCompleted(uncompletedIds, false));
+    }
+
+    await Promise.all(updatePromises);
+  });

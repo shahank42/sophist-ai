@@ -262,3 +262,51 @@ export const updateNodeAndChildrenCompletion = (
 
   return tree;
 };
+
+// New function to check if any node's children are incomplete
+export const hasIncompleteChildren = (node: HeadingNode): boolean => {
+  if (!node.children || node.children.length === 0) return false;
+  return node.children.some(
+    (child) => !child.data.completed || hasIncompleteChildren(child)
+  );
+};
+
+// New function to check if all node's children are complete
+export const hasAllChildrenComplete = (node: HeadingNode): boolean => {
+  if (!node.children || node.children.length === 0) return true;
+  return node.children.every(
+    (child) => child.data.completed && hasAllChildrenComplete(child)
+  );
+};
+
+// Modify updateParentNodesCompletion to use the new check
+export const updateParentNodesCompletion = (
+  tree: HeadingNode,
+  nodeId: string,
+  parentPath: string[]
+): HeadingNode => {
+  if (!parentPath.length) return tree;
+
+  const updateNode = (node: HeadingNode): HeadingNode => {
+    if (parentPath.includes(node.id)) {
+      // If this node is in the parent path, check its children's completion status
+      const allChildrenComplete = hasAllChildrenComplete(node);
+      return {
+        ...node,
+        data: { completed: allChildrenComplete },
+        children: node.children?.map(updateNode),
+      };
+    }
+
+    if (node.children) {
+      return {
+        ...node,
+        children: node.children.map(updateNode),
+      };
+    }
+
+    return node;
+  };
+
+  return updateNode(tree);
+};
