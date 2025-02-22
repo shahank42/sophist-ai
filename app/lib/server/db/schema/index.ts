@@ -6,7 +6,8 @@ import {
   text,
   timestamp,
   uuid,
-  index, // add this import
+  index,
+  boolean, // add this import
 } from "drizzle-orm/pg-core";
 import { user } from "./auth-schema";
 
@@ -53,6 +54,7 @@ export const nodes = pgTable(
     parentId: text("parent_id").references((): AnyPgColumn => nodes.id),
     title: text("title").notNull(),
     position: integer("position").default(0).notNull(),
+    completed: boolean("completed").default(false).notNull(),
     createdAt: timestamp("created_at").defaultNow(),
   },
   (table) => {

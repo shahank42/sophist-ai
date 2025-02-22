@@ -10,6 +10,7 @@ import {
   insertNodes,
   queryNodesForSubject,
   queryNodeById,
+  setNodeCompleted,
 } from "../queries/nodes";
 import { fetchInitialStructure } from "../prompts/generateInitialTopics";
 import { generateChildren } from "../prompts/generateChildren";
@@ -159,4 +160,18 @@ export const generateNodeChildrenFn = createServerFn({ method: "POST" })
     const childNodes = transformChildrenStructure(children);
     // TODO: add children to db
     return childNodes;
+  });
+
+export const setNodeCompletedFn = createServerFn({ method: "POST" })
+  .validator((data: unknown) =>
+    z
+      .object({
+        nodeId: z.string(),
+        completed: z.boolean(),
+      })
+      .parse(data)
+  )
+  .handler(async ({ data: { nodeId, completed } }) => {
+    console.log(`setting node ${nodeId} to completed: ${completed}`);
+    await setNodeCompleted(nodeId, completed);
   });

@@ -175,9 +175,13 @@ const Mindmap: React.FC<MindmapProps> = ({
         const insertedNodes = await appendNodesFn({
           data: { parentId: e.detail.id, children: childNodes },
         });
+        const transformedNodes = insertedNodes.map((node) => ({
+          ...node,
+          data: { completed: node.completed },
+        }));
         setData(
           (prev) =>
-            prev && updateTreeNodeChildren(prev, e.detail.id, insertedNodes)
+            prev && updateTreeNodeChildren(prev, e.detail.id, transformedNodes)
         );
       },
       treenodeselect: (e: CustomEvent) => {

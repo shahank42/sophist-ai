@@ -38,11 +38,22 @@ export const queryNodesForSubject = async (subjectId: string) => {
   const data = await db
     .select()
     .from(nodes)
-    .where(eq(nodes.subjectId, subjectId));
+    .where(eq(nodes.subjectId, subjectId))
+    .orderBy(nodes.position);
   return data;
 };
 
 export const queryNodeById = async (id: string) => {
   const data = await db.select().from(nodes).where(eq(nodes.id, id));
   return data[0];
+};
+
+export const setNodeCompleted = async (id: string, completed: boolean) => {
+  const data = await db
+    .update(nodes)
+    .set({
+      completed,
+    })
+    .where(eq(nodes.id, id))
+    .returning();
 };

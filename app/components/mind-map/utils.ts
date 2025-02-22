@@ -43,6 +43,9 @@ export const updateTreeNodeChildren = (
 export interface HeadingNode {
   id: string;
   title: string;
+  data: {
+    completed: boolean;
+  };
   children?: HeadingNode[];
 }
 
@@ -75,6 +78,7 @@ export function convertToReactFlowElements(
       expandable: hasChildren,
       expanded: expandedNodes.has(data.id),
       selected: data.id === selectedNodeId,
+      completed: data.data.completed,
     },
     position,
     type: "mindmapNode",
@@ -127,6 +131,7 @@ interface DatabaseNode {
   id: string;
   title: string;
   parentId: string | null;
+  completed: boolean;
   position: number;
 }
 
@@ -141,6 +146,9 @@ export function buildTree(nodes: DatabaseNode[]): HeadingNode | null {
     nodeMap.set(node.id, {
       id: node.id.toString(), // Convert to string for consistency
       title: node.title,
+      data: {
+        completed: node.completed,
+      },
       children: [],
     });
   }

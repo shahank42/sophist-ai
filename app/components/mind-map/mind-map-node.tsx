@@ -1,9 +1,10 @@
-import { memo, useState } from "react";
-import { Handle, Position } from "@xyflow/react";
+import { memo, useEffect, useState } from "react";
+import { Handle, Position, useEdges } from "@xyflow/react";
 import { Card, CardContent, CardHeader } from "../ui/card";
 import { Button } from "../ui/button";
-import { ChevronRight, ChevronDown, Plus } from "lucide-react";
+import { ChevronRight, ChevronDown, Plus, Check } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { setNodeCompletedFn } from "@/lib/server/rpc/nodes";
 
 interface MindmapNodeProps {
   data: {
@@ -11,11 +12,14 @@ interface MindmapNodeProps {
     expandable: boolean;
     expanded: boolean;
     selected?: boolean;
+    completed: boolean;
   };
   id: string;
 }
 
 const MindmapNode = memo<MindmapNodeProps>(({ data, id }) => {
+  const [completed, setCompleted] = useState<boolean>(data.completed);
+
   const handleExpand = (e: React.MouseEvent) => {
     e.stopPropagation();
     const event = new CustomEvent("nodeexpandtoggle", {
@@ -42,6 +46,10 @@ const MindmapNode = memo<MindmapNodeProps>(({ data, id }) => {
     document.dispatchEvent(event);
   };
 
+  useEffect(() => {
+    console.log(`node ${id} completed: ${completed}`);
+  }, [completed]);
+
   return (
     <div className={cn("flex h-full w-52 items-center justify-center")}>
       <Handle
@@ -50,23 +58,48 @@ const MindmapNode = memo<MindmapNodeProps>(({ data, id }) => {
         className="opacity-0 w-2 h-2"
       />
       <Card
-        className="size-[100%] overflow-hidden rounded-xl transition-all duration-300 ease-in-out hover:border-zinc-300 hover:shadow-md hover:ring-2 dark:ring-zinc-800 dark:hover:border-zinc-700"
+        className={cn(
+          "size-[100%] overflow-hidden rounded-xl transition-all duration-300 ease-in-out hover:shadow-md hover:ring-4 dark:ring-zinc-500",
+          {
+            "ring-4 dark:ring-zinc-400": data.selected,
+          }
+        )}
         onClick={handleNodeClick}
       >
         <CardHeader
           className={cn(
             "flex flex-row items-center justify-between border-b border-zinc-200 bg-zinc-100 px-3 py-0.5 dark:border-zinc-700 dark:bg-zinc-800",
             {
-              "bg-white/50 dark:bg-zinc-500 dark:border-zinc-500":
-                data.selected,
+              "dark:bg-green-700 dark:border-green-800": completed,
             }
           )}
         >
-          <div
-            className={cn("size-3 rounded-full bg-zinc-300 dark:bg-zinc-600", {
-              "dark:bg-zinc-300": data.selected,
-            })}
-          />
+          <span
+            onClick={async (e) => {
+              e.stopPropagation();
+              if (data.selected) {
+                console.log("setting node", !completed);
+                setCompleted(!completed);
+                await setNodeCompletedFn({
+                  data: { nodeId: id, completed: !completed },
+                });
+              }
+            }}
+            className={cn(
+              "flex h-5 w-5 items-center justify-center rounded-full border-2 transition-all duration-200",
+              {
+                "cursor-pointer hover:bg-green-50 hover:border-green-300 dark:hover:bg-green-950/50 dark:hover:border-green-700":
+                  data.selected,
+                "cursor-not-allowed opacity-50": !data.selected,
+                "border-green-700 bg-green-700 text-white hover:bg-green-800 hover:border-green-800":
+                  completed,
+                "border-zinc-300 dark:border-zinc-600": !completed,
+              }
+            )}
+          >
+            {completed && <Check className="h-3.5 w-3.5 stroke-[2.5]" />}
+          </span>
+
           {data.expandable ? (
             <Button
               variant="ghost"
@@ -89,37 +122,14 @@ const MindmapNode = memo<MindmapNodeProps>(({ data, id }) => {
             >
               <Plus className="size-4" />
             </Button>
-            // <TooltipProvider delayDuration={0}>
-            //   <Tooltip>
-            //     <TooltipTrigger asChild>
-            //       {/* <Button
-            //         variant="outline"
-            //         size="icon"
-            //         aria-label="Add new item"
-            //       >
-            //         <Plus size={16} strokeWidth={2} aria-hidden="true" />
-            //       </Button> */}
-            //       <Button
-            //         variant="ghost"
-            //         size="icon"
-            //         className="h-6 w-6 ml-2"
-            //         onClick={handleGenerateChildren}
-            //       >
-            //         <Plus className="h-4 w-4" />
-            //       </Button>
-            //     </TooltipTrigger>
-            //     <TooltipContent className="px-2 py-1 text-xs">
-            //       Generate Sub-topics
-            //     </TooltipContent>
-            //   </Tooltip>
-            // </TooltipProvider>
           )}
         </CardHeader>
         <CardContent
           className={cn(
             "flex h-full items-center justify-center bg-white px-2 py-3 dark:bg-zinc-900",
             {
-              "bg-white/50 dark:bg-zinc-600": data.selected,
+              "dark:bg-green-900": completed,
+              "": data.selected,
             }
           )}
         >
@@ -127,8 +137,7 @@ const MindmapNode = memo<MindmapNodeProps>(({ data, id }) => {
             className={cn(
               "line-clamp-2 text-center text-sm text-zinc-800 dark:text-zinc-200",
               {
-                "dark:text-white dark:font-semibold dark:tracking-wide":
-                  data.selected,
+                "dark:text-white ": data.selected,
               }
             )}
           >
