@@ -11,6 +11,8 @@ import {
   queryNodesForSubject,
   queryNodeById,
   setNodeCompleted,
+  getAllDescendantIds,
+  setNodesCompleted,
 } from "../queries/nodes";
 import { fetchInitialStructure } from "../prompts/generateInitialTopics";
 import { generateChildren } from "../prompts/generateChildren";
@@ -172,6 +174,13 @@ export const setNodeCompletedFn = createServerFn({ method: "POST" })
       .parse(data)
   )
   .handler(async ({ data: { nodeId, completed } }) => {
-    console.log(`setting node ${nodeId} to completed: ${completed}`);
-    await setNodeCompleted(nodeId, completed);
+    // Get all descendant node IDs
+    const descendantIds = await getAllDescendantIds(nodeId);
+    const allIds = [nodeId, ...descendantIds];
+
+    // Update all affected nodes in a single transaction
+    console.log(
+      `setting nodes ${allIds.join(", ")} to completed: ${completed}`
+    );
+    await setNodesCompleted(allIds, completed);
   });

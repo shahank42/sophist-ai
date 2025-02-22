@@ -1,4 +1,4 @@
-import { eq } from "drizzle-orm";
+import { eq, inArray } from "drizzle-orm";
 import { db } from "../db";
 import { nodes } from "../db/schema";
 
@@ -56,4 +56,34 @@ export const setNodeCompleted = async (id: string, completed: boolean) => {
     })
     .where(eq(nodes.id, id))
     .returning();
+};
+
+export const setNodesCompleted = async (ids: string[], completed: boolean) => {
+  const data = await db
+    .update(nodes)
+    .set({ completed })
+    .where(inArray(nodes.id, ids))
+    .returning();
+  return data;
+};
+
+// Get all descendant node IDs for a given node
+export const getAllDescendantIds = async (
+  nodeId: string
+): Promise<string[]> => {
+  const result: string[] = [];
+  let currentIds = [nodeId];
+
+  while (currentIds.length > 0) {
+    const children = await db
+      .select()
+      .from(nodes)
+      .where(inArray(nodes.parentId, currentIds));
+
+    const childIds = children.map((child) => child.id);
+    result.push(...childIds);
+    currentIds = childIds;
+  }
+
+  return result;
 };

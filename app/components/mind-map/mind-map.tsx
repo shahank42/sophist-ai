@@ -17,6 +17,7 @@ import {
   getNodeParentPath,
   findPathToNode,
   getNodeLevel,
+  updateNodeAndChildrenCompletion,
 } from "./utils";
 import MindmapNode from "./mind-map-node";
 import { updateTreeNodeChildren } from "./utils";
@@ -126,6 +127,17 @@ const Mindmap: React.FC<MindmapProps> = ({
     [getNode, setSelectedNode, nodes, setNodes]
   );
 
+  const handleNodeCompletion = useCallback(
+    async (nodeId: string, completed: boolean) => {
+      setData(
+        (prevData) =>
+          prevData &&
+          updateNodeAndChildrenCompletion(prevData, nodeId, completed)
+      );
+    },
+    [setData]
+  );
+
   useEffect(() => {
     setSelectedNode(nodes[0]);
   }, []);
@@ -188,6 +200,10 @@ const Mindmap: React.FC<MindmapProps> = ({
         expandPathToNode(e.detail.id);
         setTimeout(() => centerAndSelectNode(e.detail.id), 100);
       },
+      nodecompletion: (e: CustomEvent) => {
+        const { id, completed } = e.detail;
+        handleNodeCompletion(id, completed);
+      },
     };
 
     const controller = new AbortController();
@@ -207,6 +223,7 @@ const Mindmap: React.FC<MindmapProps> = ({
     edges,
     expandPathToNode,
     handleNodeSelection,
+    handleNodeCompletion,
   ]);
 
   useEffect(() => {

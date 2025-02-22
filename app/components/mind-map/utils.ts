@@ -233,3 +233,32 @@ export const getNodeLevel = (
   }
   return null;
 };
+
+export const updateNodeAndChildrenCompletion = (
+  tree: HeadingNode,
+  nodeId: string,
+  completed: boolean
+): HeadingNode => {
+  if (tree.id === nodeId) {
+    // Update current node and all its children recursively
+    return {
+      ...tree,
+      data: { completed },
+      children: tree.children?.map((child) =>
+        updateNodeAndChildrenCompletion(child, child.id, completed)
+      ),
+    };
+  }
+
+  // If no match in current node, recursively search children
+  if (tree.children) {
+    return {
+      ...tree,
+      children: tree.children.map((child) =>
+        updateNodeAndChildrenCompletion(child, nodeId, completed)
+      ),
+    };
+  }
+
+  return tree;
+};

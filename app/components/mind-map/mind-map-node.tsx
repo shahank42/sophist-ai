@@ -18,8 +18,6 @@ interface MindmapNodeProps {
 }
 
 const MindmapNode = memo<MindmapNodeProps>(({ data, id }) => {
-  const [completed, setCompleted] = useState<boolean>(data.completed);
-
   const handleExpand = (e: React.MouseEvent) => {
     e.stopPropagation();
     const event = new CustomEvent("nodeexpandtoggle", {
@@ -46,9 +44,21 @@ const MindmapNode = memo<MindmapNodeProps>(({ data, id }) => {
     document.dispatchEvent(event);
   };
 
-  useEffect(() => {
-    console.log(`node ${id} completed: ${completed}`);
-  }, [completed]);
+  const handleCompletion = async (e: React.MouseEvent) => {
+    e.stopPropagation();
+    const newCompleted = !data.completed;
+
+    // Dispatch event for recursive completion
+    const event = new CustomEvent("nodecompletion", {
+      detail: { id, completed: newCompleted },
+      bubbles: true,
+    });
+    document.dispatchEvent(event);
+
+    await setNodeCompletedFn({
+      data: { nodeId: id, completed: newCompleted },
+    });
+  };
 
   return (
     <div className={cn("flex h-full w-52 items-center justify-center")}>
@@ -70,34 +80,23 @@ const MindmapNode = memo<MindmapNodeProps>(({ data, id }) => {
           className={cn(
             "flex flex-row items-center justify-between border-b border-zinc-200 bg-zinc-100 px-3 py-0.5 dark:border-zinc-700 dark:bg-zinc-800",
             {
-              "dark:bg-green-700 dark:border-green-800": completed,
+              "dark:bg-green-700 dark:border-green-800": data.completed,
             }
           )}
         >
           <span
-            onClick={async (e) => {
-              e.stopPropagation();
-              if (data.selected) {
-                console.log("setting node", !completed);
-                setCompleted(!completed);
-                await setNodeCompletedFn({
-                  data: { nodeId: id, completed: !completed },
-                });
-              }
-            }}
+            onClick={handleCompletion}
             className={cn(
-              "flex h-5 w-5 items-center justify-center rounded-full border-2 transition-all duration-200",
+              "flex h-5 w-5 items-center justify-center rounded-full border-2 transition-all duration-200 cursor-pointer",
               {
-                "cursor-pointer hover:bg-green-50 hover:border-green-300 dark:hover:bg-green-950/50 dark:hover:border-green-700":
-                  data.selected,
-                "cursor-not-allowed opacity-50": !data.selected,
                 "border-green-700 bg-green-700 text-white hover:bg-green-800 hover:border-green-800":
-                  completed,
-                "border-zinc-300 dark:border-zinc-600": !completed,
+                  data.completed,
+                "border-zinc-300 dark:border-zinc-600 hover:bg-green-50 hover:border-green-300 dark:hover:bg-green-950/50 dark:hover:border-green-700":
+                  !data.completed,
               }
             )}
           >
-            {completed && <Check className="h-3.5 w-3.5 stroke-[2.5]" />}
+            {data.completed && <Check className="h-3.5 w-3.5 stroke-[2.5]" />}
           </span>
 
           {data.expandable ? (
@@ -113,6 +112,8 @@ const MindmapNode = memo<MindmapNodeProps>(({ data, id }) => {
                 <ChevronRight className="size-5" />
               )}
             </Button>
+          ) : data.completed ? (
+            <div className="h-6 w-6 ml-2" /> // Placeholder to maintain spacing
           ) : (
             <Button
               variant="ghost"
@@ -128,7 +129,7 @@ const MindmapNode = memo<MindmapNodeProps>(({ data, id }) => {
           className={cn(
             "flex h-full items-center justify-center bg-white px-2 py-3 dark:bg-zinc-900",
             {
-              "dark:bg-green-900": completed,
+              "dark:bg-green-900": data.completed,
               "": data.selected,
             }
           )}
