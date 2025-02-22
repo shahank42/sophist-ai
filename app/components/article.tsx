@@ -61,7 +61,7 @@ export function Article({ content }: ArticleProps) {
   }, [content]);
 
   return (
-    <div className="prose prose-slate dark:prose-invert max-w-none [&_pre]:p-0 [&_pre]:my-4 [&_:not(pre)>code]:before:content-none [&_:not(pre)>code]:after:content-none">
+    <div className="prose prose-slate dark:prose-invert max-w-none [&_pre]:p-0 [&_pre]:my-4 [&_:not(pre)>code]:before:content-none [&_:not(pre)>code]:after:content-none font-atkinson-hyperlegible">
       <ReactMarkdown
         remarkPlugins={[remarkMath, remarkGfm]}
         rehypePlugins={[rehypeKatex]}

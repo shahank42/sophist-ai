@@ -97,7 +97,7 @@ function RootDocument({ children }: Readonly<{ children: ReactNode }>) {
       <head>
         <Meta />
       </head>
-      <body>
+      <body className="font-space-grotesk">
         <SidebarProvider>{children}</SidebarProvider>
         <ScrollRestoration />
         <Suspense>

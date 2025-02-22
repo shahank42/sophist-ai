@@ -4,7 +4,7 @@ import { cn } from "@/lib/utils";
 import ExploreSyllabusForm from "../forms/explore-syllabus-form";
 import MaxWidthWrapper from "../max-width-wrapper";
 import { authClient } from "@/lib/utils/auth-client";
-import { GithubIcon } from "lucide-react";
+import { Github, GithubIcon } from "lucide-react";
 
 export function LandingSection() {
   return (
@@ -12,23 +12,19 @@ export function LandingSection() {
       <div className="pointer-events-none absolute inset-0 flex items-center justify-center bg-background [mask-image:radial-gradient(ellipse_at_center,transparent_20%,black)]"></div>
       <div className="relative z-10 w-full max-w-4xl space-y-12">
         <MaxWidthWrapper className="space-y-8 text-center">
-          <div className="flex items-center justify-center space-x-2">
-            <p className="relative z-20 bg-gradient-to-b from-zinc-600 to-zinc-900 bg-clip-text text-4xl font-extrabold text-transparent dark:from-zinc-100 dark:to-zinc-500 sm:text-5xl md:text-6xl">
-              SophistAI
-            </p>
-          </div>
-          <p className="mx-auto max-w-[600px] text-lg text-accent-foreground sm:text-xl">
-            The best way to learn a topic. Start cramming right away!
-          </p>
-          <div className="space-y-6">
-            <div className="rounded-lg border border-border bg-card p-6 shadow-sm">
-              <p className="mb-6 text-muted-foreground">
-                Access powerful learning tools and being your learning journey.
+          <div className="mx-auto max-w-3xl px-4 py-32 sm:py-48 lg:py-56">
+            <div className="text-center">
+              <h1 className="text-7xl font-bold tracking-tight text-foreground sm:text-8xl bg-clip-text">
+                SophistAI
+              </h1>
+              <p className="mt-6 text-2xl leading-8 text-muted-foreground tracking-wide">
+                The best way to learn a topic. Start cramming right away!
               </p>
-              <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
+
+              <div className="mt-12 flex flex-col gap-6 items-center">
                 <Button
                   variant="outline"
-                  className=""
+                  className="w-96 py-6 text-xl"
                   onClick={async () => {
                     await authClient.signIn.social({
                       provider: "github",
@@ -46,7 +42,7 @@ export function LandingSection() {
 
                 <Button
                   variant="outline"
-                  className=""
+                  className="w-96 py-6 text-xl"
                   onClick={async () => {
                     await authClient.signIn.social({
                       provider: "google",
@@ -73,14 +69,6 @@ export function LandingSection() {
                   </svg>
                   Login with Google
                 </Button>
-
-                {/* <Button
-                  onClick={async () => {
-                    await authClient.oneTap();
-                  }}
-                >
-                  One Tap Google
-                </Button> */}
               </div>
             </div>
           </div>
