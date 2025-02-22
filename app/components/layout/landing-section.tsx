@@ -14,9 +14,7 @@ export function LandingSection() {
         <MaxWidthWrapper className="space-y-8 text-center">
           <div className="mx-auto max-w-3xl px-4 py-32 sm:py-48 lg:py-56">
             <div className="text-center">
-              <h1 className="text-7xl font-bold tracking-tight text-foreground sm:text-8xl bg-clip-text">
-                SophistAI
-              </h1>
+              <img src="/logo.svg" alt="SophistAI" className="h-24 mx-auto" />
               <p className="mt-6 text-2xl leading-8 text-muted-foreground tracking-wide">
                 The best way to learn a topic. Start cramming right away!
               </p>

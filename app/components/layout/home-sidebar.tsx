@@ -66,11 +66,8 @@ export function HomeSidebar({
   return (
     <Sidebar variant="inset" {...props}>
       <SidebarHeader className="flex flex-row items-center justify-between h-16">
-        <Link
-          to="/"
-          className="relative w-full z-20 bg-gradient-to-b from-zinc-600 to-zinc-900 bg-clip-text text-xl text-center font-extrabold text-transparent dark:from-zinc-100 dark:to-zinc-500"
-        >
-          SophistAI
+        <Link to="/" className="relative w-full z-20">
+          <img src="/logo.svg" alt="SophistAI" className="h-8 w-auto mx-auto" />
         </Link>
 
         {/* <SidebarTrigger /> */}

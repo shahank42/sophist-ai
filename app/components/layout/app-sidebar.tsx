@@ -140,7 +140,7 @@ export function AppSidebar({
           to="/"
           className="relative w-full z-20 bg-gradient-to-b from-zinc-600 to-zinc-900 bg-clip-text text-xl text-center font-extrabold text-transparent dark:from-zinc-100 dark:to-zinc-500"
         >
-          SophistAI
+          <img src="/logo.svg" alt="SophistAI" className="h-8 w-auto mx-auto" />
         </Link>
       </SidebarHeader>
       <SidebarContent className="overflow-hidden">
