@@ -60,6 +60,7 @@ export function HomeSidebar({
     data: userSubjects,
     isPending,
     isError,
+    refetch,
   } = useQuery(queryUserSubjectsOptions(user.id));
   const router = useRouter();
 
@@ -120,7 +121,7 @@ export function HomeSidebar({
                       <DropdownMenuItem
                         onClick={async () => {
                           await deleteSubjectFn({ data: { id: subject.id } });
-                          router.invalidate();
+                          await refetch();
                         }}
                       >
                         <Trash2 className="text-muted-foreground" />
