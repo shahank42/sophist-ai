@@ -108,6 +108,24 @@ const Mindmap: React.FC<MindmapProps> = ({
     [data]
   );
 
+  const handleNodeSelection = useCallback(
+    (nodeId: string) => {
+      const node = getNode(nodeId);
+      if (node) {
+        setSelectedNode(node);
+        const updatedNodes = nodes.map((n) => ({
+          ...n,
+          data: {
+            ...n.data,
+            selected: n.id === nodeId,
+          },
+        }));
+        setNodes(updatedNodes);
+      }
+    },
+    [getNode, setSelectedNode, nodes, setNodes]
+  );
+
   useEffect(() => {
     setSelectedNode(nodes[0]);
   }, []);
@@ -118,8 +136,8 @@ const Mindmap: React.FC<MindmapProps> = ({
         const node = getNode(e.detail.id);
         if (!node) return;
 
+        handleNodeSelection(e.detail.id);
         centerAndSelectNode(e.detail.id);
-        // setCurrentArticle("");
       },
       nodeexpandtoggle: (e: CustomEvent) => {
         const { id: nodeId } = e.detail;
@@ -184,6 +202,7 @@ const Mindmap: React.FC<MindmapProps> = ({
     currentArticle,
     edges,
     expandPathToNode,
+    handleNodeSelection,
   ]);
 
   useEffect(() => {

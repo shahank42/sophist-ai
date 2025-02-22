@@ -16,8 +16,6 @@ interface MindmapNodeProps {
 }
 
 const MindmapNode = memo<MindmapNodeProps>(({ data, id }) => {
-  const [isSelected, setIsSelected] = useState(false);
-
   const handleExpand = (e: React.MouseEvent) => {
     e.stopPropagation();
     const event = new CustomEvent("nodeexpandtoggle", {
@@ -37,8 +35,6 @@ const MindmapNode = memo<MindmapNodeProps>(({ data, id }) => {
   };
 
   const handleNodeClick = () => {
-    setIsSelected((prev) => !prev);
-    console.log("Selected node ID:", id);
     const event = new CustomEvent("nodeselect", {
       detail: { id },
       bubbles: true,
@@ -57,8 +53,20 @@ const MindmapNode = memo<MindmapNodeProps>(({ data, id }) => {
         className="size-[100%] overflow-hidden rounded-xl transition-all duration-300 ease-in-out hover:border-zinc-300 hover:shadow-md hover:ring-2 dark:ring-zinc-800 dark:hover:border-zinc-700"
         onClick={handleNodeClick}
       >
-        <CardHeader className="flex flex-row items-center justify-between border-b border-zinc-200 bg-zinc-100 px-3 py-0.5 dark:border-zinc-700 dark:bg-zinc-800">
-          <div className="size-3 rounded-full bg-zinc-300 dark:bg-zinc-600" />
+        <CardHeader
+          className={cn(
+            "flex flex-row items-center justify-between border-b border-zinc-200 bg-zinc-100 px-3 py-0.5 dark:border-zinc-700 dark:bg-zinc-800",
+            {
+              "bg-white/50 dark:bg-zinc-500 dark:border-zinc-500":
+                data.selected,
+            }
+          )}
+        >
+          <div
+            className={cn("size-3 rounded-full bg-zinc-300 dark:bg-zinc-600", {
+              "dark:bg-zinc-300": data.selected,
+            })}
+          />
           {data.expandable ? (
             <Button
               variant="ghost"
@@ -107,8 +115,23 @@ const MindmapNode = memo<MindmapNodeProps>(({ data, id }) => {
             // </TooltipProvider>
           )}
         </CardHeader>
-        <CardContent className="flex h-full items-center justify-center bg-white px-2 py-3 dark:bg-zinc-900">
-          <h2 className="line-clamp-2 text-center text-sm text-zinc-800 dark:text-zinc-200">
+        <CardContent
+          className={cn(
+            "flex h-full items-center justify-center bg-white px-2 py-3 dark:bg-zinc-900",
+            {
+              "bg-white/50 dark:bg-zinc-600": data.selected,
+            }
+          )}
+        >
+          <h2
+            className={cn(
+              "line-clamp-2 text-center text-sm text-zinc-800 dark:text-zinc-200",
+              {
+                "dark:text-white dark:font-semibold dark:tracking-wide":
+                  data.selected,
+              }
+            )}
+          >
             {data.label}
           </h2>
         </CardContent>
@@ -121,7 +144,7 @@ const MindmapNode = memo<MindmapNodeProps>(({ data, id }) => {
           {
             "opacity-0": true,
           },
-          "border-2 border-zinc-200",
+          "border-2 border-zinc-200"
         )}
       />
     </div>
