@@ -80,7 +80,8 @@ const MindmapNode = memo<MindmapNodeProps>(({ data, id }) => {
           className={cn(
             "flex flex-row items-center justify-between border-b border-zinc-200 bg-zinc-100 px-3 py-0.5 dark:border-zinc-700 dark:bg-zinc-800",
             {
-              "dark:bg-green-700 dark:border-green-800": data.completed,
+              "bg-green-400 border-green-500 dark:bg-green-700 dark:border-green-800":
+                data.completed,
             }
           )}
         >
@@ -89,7 +90,7 @@ const MindmapNode = memo<MindmapNodeProps>(({ data, id }) => {
             className={cn(
               "flex h-5 w-5 items-center justify-center rounded-full border-2 transition-all duration-200 cursor-pointer",
               {
-                "border-green-700 bg-green-700 text-white hover:bg-green-800 hover:border-green-800":
+                "border-green-700 bg-green-700 text-white hover:bg-green-800 hover:border-green-800 dark:border-green-900 dark:bg-green-900 dark:hover:bg-green-950 dark:hover:border-green-950":
                   data.completed,
                 "border-zinc-300 dark:border-zinc-600 hover:bg-green-50 hover:border-green-300 dark:hover:bg-green-950/50 dark:hover:border-green-700":
                   !data.completed,
@@ -129,7 +130,7 @@ const MindmapNode = memo<MindmapNodeProps>(({ data, id }) => {
           className={cn(
             "flex h-full items-center justify-center bg-white px-2 py-3 dark:bg-zinc-900",
             {
-              "dark:bg-green-900": data.completed,
+              "bg-green-200 dark:bg-green-900": data.completed,
               "": data.selected,
             }
           )}
@@ -138,7 +139,9 @@ const MindmapNode = memo<MindmapNodeProps>(({ data, id }) => {
             className={cn(
               "line-clamp-2 text-center text-sm text-zinc-800 dark:text-zinc-200",
               {
-                "dark:text-white ": data.selected,
+                "text-green-800 dark:text-white":
+                  data.completed && data.selected,
+                "dark:text-white": data.selected,
               }
             )}
           >
