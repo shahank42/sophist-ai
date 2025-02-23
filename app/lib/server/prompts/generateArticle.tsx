@@ -1,8 +1,13 @@
 // import { useQuery } from "@tanstack/react-query";
 // import { model } from "../langchain";
 
-import { GROQ_API_KEY } from "@/lib/langchain";
+import {
+  CLOUDFLARE_ACCOUNT_ID,
+  CLOUDFLARE_API_TOKEN,
+  GROQ_API_KEY,
+} from "@/lib/langchain";
 import { ChatGroq } from "@langchain/groq";
+import { CloudflareWorkersAI } from "@langchain/cloudflare";
 
 export async function generateArticle(
   title: string,
@@ -15,7 +20,12 @@ export async function generateArticle(
     model: "llama-3.3-70b-versatile",
   });
 
-  console.log(parentPath);
+  // const model = new CloudflareWorkersAI({
+  //   model: "@cf/meta/llama-3.3-70b-instruct-fp8-fast",
+  //   cloudflareAccountId: CLOUDFLARE_ACCOUNT_ID,
+  //   cloudflareApiToken: CLOUDFLARE_API_TOKEN,
+
+  // });
 
   //   return model.stream(`
   // You are an expert researcher and writer tasked with creating a comprehensive, study-oriented article on based on a given syllabus or topic. Your goal is to produce a detailed, well-structured piece that serves as an authoritative resource for students and researchers.

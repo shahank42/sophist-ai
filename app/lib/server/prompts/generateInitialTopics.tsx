@@ -1,7 +1,12 @@
 // import { useQuery } from "@tanstack/react-query";
 import { z } from "zod";
 import { ChatGroq } from "@langchain/groq";
-import { GROQ_API_KEY } from "@/lib/langchain";
+import {
+  CLOUDFLARE_ACCOUNT_ID,
+  CLOUDFLARE_API_TOKEN,
+  GROQ_API_KEY,
+} from "@/lib/langchain";
+import { CloudflareWorkersAI } from "@langchain/cloudflare";
 
 export const initialStructureSchema = z.object({
   id: z.string().describe("The unique identifier for the node."),
@@ -19,6 +24,12 @@ export async function fetchInitialStructure(
     apiKey: GROQ_API_KEY,
     model: "llama-3.3-70b-versatile",
   });
+
+  // const model = new CloudflareWorkersAI({
+  //   model: "@cf/meta/llama-3.1-70b-instruct",
+  //   cloudflareAccountId: CLOUDFLARE_ACCOUNT_ID,
+  //   cloudflareApiToken: CLOUDFLARE_API_TOKEN,
+  // });
 
   const structuredModel = model.withStructuredOutput(initialStructureSchema);
 
