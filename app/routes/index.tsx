@@ -1,6 +1,7 @@
 import { HomeSidebar } from "@/components/layout/home-sidebar";
 import { LandingSection } from "@/components/layout/landing-section";
 import { MainSection } from "@/components/layout/main-section";
+import { ThemeToggle } from "@/components/theme-toggle";
 import { SidebarInset, SidebarTrigger } from "@/components/ui/sidebar";
 import {
   queryUserSubjectsFn,
@@ -35,8 +36,9 @@ function RouteComponent() {
       {user ? <HomeSidebar user={user} /> : <></>}
       <SidebarInset>
         {user ? (
-          <div className="py-3 px-3">
+          <div className="py-3 px-3 flex w-full justify-between">
             <SidebarTrigger className="" />
+            <ThemeToggle />
           </div>
         ) : (
           <></>

@@ -27,6 +27,7 @@ import { Link } from "@tanstack/react-router";
 import { ThemeToggle } from "../theme-toggle";
 import { cn } from "@/lib/utils";
 import { UserDetailsSelect } from "../user-details-select";
+import { useTheme } from "../providers/theme-provider";
 
 type TreeProps = {
   node: HeadingNode;
@@ -133,6 +134,7 @@ export function AppSidebar({
   selectedNodeId,
   ...props
 }: AppSidebarProps) {
+  const { theme } = useTheme();
   return (
     <Sidebar variant="inset" {...props}>
       <SidebarHeader className="flex flex-row items-center justify-between h-16">
@@ -140,7 +142,11 @@ export function AppSidebar({
           to="/"
           className="relative w-full z-20 bg-gradient-to-b from-zinc-600 to-zinc-900 bg-clip-text text-xl text-center font-extrabold text-transparent dark:from-zinc-100 dark:to-zinc-500"
         >
-          <img src="/logo.svg" alt="SophistAI" className="h-8 w-auto mx-auto" />
+          <img
+            src={theme === "dark" ? "/logo-dark.svg" : "/logo-light.svg"}
+            alt="SophistAI"
+            className="h-8 w-auto mx-auto"
+          />
         </Link>
       </SidebarHeader>
       <SidebarContent className="overflow-hidden">

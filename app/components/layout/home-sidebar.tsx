@@ -47,6 +47,7 @@ import {
 } from "@/lib/server/rpc/subjects";
 import { useQuery, useSuspenseQuery } from "@tanstack/react-query";
 import { Session } from "@/lib/utils/auth-client";
+import { useTheme } from "../providers/theme-provider";
 
 export function HomeSidebar({
   user,
@@ -63,12 +64,17 @@ export function HomeSidebar({
     refetch,
   } = useQuery(queryUserSubjectsOptions(user.id));
   const router = useRouter();
+  const { theme } = useTheme();
 
   return (
     <Sidebar variant="inset" {...props}>
       <SidebarHeader className="flex flex-row items-center justify-between h-16">
         <Link to="/" className="relative w-full z-20">
-          <img src="/logo.svg" alt="SophistAI" className="h-8 w-auto mx-auto" />
+          <img
+            src={theme === "dark" ? "/logo-dark.svg" : "/logo-light.svg"}
+            alt="SophistAI"
+            className="h-8 w-auto mx-auto"
+          />
         </Link>
 
         {/* <SidebarTrigger /> */}

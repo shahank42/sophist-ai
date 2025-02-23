@@ -5,8 +5,11 @@ import ExploreSyllabusForm from "../forms/explore-syllabus-form";
 import MaxWidthWrapper from "../max-width-wrapper";
 import { authClient } from "@/lib/utils/auth-client";
 import { Github, GithubIcon } from "lucide-react";
+import { useTheme } from "../providers/theme-provider";
 
 export function LandingSection() {
+  const { theme } = useTheme();
+
   return (
     <div className="w-full relative flex h-[calc(100dvh-48px-24px)] flex-col items-center justify-center overflow-hidden bg-grid-zinc-700/[0.3] dark:bg-grid-zinc-100/[0.1] sm:p-8 lg:p-16">
       <div className="pointer-events-none absolute inset-0 flex items-center justify-center bg-background [mask-image:radial-gradient(ellipse_at_center,transparent_20%,black)]"></div>
@@ -14,15 +17,19 @@ export function LandingSection() {
         <MaxWidthWrapper className="space-y-8 text-center">
           <div className="mx-auto max-w-3xl px-4 py-32 sm:py-48 lg:py-56">
             <div className="text-center">
-              <img src="/logo.svg" alt="SophistAI" className="h-24 mx-auto" />
-              <p className="mt-6 text-2xl leading-8 text-muted-foreground tracking-wide">
-                The best way to learn a topic. Start cramming right away!
+              <img
+                src={theme === "dark" ? "/logo-dark.svg" : "/logo-light.svg"}
+                alt="SophistAI"
+                className="h-32 mx-auto"
+              />
+              <p className="mt-5 text-2xl leading-8 text-muted-foreground tracking-wide font-semibold">
+                Your Personal Syllabus Navigator
               </p>
 
               <div className="mt-12 flex flex-col gap-6 items-center">
                 <Button
-                  variant="outline"
-                  className="w-96 py-6 text-xl"
+                  variant={theme === "dark" ? "outline" : "default"}
+                  className="w-80 py-6 text-xl"
                   onClick={async () => {
                     await authClient.signIn.social({
                       provider: "github",
@@ -39,8 +46,8 @@ export function LandingSection() {
                 </Button>
 
                 <Button
-                  variant="outline"
-                  className="w-96 py-6 text-xl"
+                  variant={theme === "dark" ? "outline" : "default"}
+                  className="w-80 py-6 text-xl"
                   onClick={async () => {
                     await authClient.signIn.social({
                       provider: "google",
