@@ -45,8 +45,8 @@ export const Route = createRootRouteWithContext<{
         content: "width=device-width, initial-scale=1",
       },
       ...seo({
-        title: "SophistAI - The Modern way to study",
-        description: `SophistAI uses AI to help you learn more effectively.`,
+        title: "SophistAI - Your Personal Syllabus Navigator",
+        description: `SophistAI is your intelligent study companion that turns any course syllabus into an interactive knowledge map. Just upload your syllabus, and watch as our advanced AI transforms it into a beautiful, navigable universe of connected concepts. No more chaos, just clarity.`,
       }),
     ],
     links: [
