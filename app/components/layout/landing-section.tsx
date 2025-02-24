@@ -27,7 +27,7 @@ export function LandingSection() {
               </p>
 
               <div className="mt-12 flex flex-col gap-6 items-center">
-                <Button
+                {/* <Button
                   variant={theme === "dark" ? "outline" : "default"}
                   className="w-80 py-6 text-xl"
                   onClick={async () => {
@@ -43,7 +43,7 @@ export function LandingSection() {
                     />
                   </svg>
                   Login with GitHub
-                </Button>
+                </Button> */}
 
                 <Button
                   variant={theme === "dark" ? "outline" : "default"}
