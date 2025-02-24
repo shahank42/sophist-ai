@@ -49,6 +49,7 @@
     "mini-svg-data-uri": "^1.4.4",
     "nanoid": "^5.0.9",
     "postgres": "^3.4.5",
+    "razorpay": "^2.9.6",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
     "react-hook-form": "^7.54.2",

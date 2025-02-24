@@ -1,1 +1,0 @@
-ALTER TABLE "nodes" ADD COLUMN "completed" boolean DEFAULT false;

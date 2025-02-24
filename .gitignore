@@ -11,6 +11,10 @@ yarn.lock
 .output
 .vinxi
 
+# Drizzle
+/app/lib/server/db/drizzle/
+/app/lib/server/db/drizzle/meta
+
 /build/
 /api/
 /server/build
