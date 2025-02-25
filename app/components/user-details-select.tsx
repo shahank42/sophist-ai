@@ -29,7 +29,11 @@ import { getRouteApi, useRouter } from "@tanstack/react-router";
 import { authClient } from "@/lib/utils/auth-client";
 import { useRazorpay, RazorpayOrderOptions } from "react-razorpay";
 import { useServerFn } from "@tanstack/start";
-import { createOrderFn, createSubscriptionFn } from "@/lib/server/rpc/payments";
+import {
+  createOrderFn,
+  createSubscriptionFn,
+  verifyOrderFn,
+} from "@/lib/server/rpc/payments";
 import { toast } from "sonner";
 import { useCallback } from "react";
 
@@ -56,6 +60,15 @@ export function UserDetailsSelect() {
 
   const getRazorpayOrder = useServerFn(createOrderFn);
   const getRazorpaySubscription = useServerFn(createSubscriptionFn);
+  const verifyRazorpayOrder = useServerFn(verifyOrderFn);
+
+  const paymentSuccess = () => {
+    toast("Payment Successful! Thanks for buying ^_^");
+  };
+
+  const paymentFailure = () => {
+    toast("Payment Failed! Please try again.");
+  };
 
   const { error, Razorpay } = useRazorpay();
 
@@ -74,9 +87,20 @@ export function UserDetailsSelect() {
         name: user.name,
         email: user.email,
       },
-      handler: function (response: any) {
-        console.log(response);
-        toast("Payment Successful!");
+      handler: async function (response: any) {
+        const data = await verifyRazorpayOrder({
+          data: {
+            subscriptionId: response.razorpay_subscription_id,
+            razorpayPaymentId: response.razorpay_payment_id,
+            razorpaySignature: response.razorpay_signature,
+          },
+        });
+
+        if (data.isOk) {
+          paymentSuccess();
+        } else {
+          paymentFailure();
+        }
       },
     };
 
@@ -85,7 +109,7 @@ export function UserDetailsSelect() {
     razorpayInstance.open();
 
     razorpayInstance.on("payment.failed", function (response) {
-      toast("Payment Failed! Please try again.");
+      paymentFailure();
     });
   }, [Razorpay]);
 
