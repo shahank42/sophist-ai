@@ -78,7 +78,7 @@ export function UserDetailsSelect() {
     console.log(subscriptionOrder);
 
     const options = {
-      key: "rzp_test_cyEydBueXhWpz1", // TODO: obfuscate this key
+      key: process.env.RAZORPAY_API_KEY_ID as string,
       subscription_id: subscriptionOrder.id,
       plan_id: subscriptionOrder.plan_id,
       name: "SophistAI",
