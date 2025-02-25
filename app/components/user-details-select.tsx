@@ -27,6 +27,11 @@ import {
 } from "@/components/ui/sidebar";
 import { getRouteApi, useRouter } from "@tanstack/react-router";
 import { authClient } from "@/lib/utils/auth-client";
+import { useRazorpay, RazorpayOrderOptions } from "react-razorpay";
+import { useServerFn } from "@tanstack/start";
+import { createOrderFn, createSubscriptionFn } from "@/lib/server/rpc/payments";
+import { toast } from "sonner";
+import { useCallback } from "react";
 
 function UserAvatar({ username }: { username: string }) {
   return (
@@ -48,6 +53,41 @@ export function UserDetailsSelect() {
   if (!user) {
     return null;
   }
+
+  const getRazorpayOrder = useServerFn(createOrderFn);
+  const getRazorpaySubscription = useServerFn(createSubscriptionFn);
+
+  const { error, Razorpay } = useRazorpay();
+
+  const handlePayment = useCallback(async () => {
+    const subscriptionOrder = await getRazorpaySubscription();
+    console.log(subscriptionOrder);
+
+    const options = {
+      key: "rzp_test_cyEydBueXhWpz1", // TODO: obfuscate this key
+      subscription_id: subscriptionOrder.id,
+      plan_id: subscriptionOrder.plan_id,
+      name: "SophistAI",
+      description: "SophistAI Pro Subscription",
+      // image: "/",
+      prefill: {
+        name: user.name,
+        email: user.email,
+      },
+      handler: function (response: any) {
+        console.log(response);
+        toast("Payment Successful!");
+      },
+    };
+
+    //@ts-ignore
+    const razorpayInstance = new Razorpay(options);
+    razorpayInstance.open();
+
+    razorpayInstance.on("payment.failed", function (response) {
+      toast("Payment Failed! Please try again.");
+    });
+  }, [Razorpay]);
 
   return (
     <SidebarMenu>
@@ -83,7 +123,7 @@ export function UserDetailsSelect() {
             </DropdownMenuLabel>
             <DropdownMenuSeparator />
             <DropdownMenuGroup>
-              <DropdownMenuItem>
+              <DropdownMenuItem onClick={handlePayment}>
                 <Sparkles />
                 Upgrade to Pro
               </DropdownMenuItem>

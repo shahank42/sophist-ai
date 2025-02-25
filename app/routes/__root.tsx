@@ -19,6 +19,7 @@ import { NotFound } from "@/components/not-found";
 import { getUser } from "@/lib/server/rpc/users";
 import { QueryClient } from "@tanstack/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
+import { Toaster } from "@/components/ui/sonner";
 
 const TanStackRouterDevtools =
   process.env.NODE_ENV === "production"
@@ -100,6 +101,7 @@ function RootDocument({ children }: Readonly<{ children: ReactNode }>) {
       <body className="font-space-grotesk">
         <SidebarProvider>{children}</SidebarProvider>
         <ScrollRestoration />
+        <Toaster />
         <Suspense>
           <ReactQueryDevtools
             initialIsOpen={false}
