@@ -2,6 +2,12 @@ import { createServerFn } from "@tanstack/start";
 import { z } from "zod";
 import Razorpay from "razorpay";
 import crypto from "crypto";
+import {
+  createInactiveSubscription,
+  getSubscriptionByRazorpayId,
+  activateSubscription,
+} from "../queries/payments";
+import { setUserProFn } from "./users";
 
 const razorpay = new Razorpay({
   key_id: process.env.RAZORPAY_API_KEY_ID!,
@@ -25,16 +31,48 @@ export const createOrderFn = createServerFn({ method: "POST" })
     return order;
   });
 
-export const createSubscriptionFn = createServerFn({ method: "POST" }).handler(
-  async () => {
-    const order = await razorpay.subscriptions.create({
+export const createSubscriptionFn = createServerFn({ method: "POST" })
+  .validator((data: unknown) =>
+    z
+      .object({
+        userId: z.string(),
+      })
+      .parse(data)
+  )
+  .handler(async ({ data: { userId } }) => {
+    const subscription = await razorpay.subscriptions.create({
       plan_id: "plan_PzZI7z3awvGme5",
       total_count: 1,
     });
 
-    return order;
-  }
-);
+    // Create an inactive subscription in our database
+    const amount = 50;
+
+    // Get subscription period details if available
+    let currentPeriodStart = undefined;
+    let currentPeriodEnd = undefined;
+
+    if (subscription.current_start && subscription.current_end) {
+      currentPeriodStart = new Date(subscription.current_start * 1000);
+      currentPeriodEnd = new Date(subscription.current_end * 1000);
+    }
+
+    // Create inactive subscription in database
+    const dbSubscription = await createInactiveSubscription(
+      userId,
+      subscription.id,
+      "", // Payment ID will be updated after payment
+      "", // Signature will be updated after verification
+      amount,
+      currentPeriodStart,
+      currentPeriodEnd
+    );
+
+    return {
+      razorpaySubscription: subscription,
+      dbSubscription,
+    };
+  });
 
 const generatedSignature = (
   razorpaySubscriptionId: string,
@@ -65,34 +103,37 @@ export const verifyOrderFn = createServerFn({ method: "POST" })
     }) => {
       const signature = generatedSignature(subscriptionId, razorpayPaymentId);
       if (signature !== razorpaySignature) {
-        // return new Response(
-        //   JSON.stringify({
-        //     message: "Payment verification failed",
-        //     isOk: false,
-        //   }),
-        //   {
-        //     status: 400,
-        //   }
-        // );
         return {
           message: "Payment verification failed",
           isOk: false,
+          subscription: null,
         };
       }
 
-      // Probably some database calls here to update order or add premium status to user
-      // return new Response(
-      //   JSON.stringify({
-      //     message: "Payment verified successfully",
-      //     isOk: true,
-      //   }),
-      //   {
-      //     status: 200,
-      //   }
-      // );
+      // Find the subscription in our database
+      const subscription = await getSubscriptionByRazorpayId(subscriptionId);
+
+      if (!subscription) {
+        return {
+          message: "Subscription not found",
+          isOk: false,
+          subscription: null,
+        };
+      }
+
+      // Update subscription with payment details and activate it using the query function
+      const updatedSubscription = await activateSubscription(
+        subscription.id,
+        razorpayPaymentId,
+        razorpaySignature
+      );
+
+      await setUserProFn({ data: { isPro: true } });
+
       return {
         message: "Payment verified successfully",
         isOk: true,
+        subscription: updatedSubscription,
       };
     }
   );

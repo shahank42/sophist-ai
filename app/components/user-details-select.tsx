@@ -73,7 +73,8 @@ export function UserDetailsSelect() {
   const { error, Razorpay } = useRazorpay();
 
   const handlePayment = useCallback(async () => {
-    const subscriptionOrder = await getRazorpaySubscription();
+    const { razorpaySubscription: subscriptionOrder, dbSubscription } =
+      await getRazorpaySubscription({ data: { userId: user.id } });
     console.log(subscriptionOrder);
 
     const options = {
