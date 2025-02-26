@@ -10,7 +10,7 @@ import {
 import { setUserProFn } from "./users";
 
 const razorpay = new Razorpay({
-  key_id: process.env.RAZORPAY_API_KEY_ID!,
+  key_id: process.env.VITE_RAZORPAY_API_KEY_ID!,
   key_secret: process.env.RAZORPAY_API_SECRET!,
 });
 
@@ -41,7 +41,7 @@ export const createSubscriptionFn = createServerFn({ method: "POST" })
   )
   .handler(async ({ data: { userId } }) => {
     const subscription = await razorpay.subscriptions.create({
-      plan_id: "plan_PzZI7z3awvGme5",
+      plan_id: process.env.VITE_RAZORPAY_PLAN_ID as string,
       total_count: 1,
     });
 
