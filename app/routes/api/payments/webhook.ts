@@ -7,6 +7,8 @@ import {
   cancelSubscriptionByRazorpayId,
 } from "../../../lib/server/queries/payments";
 import { c } from "node_modules/better-auth/dist/index-Y--3ocl8";
+import { setUserProFn } from "@/lib/server/rpc/users";
+import { setUserProStatus } from "@/lib/server/queries/users";
 
 // const razorpay = new Razorpay({
 //   key_id: process.env.VITE_RAZORPAY_API_KEY_ID!,
@@ -29,13 +31,22 @@ export const APIRoute = createAPIFileRoute("/api/payments/webhook")({
         break;
       case "subscription.halted":
         console.log(`Halting subscription: ${payload.subscription.entity.id}`);
-        await haltSubscription(payload.subscription.entity.id);
+        const haltedSubscription = await haltSubscription(
+          payload.subscription.entity.id
+        );
+        if (haltedSubscription)
+          await setUserProStatus(haltedSubscription.userId, false);
         break;
       case "subscription.cancelled":
         console.log(
           `Cancelling subscription: ${payload.subscription.entity.id}`
         );
-        await cancelSubscriptionByRazorpayId(payload.subscription.entity.id);
+        const cancelledSubscription = await cancelSubscriptionByRazorpayId(
+          payload.subscription.entity.id
+        );
+        if (cancelledSubscription)
+          await setUserProStatus(cancelledSubscription.userId, false);
+
         break;
       default:
         console.log(

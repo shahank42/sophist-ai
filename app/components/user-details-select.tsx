@@ -36,6 +36,7 @@ import {
 } from "@/lib/server/rpc/payments";
 import { toast } from "sonner";
 import { useCallback } from "react";
+import Premium from "./icons/premium";
 
 function UserAvatar({ username }: { username: string }) {
   return (
@@ -51,7 +52,8 @@ function UserAvatar({ username }: { username: string }) {
 
 export function UserDetailsSelect() {
   const { isMobile } = useSidebar();
-  const { user } = getRouteApi("__root__").useRouteContext();
+  const { user, queryClient: rootRouteApiQueryClient } =
+    getRouteApi("__root__").useRouteContext();
   const router = useRouter();
 
   if (!user) {
@@ -102,6 +104,8 @@ export function UserDetailsSelect() {
         } else {
           paymentFailure();
         }
+
+        router.invalidate();
       },
     };
 
@@ -148,25 +152,17 @@ export function UserDetailsSelect() {
             </DropdownMenuLabel>
             <DropdownMenuSeparator />
             <DropdownMenuGroup>
-              <DropdownMenuItem onClick={handlePayment}>
-                <Sparkles />
-                Upgrade to Pro
-              </DropdownMenuItem>
-            </DropdownMenuGroup>
-            <DropdownMenuSeparator />
-            <DropdownMenuGroup>
-              {/* <DropdownMenuItem>
-                <BadgeCheck />
-                Account
-              </DropdownMenuItem> */}
-              <DropdownMenuItem>
-                <CreditCard />
-                Billing
-              </DropdownMenuItem>
-              <DropdownMenuItem>
-                <Bell />
-                Notifications
-              </DropdownMenuItem>
+              {user.isPro ? (
+                <DropdownMenuLabel className="flex items-center gap-2">
+                  <Premium className="text-blue-500 size-4" />
+                  <span>SophistAI Pro</span>
+                </DropdownMenuLabel>
+              ) : (
+                <DropdownMenuItem onClick={handlePayment}>
+                  <Sparkles className="size-4 mr-2" />
+                  Upgrade to Pro
+                </DropdownMenuItem>
+              )}
             </DropdownMenuGroup>
             <DropdownMenuSeparator />
             <DropdownMenuItem
