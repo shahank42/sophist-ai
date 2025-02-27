@@ -13,37 +13,57 @@ export enum SubscriptionStatus {
 }
 
 /**
- * Creates a new subscription with INACTIVE status
+ * Creates a new subscription or updates an existing one with INACTIVE status using upsert
  * @param userId - ID of the user
  * @param razorpaySubscriptionId - Razorpay subscription ID
- * @param razorpayPaymentId - Razorpay payment ID
- * @param razorpaySignature - Razorpay signature
+ * @param razorpayPaymentId - Razorpay payment ID (null until payment is complete)
+ * @param razorpaySignature - Razorpay signature (null until payment is complete)
  * @param amount - Subscription amount
  */
-export const createInactiveSubscription = async (
+export const createOrUpdateInactiveSubscription = async (
   userId: string,
   razorpaySubscriptionId: string,
-  razorpayPaymentId: string,
-  razorpaySignature: string,
+  razorpayPaymentId: string | null,
+  razorpaySignature: string | null,
   amount: number,
   currentPeriodStart?: Date,
   currentPeriodEnd?: Date
 ) => {
   const now = new Date();
 
+  // Prepare the values object with conditional properties for optional fields
+  const values = {
+    userId,
+    razorpaySubscriptionId,
+    status: SubscriptionStatus.INACTIVE,
+    amount: amount.toString(),
+    currentPeriodStart: currentPeriodStart || now,
+    currentPeriodEnd: currentPeriodEnd || now,
+    createdAt: now,
+    updatedAt: now,
+    // Only include payment ID and signature if they're provided
+    ...(razorpayPaymentId ? { razorpayPaymentId } : {}),
+    ...(razorpaySignature ? { razorpaySignature } : {}),
+  };
+
+  // Use upsert operation
   const data = await db
     .insert(subscriptions)
-    .values({
-      userId,
-      razorpaySubscriptionId,
-      razorpayPaymentId,
-      razorpaySignature,
-      status: SubscriptionStatus.INACTIVE,
-      amount: amount.toString(),
-      currentPeriodStart: currentPeriodStart || now,
-      currentPeriodEnd: currentPeriodEnd || now,
-      createdAt: now,
-      updatedAt: now,
+    .values(values)
+    .onConflictDoUpdate({
+      target: subscriptions.userId,
+      set: {
+        userId,
+        status: SubscriptionStatus.INACTIVE,
+        razorpaySubscriptionId,
+        amount: amount.toString(),
+        currentPeriodStart: currentPeriodStart || now,
+        currentPeriodEnd: currentPeriodEnd || now,
+        updatedAt: now,
+        // Only update payment ID and signature if they're provided
+        ...(razorpayPaymentId ? { razorpayPaymentId } : {}),
+        ...(razorpaySignature ? { razorpaySignature } : {}),
+      },
     })
     .returning();
 

@@ -3,7 +3,7 @@ import { z } from "zod";
 import Razorpay from "razorpay";
 import crypto from "crypto";
 import {
-  createInactiveSubscription,
+  createOrUpdateInactiveSubscription,
   getSubscriptionByRazorpayId,
   activateSubscription,
 } from "../queries/payments";
@@ -42,7 +42,7 @@ export const createSubscriptionFn = createServerFn({ method: "POST" })
   .handler(async ({ data: { userId } }) => {
     const subscription = await razorpay.subscriptions.create({
       plan_id: process.env.VITE_RAZORPAY_PLAN_ID as string,
-      total_count: 1,
+      total_count: 6,
     });
 
     // Create an inactive subscription in our database
@@ -57,12 +57,12 @@ export const createSubscriptionFn = createServerFn({ method: "POST" })
       currentPeriodEnd = new Date(subscription.current_end * 1000);
     }
 
-    // Create inactive subscription in database
-    const dbSubscription = await createInactiveSubscription(
+    // Create or update inactive subscription in database with null values for payment details
+    const dbSubscription = await createOrUpdateInactiveSubscription(
       userId,
       subscription.id,
-      "", // Payment ID will be updated after payment
-      "", // Signature will be updated after verification
+      null, // Payment ID will be updated after payment
+      null, // Signature will be updated after verification
       amount,
       currentPeriodStart,
       currentPeriodEnd

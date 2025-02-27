@@ -1,5 +1,5 @@
 {
-  "id": "59959b68-835a-4889-82ba-1ec2bd1d9928",
+  "id": "b2819a5a-838f-4d5b-b365-3b7defcb285b",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "version": "7",
   "dialect": "postgresql",
@@ -279,13 +279,13 @@
           "name": "razorpay_payment_id",
           "type": "varchar(255)",
           "primaryKey": false,
-          "notNull": true
+          "notNull": false
         },
         "razorpay_signature": {
           "name": "razorpay_signature",
           "type": "varchar(255)",
           "primaryKey": false,
-          "notNull": true
+          "notNull": false
         },
         "status": {
           "name": "status",
@@ -647,6 +647,12 @@
           "type": "timestamp",
           "primaryKey": false,
           "notNull": true
+        },
+        "is_pro": {
+          "name": "is_pro",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": false
         }
       },
       "indexes": {},

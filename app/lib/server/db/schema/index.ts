@@ -99,12 +99,9 @@ export const subscriptions = pgTable(
     razorpaySubscriptionId: varchar("razorpay_subscription_id", { length: 255 })
       .notNull()
       .unique(),
-    razorpayPaymentId: varchar("razorpay_payment_id", { length: 255 })
-      .notNull()
-      .unique(),
-    razorpaySignature: varchar("razorpay_signature", { length: 255 })
-      .notNull()
-      .unique(),
+    // Make these fields optional by removing .notNull()
+    razorpayPaymentId: varchar("razorpay_payment_id", { length: 255 }).unique(),
+    razorpaySignature: varchar("razorpay_signature", { length: 255 }).unique(),
     status: varchar("status", { length: 50 }).notNull(),
     amount: numeric("amount", { precision: 10, scale: 2 }).notNull(),
     currency: varchar("currency", { length: 3 }).default("INR").notNull(),
