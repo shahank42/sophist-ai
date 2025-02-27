@@ -17,6 +17,7 @@ interface ActionButtonsProps {
   onElaborate?: (sectionIndex: number) => void;
   isElaborating: boolean;
   isRegenerating: boolean;
+  onPopoverOpenChange?: (isOpen: boolean) => void;
 }
 
 export const ActionButtons = ({
@@ -27,6 +28,7 @@ export const ActionButtons = ({
   onElaborate,
   isElaborating,
   isRegenerating,
+  onPopoverOpenChange,
 }: ActionButtonsProps) => (
   <TooltipProvider delayDuration={300}>
     <div
@@ -58,6 +60,7 @@ export const ActionButtons = ({
         sectionIndex={sectionIndex}
         onRegenerateWithPrompt={onRegenerateWithPrompt}
         isRegenerating={isRegenerating}
+        onPopoverOpenChange={onPopoverOpenChange}
       />
 
       <Tooltip>

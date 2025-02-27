@@ -25,6 +25,7 @@ export const ArticleSection = ({
   selectedNode: Node;
 }) => {
   const [isHovered, setIsHovered] = useState(false);
+  const [isPopoverOpen, setIsPopoverOpen] = useState(false);
 
   const { mutate: elaborateSection, isPending: isElaborating } =
     useElaborateSection(selectedNode);
@@ -63,14 +64,22 @@ export const ArticleSection = ({
     });
   };
 
+  // Handler for popover state changes
+  const handlePopoverOpenChange = (isOpen: boolean) => {
+    setIsPopoverOpen(isOpen);
+  };
+
+  // Section should appear hovered when either mouse is over it OR popover is open
+  const shouldShowHovered = isHovered || isPopoverOpen;
+
   return (
     <Card
       className={cn(
         "my-4 transition-all duration-300 border",
-        isHovered
+        shouldShowHovered
           ? "border-accent shadow-md"
           : "border-transparent bg-transparent shadow-none",
-        isHovered &&
+        shouldShowHovered &&
           "relative before:absolute before:left-0 before:top-0 before:h-full before:w-1 before:bg-accent before:rounded-l-lg"
       )}
       onMouseEnter={() => setIsHovered(true)}
@@ -91,13 +100,14 @@ export const ArticleSection = ({
           {heading}
         </CardTitle>
         <ActionButtons
-          isHovered={isHovered}
+          isHovered={shouldShowHovered}
           sectionIndex={sectionIndex}
           onRegenerate={handleRegenerate}
           onRegenerateWithPrompt={handleRegenerateWithPrompt}
           onElaborate={handleElaborate}
           isElaborating={isElaborating}
           isRegenerating={isRegenerating}
+          onPopoverOpenChange={handlePopoverOpenChange}
         />
       </CardHeader>
       <CardContent className="pb-0">

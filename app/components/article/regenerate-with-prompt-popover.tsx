@@ -18,12 +18,14 @@ interface RegenerateWithPromptPopoverProps {
   sectionIndex: number;
   onRegenerateWithPrompt?: (sectionIndex: number, prompt: string) => void;
   isRegenerating: boolean;
+  onPopoverOpenChange?: (isOpen: boolean) => void;
 }
 
 export const RegenerateWithPromptPopover = ({
   sectionIndex,
   onRegenerateWithPrompt,
   isRegenerating,
+  onPopoverOpenChange,
 }: RegenerateWithPromptPopoverProps) => {
   const [popoverOpen, setPopoverOpen] = useState(false);
   const [promptText, setPromptText] = useState("");
@@ -37,9 +39,14 @@ export const RegenerateWithPromptPopover = ({
     }
   };
 
+  const handleOpenChange = (open: boolean) => {
+    setPopoverOpen(open);
+    onPopoverOpenChange?.(open);
+  };
+
   return (
     <div className="relative">
-      <Popover open={popoverOpen} onOpenChange={setPopoverOpen}>
+      <Popover open={popoverOpen} onOpenChange={handleOpenChange}>
         <Tooltip>
           <TooltipTrigger asChild>
             <PopoverTrigger asChild>
@@ -61,7 +68,7 @@ export const RegenerateWithPromptPopover = ({
           </TooltipContent>
         </Tooltip>
         <PopoverContent
-          className="w-[30rem] p-0 overflow-hidden border border-border shadow-md"
+          className="w-[30rem] p-0 overflow-hidden border border-border shadow-md z-[50] rounded-lg"
           sideOffset={5}
           align="end"
           side="top"
@@ -70,7 +77,7 @@ export const RegenerateWithPromptPopover = ({
             <div className="bg-muted/50 px-4 py-2 border-b border-border">
               <h4 className="text-sm font-medium flex items-center gap-2">
                 <MessageSquarePlus className="h-3.5 w-3.5" />
-                Custom Instructions
+                Regenerate with prompt
               </h4>
             </div>
 
@@ -92,11 +99,6 @@ export const RegenerateWithPromptPopover = ({
                 />
               </div>
               <div className="flex items-center justify-between pt-2">
-                <p className="text-xs text-muted-foreground">
-                  {promptText.length > 0
-                    ? `${promptText.length} characters`
-                    : "Be specific for better results"}
-                </p>
                 <Button
                   type="submit"
                   size="sm"
@@ -106,6 +108,11 @@ export const RegenerateWithPromptPopover = ({
                   <Sparkles className="h-3.5 w-3.5" />
                   <span>Generate</span>
                 </Button>
+                <p className="text-xs text-muted-foreground">
+                  {promptText.length > 0
+                    ? `${promptText.length} characters`
+                    : "Be specific for better results"}
+                </p>
               </div>
             </form>
           </div>
