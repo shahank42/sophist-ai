@@ -79,7 +79,7 @@ export default function ExploreSyllabusForm() {
     const subjectCount = userSubjects?.length || 0;
 
     if (!user.isPro && subjectCount >= FREE_TIER_MAX_SUBJECTS) {
-      toast.error(
+      toast.info(
         `Free users can create up to ${FREE_TIER_MAX_SUBJECTS} subject. Upgrade to Pro for unlimited subjects!`
       );
       return false;

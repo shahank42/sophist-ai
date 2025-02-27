@@ -53,7 +53,7 @@ const MindmapNode = memo<MindmapNodeProps>(({ data, id }) => {
     e.stopPropagation();
 
     if (!user.isPro) {
-      toast.error("You need to be a Pro user to mark nodes as completed!");
+      toast.info("You need to be a Pro user to mark nodes as completed!");
       return;
     }
 

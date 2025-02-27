@@ -101,7 +101,7 @@ function RootDocument({ children }: Readonly<{ children: ReactNode }>) {
       <body className="font-space-grotesk">
         <SidebarProvider>{children}</SidebarProvider>
         <ScrollRestoration />
-        <Toaster />
+        <Toaster richColors />
         <Suspense>
           <ReactQueryDevtools
             initialIsOpen={false}
