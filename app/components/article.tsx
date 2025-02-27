@@ -1,12 +1,9 @@
 import ReactMarkdown from "react-markdown";
-import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
-import { dark } from "react-syntax-highlighter/dist/esm/styles/prism";
 import remarkMath from "remark-math";
 import remarkGfm from "remark-gfm";
 import rehypeKatex from "rehype-katex";
 import "katex/dist/katex.min.css";
-import { Button } from "@/components/ui/button";
-import { Copy } from "lucide-react";
+import { Card, CardContent } from "@/components/ui/card";
 import {
   Table,
   TableBody,
@@ -17,116 +14,130 @@ import {
 } from "@/components/ui/table";
 import { useRef, useEffect, useState } from "react";
 import mermaid from "mermaid";
+import { useTheme } from "./providers/theme-provider";
+import { cn } from "@/lib/utils";
+import { CodeHighlight } from "./code-highlight";
 
 interface ArticleProps {
   content: string;
 }
 
-function CopyButton({ code }: { code: string }) {
-  const [copied, setCopied] = useState(false);
+// Initialize mermaid
+mermaid.initialize({
+  startOnLoad: true,
+  theme: "neutral",
+  securityLevel: "loose",
+  fontFamily: "Inter, sans-serif",
+});
 
-  const handleCopy = () => {
-    navigator.clipboard.writeText(code);
-    setCopied(true);
-    setTimeout(() => setCopied(false), 2000);
-  };
+function MermaidDiagram({ chart }: { chart: string }) {
+  const ref = useRef<HTMLDivElement>(null);
+  const { theme } = useTheme();
+  const [svg, setSvg] = useState<string>("");
+
+  useEffect(() => {
+    const renderChart = async () => {
+      if (ref.current) {
+        // Clear previous renders
+        ref.current.innerHTML = "";
+
+        try {
+          // Set mermaid theme based on current theme
+          mermaid.initialize({
+            theme: theme === "dark" ? "dark" : "neutral",
+          });
+
+          // Render the chart
+          const { svg } = await mermaid.render(
+            `mermaid-${Math.random()}`,
+            chart
+          );
+          setSvg(svg);
+        } catch (error) {
+          console.error("Failed to render mermaid diagram:", error);
+          ref.current.innerHTML = `<div class="text-red-500">Failed to render diagram</div>`;
+        }
+      }
+    };
+
+    renderChart();
+  }, [chart, theme]);
 
   return (
-    <Button
-      variant="ghost"
-      size="icon"
-      className="absolute right-2 top-2 opacity-50 hover:opacity-100"
-      onClick={handleCopy}
-    >
-      <Copy className={copied ? "text-green-500" : "text-gray-500"} size={16} />
-    </Button>
+    <Card className="my-6">
+      <CardContent className="p-4 flex justify-center overflow-auto">
+        <div
+          ref={ref}
+          className="mermaid-diagram"
+          dangerouslySetInnerHTML={{ __html: svg }}
+        ></div>
+      </CardContent>
+    </Card>
   );
 }
 
 export function Article({ content }: ArticleProps) {
-  const mermaidRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    mermaid.initialize({
-      startOnLoad: true,
-      theme: "neutral",
-      securityLevel: "loose",
-    });
-  }, []);
-
-  useEffect(() => {
-    if (mermaidRef.current) {
-      mermaid.contentLoaded();
-    }
-  }, [content]);
+  const { theme } = useTheme();
 
   return (
-    <div className="prose prose-slate dark:prose-invert max-w-none [&_pre]:p-0 [&_pre]:my-4 [&_:not(pre)>code]:before:content-none [&_:not(pre)>code]:after:content-none font-atkinson-hyperlegible">
+    <div
+      className={cn(
+        "prose prose-lg max-w-none font-atkinson-hyperlegible",
+        "prose-headings:font-semibold prose-headings:tracking-tight prose-headings:text-foreground",
+        "prose-p:text-foreground prose-p:leading-relaxed",
+        "prose-li:my-1 prose-li:text-foreground",
+        "prose-img:rounded-lg",
+        "dark:prose-invert",
+        "transition-colors duration-200"
+      )}
+    >
       <ReactMarkdown
         remarkPlugins={[remarkMath, remarkGfm]}
         rehypePlugins={[rehypeKatex]}
         components={{
-          code({ node, inline, className, children, ...props }) {
-            const match = /language-(\w+)/.exec(className || "");
-            const code = String(children).replace(/\n$/, "");
-
-            if (match && match[1] === "mermaid") {
-              return (
-                <div ref={mermaidRef} className="mermaid my-4">
-                  {code}
-                </div>
-              );
-            }
-
-            if (!inline && match) {
-              return (
-                <div className="relative group">
-                  <SyntaxHighlighter
-                    style={dark}
-                    language={match[1]}
-                    PreTag="div"
-                    className="rounded-md !bg-slate-900 !p-4"
-                    {...props}
-                  >
-                    {code}
-                  </SyntaxHighlighter>
-                  <CopyButton code={code} />
-                </div>
-              );
-            }
-
+          code: CodeHighlight,
+          table({ node, ...props }) {
             return (
-              <code
-                className="rounded bg-slate-200 px-1 py-0.5 font-mono text-sm dark:bg-slate-800"
-                {...props}
-              >
-                {children}
-              </code>
-            );
-          },
-          table({ children }) {
-            return (
-              <div className="my-4 w-full overflow-auto">
-                <Table className="border border-slate-200 dark:border-slate-800">
-                  {children}
-                </Table>
+              <div className="my-6 w-full overflow-y-auto">
+                <Table>{props.children}</Table>
               </div>
             );
           },
-          thead({ children }) {
-            return <TableHeader>{children}</TableHeader>;
+          thead({ node, ...props }) {
+            return <TableHeader>{props.children}</TableHeader>;
           },
-          tbody({ children }) {
-            return <TableBody>{children}</TableBody>;
+          tbody({ node, ...props }) {
+            return <TableBody>{props.children}</TableBody>;
           },
-          tr({ children }) {
-            return <TableRow>{children}</TableRow>;
+          tr({ node, ...props }) {
+            return <TableRow>{props.children}</TableRow>;
           },
-          th({ children }) {
-            return <TableHead>{children}</TableHead>;
+          th({ node, ...props }) {
+            return (
+              <TableHead className="text-left font-medium">
+                {props.children}
+              </TableHead>
+            );
           },
-          td({ children }) {
-            return <TableCell>{children}</TableCell>;
+          td({ node, ...props }) {
+            return <TableCell className="p-2">{props.children}</TableCell>;
+          },
+          blockquote({ node, ...props }) {
+            return (
+              <blockquote className="mt-6 border-l-4 border-primary pl-4 italic text-muted-foreground">
+                {props.children}
+              </blockquote>
+            );
+          },
+          a({ node, ...props }) {
+            return (
+              <a
+                className="font-medium text-primary underline underline-offset-4 hover:no-underline"
+                {...props}
+              >
+                {props.children}
+              </a>
+            );
           },
         }}
       >

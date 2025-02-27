@@ -68,7 +68,7 @@ export default function ContentPanel({
 
   return (
     <ScrollArea className="flex h-[calc(100dvh-48px-24px)] w-full justify-center bg-secondary/20 px-6 text-secondary-foreground/80">
-      <div className="mx-auto max-w-2xl py-6 prose dark:prose-invert">
+      <div className="mx-auto max-w-2xl py-6">
         {isPending ? (
           <SkeletonContent />
         ) : isError ? (
