@@ -45,7 +45,7 @@ function RouteComponent() {
         )}
 
         <div className="w-full py-3">
-          {user ? <MainSection userId={user.id} /> : <LandingSection />}
+          {user ? <MainSection /> : <LandingSection />}
         </div>
       </SidebarInset>
     </>
