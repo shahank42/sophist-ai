@@ -22,7 +22,7 @@ export async function fetchInitialStructure(
 ): Promise<InitialStructure> {
   const model = new ChatGroq({
     apiKey: GROQ_API_KEY,
-    model: "llama-3.3-70b-versatile",
+    model: "mistral-saba-24b",
   });
 
   // const model = new CloudflareWorkersAI({

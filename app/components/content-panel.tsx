@@ -1,10 +1,16 @@
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Skeleton } from "./ui/skeleton";
-import { useArticleContent } from "@/hooks/use-article-content";
+import {
+  useStructuredArticle,
+  useRegenerateSection,
+  useElaborateSection,
+} from "@/hooks/use-article-content";
 import { Node } from "@xyflow/react";
-import { Article } from "./article";
 import { Button } from "./ui/button";
 import { AlertCircle } from "lucide-react";
+import { StructuredArticle } from "./article/structured-article";
+import { useEffect, useState } from "react";
+import { StructuredArticleType } from "@/lib/server/prompts/generateStructuredArticle";
 
 function ErrorContent({ retry }: { retry: () => void }) {
   return (
@@ -60,21 +66,35 @@ export default function ContentPanel({
   selectedNode: Node | null;
 }) {
   const {
-    data: article,
+    data: originalData,
     isPending,
     isError,
     refetch,
-  } = useArticleContent(selectedNode);
+  } = useStructuredArticle(selectedNode);
+
+  // Local state to track any modifications to the article data
+  const [articleData, setArticleData] = useState<
+    StructuredArticleType | undefined
+  >(undefined);
+
+  // Update local state whenever the original data changes
+  useEffect(() => {
+    if (originalData) {
+      setArticleData(originalData);
+    }
+  }, [originalData]);
 
   return (
     <ScrollArea className="flex h-[calc(100dvh-48px-24px)] w-full justify-center bg-secondary/20 px-6 text-secondary-foreground/80">
-      <div className="mx-auto max-w-2xl py-6">
+      <div className="mx-auto max-w-3xl py-6">
         {isPending ? (
           <SkeletonContent />
         ) : isError ? (
           <ErrorContent retry={refetch} />
+        ) : articleData ? (
+          <StructuredArticle data={articleData} selectedNode={selectedNode!} />
         ) : (
-          <Article content={article} />
+          <></>
         )}
       </div>
     </ScrollArea>

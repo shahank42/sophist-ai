@@ -1,5 +1,5 @@
 {
-  "id": "b2819a5a-838f-4d5b-b365-3b7defcb285b",
+  "id": "dd58f951-1c48-4552-8955-fd65ace4407e",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "version": "7",
   "dialect": "postgresql",
@@ -25,6 +25,12 @@
           "type": "text",
           "primaryKey": false,
           "notNull": true
+        },
+        "structured_content": {
+          "name": "structured_content",
+          "type": "json",
+          "primaryKey": false,
+          "notNull": false
         },
         "llm_model": {
           "name": "llm_model",

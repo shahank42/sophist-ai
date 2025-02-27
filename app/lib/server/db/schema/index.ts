@@ -10,7 +10,8 @@ import {
   boolean,
   varchar,
   numeric,
-  uniqueIndex, // add this import
+  uniqueIndex,
+  json, // add this import
 } from "drizzle-orm/pg-core";
 import { user } from "./auth-schema";
 
@@ -77,6 +78,7 @@ export const articles = pgTable(
       .notNull()
       .references(() => nodes.id, { onDelete: "cascade" }),
     content: text("content").notNull(),
+    structuredContent: json("structured_content"), // Add this line for structured articles
     llmModel: text("llm_model"),
     updatedAt: timestamp("updated_at").defaultNow(),
   },
