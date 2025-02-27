@@ -27,6 +27,16 @@ import {
 } from "@/components/ui/sidebar";
 import { getRouteApi, useRouter } from "@tanstack/react-router";
 import { authClient } from "@/lib/utils/auth-client";
+import { useRazorpay, RazorpayOrderOptions } from "react-razorpay";
+import { useServerFn } from "@tanstack/start";
+import {
+  createOrderFn,
+  createSubscriptionFn,
+  verifyOrderFn,
+} from "@/lib/server/rpc/payments";
+import { toast } from "sonner";
+import { useCallback } from "react";
+import Premium from "./icons/premium";
 
 function UserAvatar({ username }: { username: string }) {
   return (
@@ -42,12 +52,71 @@ function UserAvatar({ username }: { username: string }) {
 
 export function UserDetailsSelect() {
   const { isMobile } = useSidebar();
-  const { user } = getRouteApi("__root__").useRouteContext();
+  const { user, queryClient: rootRouteApiQueryClient } =
+    getRouteApi("__root__").useRouteContext();
   const router = useRouter();
 
   if (!user) {
     return null;
   }
+
+  const getRazorpayOrder = useServerFn(createOrderFn);
+  const getRazorpaySubscription = useServerFn(createSubscriptionFn);
+  const verifyRazorpayOrder = useServerFn(verifyOrderFn);
+
+  const paymentSuccess = () => {
+    toast("Payment Successful! Thanks for buying ^_^");
+  };
+
+  const paymentFailure = () => {
+    toast("Payment Failed! Please try again.");
+  };
+
+  const { error, Razorpay } = useRazorpay();
+
+  const handlePayment = useCallback(async () => {
+    const { razorpaySubscription: subscriptionOrder, dbSubscription } =
+      await getRazorpaySubscription({ data: { userId: user.id } });
+    console.log(subscriptionOrder);
+
+    const options = {
+      key: import.meta.env.VITE_RAZORPAY_API_KEY_ID as string,
+      subscription_id: subscriptionOrder.id,
+      plan_id: subscriptionOrder.plan_id,
+      name: "SophistAI",
+      description: "SophistAI Pro Subscription",
+      // image: "/",
+      prefill: {
+        name: user.name,
+        email: user.email,
+      },
+      handler: async function (response: any) {
+        const data = await verifyRazorpayOrder({
+          data: {
+            subscriptionId: response.razorpay_subscription_id,
+            razorpayPaymentId: response.razorpay_payment_id,
+            razorpaySignature: response.razorpay_signature,
+          },
+        });
+
+        if (data.isOk) {
+          paymentSuccess();
+        } else {
+          paymentFailure();
+        }
+
+        router.invalidate();
+      },
+    };
+
+    //@ts-ignore
+    const razorpayInstance = new Razorpay(options);
+    razorpayInstance.open();
+
+    razorpayInstance.on("payment.failed", function (response) {
+      paymentFailure();
+    });
+  }, [Razorpay]);
 
   return (
     <SidebarMenu>
@@ -83,25 +152,17 @@ export function UserDetailsSelect() {
             </DropdownMenuLabel>
             <DropdownMenuSeparator />
             <DropdownMenuGroup>
-              <DropdownMenuItem>
-                <Sparkles />
-                Upgrade to Pro
-              </DropdownMenuItem>
-            </DropdownMenuGroup>
-            <DropdownMenuSeparator />
-            <DropdownMenuGroup>
-              {/* <DropdownMenuItem>
-                <BadgeCheck />
-                Account
-              </DropdownMenuItem> */}
-              <DropdownMenuItem>
-                <CreditCard />
-                Billing
-              </DropdownMenuItem>
-              <DropdownMenuItem>
-                <Bell />
-                Notifications
-              </DropdownMenuItem>
+              {user.isPro ? (
+                <DropdownMenuLabel className="flex items-center gap-2">
+                  <Premium className="text-blue-500 size-4" />
+                  <span>SophistAI Pro</span>
+                </DropdownMenuLabel>
+              ) : (
+                <DropdownMenuItem onClick={handlePayment}>
+                  <Sparkles className="size-4 mr-2" />
+                  Upgrade to Pro
+                </DropdownMenuItem>
+              )}
             </DropdownMenuGroup>
             <DropdownMenuSeparator />
             <DropdownMenuItem

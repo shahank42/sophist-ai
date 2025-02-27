@@ -14,6 +14,15 @@ export const auth = betterAuth({
     },
   },
 
+  user: {
+    additionalFields: {
+      isPro: {
+        type: "boolean",
+        default: false,
+      },
+    },
+  },
+
   socialProviders: {
     github: {
       clientId: process.env.GITHUB_CLIENT_ID!,

@@ -1,1 +1,0 @@
-ALTER TABLE "nodes" ALTER COLUMN "completed" SET NOT NULL;
