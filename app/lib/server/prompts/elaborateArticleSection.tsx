@@ -5,49 +5,50 @@ import {
 } from "@/lib/langchain";
 import { ChatGroq } from "@langchain/groq";
 import { CloudflareWorkersAI } from "@langchain/cloudflare";
+import { CONFIG } from "@/lib/config";
 
 export async function elaborateArticleSection(
-  title: string,
-  parentPath: string[],
-  topic: string,
-  syllabus?: string
+  heading: string,
+  isPro: boolean,
+  contextData: {
+    topic: string;
+    previousContent: string;
+  }
 ) {
   const model = new ChatGroq({
     apiKey: GROQ_API_KEY,
-    model: "mistral-saba-24b",
+    model: isPro
+      ? CONFIG.models.pro.elaborateArticleSection
+      : CONFIG.models.free.elaborateArticleSection,
   });
 
   return model.invoke(`
-You are an advanced language model tasked with generating or updating a specific section of an article based on the following syllabus. Focus ONLY on the specified section title and draw context from the syllabus to determine what to include. Do not generate content for the entire article - only the requested section.
+<SYSTEM_CONTEXT>
+You are Richard Feynman, world renowned Physicist and masterful educator. You are known for your exceptional abilities of breaking down topics into simple, digestible explanations. That's why you even coined the term "Feynman Technique" to describe your approach to learning and teaching complex subjects.
+</SYSTEM_CONTEXT>
 
-The goal is to create a section that fits seamlessly into the broader article while instilling deep understanding for the reader. It should be as accessible as possible while still being informative and educational - prioritize clarity over complexity.
+<TASK>
+Your task is to use your expertise of simplifying complex topics to expand and elaborate on the given article. The content you generate should focus on the specified heading and elaborate upon the already existing content. Please ensure that the article is concise and to the point, avoiding unnecessary introductions, conclusions, or explanations of other headings. Use Markdown for formatting, and include tables and LaTeX equations more generously.
 
-Syllabus:
+You have to make sure the reader is able to comprehend what you're explaining. So that's why you should make use of lists, tables, and other formatting options to make the content more digestible.
 
-<syllabus-begin>
-${syllabus}
-</syllabus-end>
+There is no need to elaborate too much now, just a 20-25% increase in content should be enough.
+</TASK>
 
-Here I am providing you with the parent path, which is an array of headings from root to current section. Use this to understand where this section fits in the hierarchy of the article.
+<ARTICLE_HEADING>${heading}</ARTICLE_HEADING>
 
-Parent Path: ${parentPath}
+<CONTEXT>
+  <TOPIC 
+    meaning="The subject of which the article you need to generate is a part of."
+  >
+    ${contextData.topic}
+  </TOPIC>
 
-Section Title to Update: ${title}
-
-Instructions:
-
-  - Generate ONLY the content for the specified section title, not the entire article.
-  - Ensure the section aligns with the parent headings and overall article structure.
-  - Start with a brief conceptual overview of this specific section's topic.
-  - Use clear, simple language and break down complex ideas into digestible parts.
-  - Include relevant examples, analogies, or mental models specific to this section.
-  - Match the tone and style that would be consistent with the rest of the article.
-  - Use Markdown for formatting with appropriate subheaders (H3, H4) if needed.
-  - Include tables only when they enhance understanding of comparative or structured information.
-  - Use LaTeX for mathematical equations, ensuring they are explained in plain language as well.
-  - If the section is instructional, provide step-by-step guidance with practical examples.
-  - When appropriate, note common misconceptions or areas where students typically struggle.
-  - Keep the section focused and concise - don't repeat content that would belong in other sections.
-  - Do not add any prefacing text like "Section:" or "Here is the content for..." - just produce the section content directly.
+  <PREVIOUS_CONTENT 
+    meaning="The existing content of the article before your elaboration."
+  >
+    ${contextData.previousContent}
+  </PREVIOUS_CONTENT>
+</CONTEXT>
    `);
 }

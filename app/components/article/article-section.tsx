@@ -9,6 +9,9 @@ import {
 } from "@/hooks/use-article-content";
 import { Node } from "@xyflow/react";
 import { Skeleton } from "../ui/skeleton";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { elaborateSectionFn } from "@/lib/server/rpc/articles";
+import { getRouteApi } from "@tanstack/react-router";
 
 // Section component to handle hover highlighting
 export const ArticleSection = ({
@@ -24,11 +27,56 @@ export const ArticleSection = ({
   sectionIndex: number;
   selectedNode: Node;
 }) => {
+  const queryClient = useQueryClient();
+  const { subject } = getRouteApi("/(app)/app/$subjectId").useLoaderData();
+
   const [isHovered, setIsHovered] = useState(false);
   const [isPopoverOpen, setIsPopoverOpen] = useState(false);
 
-  // const { mutate: elaborateSection, isPending: isElaborating } =
-  //   useElaborateSection(selectedNode);
+  const { mutate: elaborateSectionMutation, isPending: isElaborating } =
+    useMutation({
+      // mutationFn: ({
+      //   sectionIndex,
+      //   selectedNode,
+      //   previousContent,
+      //   subjectName,
+      //   isPro,
+      // }: {
+      //   sectionIndex: number;
+      //   selectedNode: Node;
+      //   previousContent: string;
+      //   subjectName: string;
+      //   isPro: boolean;
+      // }) =>
+      mutationFn: () =>
+        elaborateSectionFn({
+          data: {
+            nodeId: selectedNode.id,
+            sectionIndex,
+            title: selectedNode.data.label || "",
+            isPro: true,
+            contextData: {
+              topic: subject.name,
+              previousContent: content,
+            },
+          },
+        }),
+      onSuccess: (data) => {
+        queryClient.setQueryData(["structuredArticle", selectedNode.id], data);
+      },
+    });
+
+  // // Handler for elaborating a section
+  // const handleElaborate = (sectionIndex: number) => {
+  //   if (!selectedNode?.id) return;
+
+  //   console.log("just before mut");
+  //   elaborateSection({
+  //     nodeId: selectedNode.id,
+  //     sectionIndex,
+  //   });
+  //   console.log("just after mut");
+  // };
 
   // const { mutate: regenerateSection, isPending: isRegenerating } =
   //   useRegenerateSection(selectedNode);
@@ -51,16 +99,6 @@ export const ArticleSection = ({
   //     nodeId: selectedNode.id,
   //     sectionIndex,
   //     customPrompt: prompt,
-  //   });
-  // };
-
-  // // Handler for elaborating a section
-  // const handleElaborate = (sectionIndex: number) => {
-  //   if (!selectedNode?.id) return;
-
-  //   elaborateSection({
-  //     nodeId: selectedNode.id,
-  //     sectionIndex,
   //   });
   // };
 
@@ -99,16 +137,16 @@ export const ArticleSection = ({
         >
           {heading}
         </CardTitle>
-        {/* <ActionButtons
+        <ActionButtons
           isHovered={shouldShowHovered}
           sectionIndex={sectionIndex}
-          onRegenerate={handleRegenerate}
-          onRegenerateWithPrompt={handleRegenerateWithPrompt}
-          onElaborate={handleElaborate}
+          // onRegenerate={handleRegenerate}
+          // onRegenerateWithPrompt={handleRegenerateWithPrompt}
+          onElaborate={elaborateSectionMutation}
           isElaborating={isElaborating}
-          isRegenerating={isRegenerating}
+          isRegenerating={false}
           onPopoverOpenChange={handlePopoverOpenChange}
-        /> */}
+        />
       </CardHeader>
       <CardContent className="pb-0">
         {/* {isElaborating || isRegenerating ? ( */}

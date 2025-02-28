@@ -186,39 +186,45 @@ export const elaborateSectionFn = createServerFn({ method: "POST" })
         nodeId: z.string(),
         sectionIndex: z.number(),
         title: z.string(),
-        parentPath: z.array(z.string()),
-        topic: z.string(),
-        syllabus: z.string().optional(),
+        isPro: z.boolean(),
+        contextData: z.object({
+          topic: z.string(),
+          previousContent: z.string(),
+        }),
       })
       .parse(data)
   )
   .handler(
     async ({
-      data: { nodeId, sectionIndex, title, parentPath, topic, syllabus },
+      data: {
+        nodeId,
+        sectionIndex,
+        isPro,
+        title,
+        contextData: { topic, previousContent },
+      },
     }) => {
-      // Get the existing article
-      const existingArticle = await getStructuredArticleByNode(nodeId);
-      if (!existingArticle) {
-        console.error(`Structured article for node ${nodeId} not found`);
-      }
+      // // Get the existing article
+      // const existingArticle = await getStructuredArticleByNode(nodeId);
+      // if (!existingArticle) {
+      //   console.error(`Structured article for node ${nodeId} not found`);
+      // }
 
-      const structuredContent = existingArticle as StructuredArticleType;
-      const section = structuredContent.sections[sectionIndex];
+      // const structuredContent = existingArticle as StructuredArticleType;
+      // const section = structuredContent.sections[sectionIndex];
 
-      if (!section) {
-        throw new Error(`Section ${sectionIndex} not found in article`);
-      }
-      console.log("elaborating", section);
+      // if (!section) {
+      //   throw new Error(`Section ${sectionIndex} not found in article`);
+      // }
+      // console.log("elaborating", section);
 
       // In a real implementation, you would use an LLM to elaborate the content
       // const elaboratedContent = `${section.content}\n\nElaboration: This section has been expanded with more details, examples, and explanations to provide a more comprehensive understanding of the topic.`;
 
-      const elaboratedContent = await elaborateArticleSection(
-        title,
-        parentPath,
+      const elaboratedContent = await elaborateArticleSection(title, isPro, {
         topic,
-        syllabus
-      );
+        previousContent: previousContent,
+      });
 
       // Update the section in the database
       const updatedArticle = await updateStructuredArticleSection(

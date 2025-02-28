@@ -96,7 +96,10 @@ export function useRegenerateSection(selectedNode: Node) {
   });
 }
 
-export function useElaborateSection(selectedNode: Node) {
+export function useElaborateSection(
+  selectedNode: Node,
+  previousContent: string
+) {
   const queryClient = useQueryClient();
 
   return useMutation({
@@ -107,16 +110,22 @@ export function useElaborateSection(selectedNode: Node) {
       nodeId: string;
       sectionIndex: number;
     }) => {
+      console.log("mut mid");
+      const { subject } = getRouteApi("/(app)/app/$subjectId").useLoaderData();
+
       const data = selectedNode.data || {};
+      console.log(data);
 
       return elaborateSectionFn({
         data: {
           nodeId: selectedNode.id,
           sectionIndex,
           title: selectedNode.data.label || "",
-          parentPath: data.parentPath || [],
-          topic: data.topic || "",
-          syllabus: data.syllabus,
+          isPro: true,
+          contextData: {
+            topic: subject.name,
+            previousContent: previousContent,
+          },
         },
       });
     },

@@ -14,8 +14,8 @@ interface ActionButtonsProps {
   sectionIndex: number;
   onRegenerate?: (sectionIndex: number) => void;
   onRegenerateWithPrompt?: (sectionIndex: number, prompt: string) => void;
-  onElaborate?: (sectionIndex: number) => void;
-  isElaborating: boolean;
+  onElaborate?: () => void;
+  isElaborating?: boolean;
   isRegenerating: boolean;
   onPopoverOpenChange?: (isOpen: boolean) => void;
 }
@@ -69,7 +69,7 @@ export const ActionButtons = ({
             variant="ghost"
             size="icon"
             className="h-8 w-8"
-            onClick={() => onElaborate?.(sectionIndex)}
+            onClick={() => onElaborate?.()}
             disabled={isElaborating}
           >
             <ListPlus className="h-4 w-4" />
