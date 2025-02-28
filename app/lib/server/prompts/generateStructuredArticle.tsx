@@ -9,6 +9,7 @@ import {
 import { ChatGroq } from "@langchain/groq";
 import { CloudflareWorkersAI } from "@langchain/cloudflare";
 import { z } from "zod";
+import { CONFIG } from "@/lib/config";
 
 const structuredArticleSchema = z.object({
   title: z.string().describe("The title of the article."),
@@ -38,41 +39,53 @@ export type StructuredArticleType = z.infer<typeof structuredArticleSchema>;
 
 export async function generateStructuredArticle(
   title: string,
-  parentPath: string[],
-  topic: string,
-  syllabus?: string
+  isPro: boolean,
+  contextData: {
+    parentPath: string[];
+    topic: string;
+    syllabus?: string;
+  }
 ) {
   const model = new ChatGroq({
     apiKey: GROQ_API_KEY,
-    model: "mistral-saba-24b",
+    model: isPro
+      ? CONFIG.models.pro.generateStructuredArticle
+      : CONFIG.models.free.generateStructuredArticle,
   });
 
   const structuredModel = model.withStructuredOutput(structuredArticleSchema);
 
   return structuredModel.invoke(`
-You are an advanced language model tasked with generating a detailed article based on the following syllabus. The article should focus on the specified title and draw context from the syllabus to determine which topics to elaborate on. Please ensure that the article is concise and to the point, avoiding unnecessary introductions, conclusions, or explanations of other headings. Use Markdown for formatting, and include tables and LaTeX equations where relevant.
+<SYSTEM_CONTEXT>
+You are Richard Feynman, world renowned Physicist and masterful educator. You are known for your exceptional abilities of breaking down topics into simple, digestible explanations. That's why you even coined the term "Feynman Technique" to describe your approach to learning and teaching complex subjects.
+</SYSTEM_CONTEXT>
 
-The goal of the article is to incluclate a sense of understanding for the reader. It should be as easy to understand as possible, while still being informative and educational.
+<TASK>
+Your task is to use your expertise of simplifying complex topics to generate a detailed article based on the following syllabus. The article should focus on the specified title and draw context from the syllabus to determine which topics to elaborate on. Please ensure that the article is concise and to the point, avoiding unnecessary introductions, conclusions, or explanations of other headings. Use Markdown for formatting, and include tables and LaTeX equations generously.
 
-Syllabus:
+You have to make sure the reader is able to comprehend what you're explaining. So that's why you should make use of lists, tables, and other formatting options to make the content more digestible.
+</TASK>
 
-<syllabus-begin>
-${syllabus}
-</syllabus-end>
+<ARTICLE_TITLE>${title}</ARTICLE_TITLE>
 
-Here I am also providing you with a parent path, which is an array of headings from root to current which you can use to gain a better understanding of the context.
+<CONTEXT>
+  <TOPIC 
+    meaning="The subject of which the article you need to generate is a part of."
+  >
+    ${contextData.topic}
+  </TOPIC>
 
-Parent Path: ${parentPath}
+  <SYLLABUS 
+    meaning="The syllabus of TOPIC, of which the article you need to generate is a part of."
+  >
+    ${contextData.syllabus}
+  </SYLLABUS>
 
-Article Title: ${title}
-
-Instructions:
-
-  - Generate the article based on the syllabus context. Use the provided syllabus to get an understanding of what to include in the article.
-  - Use Markdown for formatting.
-  - Include tables where necessary. Don't unnecessarily add them everywhwere.
-  - Use LaTeX for any mathematical equations. (you don't need to specifically say that it's a LaTeX equation, just include it in the text).
-  - Focus on the relevant topics from the syllabus without unnecessary content.
-  - If the topic is instructional, then make sure to include suitable steps, examples and walkthroughs. 
+  <PARENT_PATH 
+    meaning="All the headings and subheading leading to this article's TITLE"
+  >
+    ${contextData.parentPath.join(" > ")}
+  </PARENT_PATH>
+</CONTEXT>
    `);
 }

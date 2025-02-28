@@ -27,42 +27,42 @@ export const ArticleSection = ({
   const [isHovered, setIsHovered] = useState(false);
   const [isPopoverOpen, setIsPopoverOpen] = useState(false);
 
-  const { mutate: elaborateSection, isPending: isElaborating } =
-    useElaborateSection(selectedNode);
+  // const { mutate: elaborateSection, isPending: isElaborating } =
+  //   useElaborateSection(selectedNode);
 
-  const { mutate: regenerateSection, isPending: isRegenerating } =
-    useRegenerateSection(selectedNode);
+  // const { mutate: regenerateSection, isPending: isRegenerating } =
+  //   useRegenerateSection(selectedNode);
 
-  // Handler for regenerating a section
-  const handleRegenerate = (sectionIndex: number) => {
-    if (!selectedNode?.id) return;
+  // // Handler for regenerating a section
+  // const handleRegenerate = (sectionIndex: number) => {
+  //   if (!selectedNode?.id) return;
 
-    regenerateSection({
-      nodeId: selectedNode.id,
-      sectionIndex,
-    });
-  };
+  //   regenerateSection({
+  //     nodeId: selectedNode.id,
+  //     sectionIndex,
+  //   });
+  // };
 
-  // Handler for regenerating with a custom prompt
-  const handleRegenerateWithPrompt = (sectionIndex: number, prompt: string) => {
-    if (!selectedNode?.id) return;
+  // // Handler for regenerating with a custom prompt
+  // const handleRegenerateWithPrompt = (sectionIndex: number, prompt: string) => {
+  //   if (!selectedNode?.id) return;
 
-    regenerateSection({
-      nodeId: selectedNode.id,
-      sectionIndex,
-      customPrompt: prompt,
-    });
-  };
+  //   regenerateSection({
+  //     nodeId: selectedNode.id,
+  //     sectionIndex,
+  //     customPrompt: prompt,
+  //   });
+  // };
 
-  // Handler for elaborating a section
-  const handleElaborate = (sectionIndex: number) => {
-    if (!selectedNode?.id) return;
+  // // Handler for elaborating a section
+  // const handleElaborate = (sectionIndex: number) => {
+  //   if (!selectedNode?.id) return;
 
-    elaborateSection({
-      nodeId: selectedNode.id,
-      sectionIndex,
-    });
-  };
+  //   elaborateSection({
+  //     nodeId: selectedNode.id,
+  //     sectionIndex,
+  //   });
+  // };
 
   // Handler for popover state changes
   const handlePopoverOpenChange = (isOpen: boolean) => {
@@ -99,7 +99,7 @@ export const ArticleSection = ({
         >
           {heading}
         </CardTitle>
-        <ActionButtons
+        {/* <ActionButtons
           isHovered={shouldShowHovered}
           sectionIndex={sectionIndex}
           onRegenerate={handleRegenerate}
@@ -108,10 +108,11 @@ export const ArticleSection = ({
           isElaborating={isElaborating}
           isRegenerating={isRegenerating}
           onPopoverOpenChange={handlePopoverOpenChange}
-        />
+        /> */}
       </CardHeader>
       <CardContent className="pb-0">
-        {isElaborating || isRegenerating ? (
+        {/* {isElaborating || isRegenerating ? ( */}
+        {false ? (
           <div className="space-y-3 py-2 my-6">
             <Skeleton className="h-4 w-full" />
             <Skeleton className="h-4 w-[92%]" />

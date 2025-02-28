@@ -15,6 +15,7 @@ import {
 import { elaborateArticleSection } from "../prompts/elaborateArticleSection";
 import { regenerateArticleSectionWithCustomPrompt } from "../prompts/regenerateArticleSectionWithCustomPrompt";
 import { regenerateArticleSection } from "../prompts/regenerateArticleSection";
+import { getWebRequest } from "@tanstack/start/server";
 
 export const getArticleContentFn = createServerFn({ method: "POST" })
   .validator((data: unknown) =>
@@ -56,33 +57,46 @@ export const getStructuredArticleContentFn = createServerFn({ method: "POST" })
       .object({
         nodeId: z.string(),
         title: z.string(),
-        parentPath: z.array(z.string()),
-        topic: z.string(),
-        syllabus: z.string().optional(),
+        isPro: z.boolean(),
+        contextData: z.object({
+          parentPath: z.array(z.string()),
+          topic: z.string(),
+          syllabus: z.string().optional(),
+        }),
       })
       .parse(data)
   )
-  .handler(async ({ data: { nodeId, title, parentPath, topic, syllabus } }) => {
-    // First check if we already have a structured article for this node
-    const existingStructuredArticle = await getStructuredArticleByNode(nodeId);
-    if (existingStructuredArticle) {
-      console.log("Structured article fetched from DB!");
-      return existingStructuredArticle;
+  .handler(
+    async ({
+      data: {
+        nodeId,
+        title,
+        isPro,
+        contextData: { parentPath, topic, syllabus },
+      },
+    }) => {
+      // First check if we already have a structured article for this node
+      const existingStructuredArticle =
+        await getStructuredArticleByNode(nodeId);
+      if (existingStructuredArticle) {
+        console.log(`Article for "${title}" already exists!`);
+        return existingStructuredArticle;
+      } else {
+        console.log(`Generating article for "${title}"`);
+        // Generate a new structured article
+        const generatedArticle = await generateStructuredArticle(title, isPro, {
+          parentPath,
+          topic,
+          syllabus,
+        });
+
+        // Store the structured article in the database
+        await insertStructuredArticle(nodeId, generatedArticle);
+
+        return generatedArticle;
+      }
     }
-
-    // Generate a new structured article
-    const generatedArticle = await generateStructuredArticle(
-      title,
-      parentPath,
-      topic,
-      syllabus
-    );
-
-    // Store the structured article in the database
-    await insertStructuredArticle(nodeId, generatedArticle);
-
-    return generatedArticle;
-  });
+  );
 
 // New function to regenerate a specific section
 export const regenerateSectionFn = createServerFn({ method: "POST" })

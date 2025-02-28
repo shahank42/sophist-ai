@@ -11,6 +11,7 @@ import { AlertCircle } from "lucide-react";
 import { StructuredArticle } from "./article/structured-article";
 import { useEffect, useState } from "react";
 import { StructuredArticleType } from "@/lib/server/prompts/generateStructuredArticle";
+import { getRouteApi } from "@tanstack/react-router";
 
 function ErrorContent({ retry }: { retry: () => void }) {
   return (
@@ -65,12 +66,15 @@ export default function ContentPanel({
 }: {
   selectedNode: Node | null;
 }) {
+  const rootContext = getRouteApi("__root__").useRouteContext();
+  const user = rootContext.user!;
+
   const {
     data: originalData,
     isPending,
     isError,
     refetch,
-  } = useStructuredArticle(selectedNode);
+  } = useStructuredArticle(selectedNode, user.isPro);
 
   // Local state to track any modifications to the article data
   const [articleData, setArticleData] = useState<

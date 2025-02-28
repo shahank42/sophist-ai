@@ -7,6 +7,8 @@ import {
   elaborateSectionFn,
 } from "@/lib/server/rpc/articles";
 import { StructuredArticleType } from "@/lib/server/prompts/generateStructuredArticle";
+import { User } from "better-auth";
+import { getRouteApi } from "@tanstack/react-router";
 
 export function useArticleContent(selectedNode: Node | null) {
   return useQuery({
@@ -30,7 +32,12 @@ export function useArticleContent(selectedNode: Node | null) {
   });
 }
 
-export function useStructuredArticle(selectedNode: Node | null) {
+export function useStructuredArticle(
+  selectedNode: Node | null,
+  userIsPro: boolean
+) {
+  const { subject } = getRouteApi("/(app)/app/$subjectId").useLoaderData();
+
   return useQuery({
     queryKey: ["structuredArticle", selectedNode?.id],
     queryFn: () => {
@@ -42,9 +49,12 @@ export function useStructuredArticle(selectedNode: Node | null) {
         data: {
           nodeId: selectedNode.id,
           title: selectedNode.data.label || "",
-          parentPath: data.parentPath || [],
-          topic: data.topic || "",
-          syllabus: data.syllabus,
+          isPro: userIsPro,
+          contextData: {
+            parentPath: data.parentPath || [],
+            topic: subject.name || "",
+            syllabus: subject.rawSyllabus,
+          },
         },
       });
     },
