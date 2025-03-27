@@ -7,7 +7,10 @@ import {
   timestamp,
   uuid,
   index,
-  boolean, // add this import
+  boolean,
+  varchar,
+  numeric,
+  uniqueIndex, // add this import
 } from "drizzle-orm/pg-core";
 import { user } from "./auth-schema";
 
@@ -80,6 +83,58 @@ export const articles = pgTable(
   (table) => {
     return {
       nodeIdIndex: index("articles_node_id_idx").on(table.nodeId),
+    };
+  }
+);
+
+// export const payments = pgTable("payments", {
+//   id: text("id")
+//     .$defaultFn(() => generateRandomString(10))
+//     .primaryKey(),
+//     razorpayPaymentId: varchar("razorpay_payment_id", { length: 255 }).unique(),
+//     razorpaySignature: varchar("razorpay_signature", { length: 255 }).unique(),
+//     status: varchar("status", { length: 50 }).notNull(),
+
+// });
+
+export const subscriptions = pgTable(
+  "subscriptions",
+  {
+    id: text("id")
+      .$defaultFn(() => generateRandomString(10))
+      .primaryKey(),
+    userId: text("user_id")
+      .notNull()
+      .references(() => user.id),
+    razorpayCustomerId: varchar("razorpay_customer_id", {
+      length: 255,
+    }).unique(),
+    razorpaySubscriptionId: varchar("razorpay_subscription_id", {
+      length: 255,
+    }).unique(),
+    razorpayPaymentId: varchar("razorpay_payment_id", { length: 255 }).unique(),
+    razorpaySignature: varchar("razorpay_signature", { length: 255 }).unique(),
+    status: varchar("status", { length: 50 }).notNull(),
+    currentPeriodStart: timestamp("current_period_start", {
+      withTimezone: true,
+    }),
+    currentPeriodEnd: timestamp("current_period_end", {
+      withTimezone: true,
+    }),
+    lastPaymentDate: timestamp("last_payment_date", { withTimezone: true }),
+    createdAt: timestamp("created_at", { withTimezone: true })
+      .defaultNow()
+      .notNull(),
+    updatedAt: timestamp("updated_at", { withTimezone: true })
+      .defaultNow()
+      .notNull(),
+  },
+  (table) => {
+    return {
+      userIdIdx: uniqueIndex("user_id_idx").on(table.userId),
+      razorpaySubIdIdx: uniqueIndex("razorpay_sub_id_idx").on(
+        table.razorpaySubscriptionId
+      ),
     };
   }
 );

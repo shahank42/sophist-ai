@@ -12,6 +12,10 @@ import { insertSubject } from "@/lib/server/queries/subjects";
 import { fetchInitialStructure } from "@/lib/server/prompts/generateInitialTopics";
 import { transformInitialStructure } from "@/lib/utils";
 import { storeTreeFn } from "@/lib/server/rpc/nodes";
+import { getRouteApi } from "@tanstack/react-router";
+import { toast } from "sonner";
+import { useQuery } from "@tanstack/react-query";
+import { queryUserSubjectsOptions } from "@/lib/server/rpc/subjects";
 
 export const registerSubjectAndTreeFn = createServerFn({ method: "POST" })
   .validator((data: unknown) =>
@@ -52,7 +56,12 @@ const exploreSyllabusSchema = z.object({
 
 type ExploreSyllabusForm = z.infer<typeof exploreSyllabusSchema>;
 
-export default function ExploreSyllabusForm({ userId }: { userId: string }) {
+const FREE_TIER_MAX_SUBJECTS = 2;
+
+export default function ExploreSyllabusForm() {
+  const rootContext = getRouteApi("__root__").useRouteContext();
+  const user = rootContext.user!;
+
   const {
     register,
     handleSubmit,
@@ -64,16 +73,36 @@ export default function ExploreSyllabusForm({ userId }: { userId: string }) {
   const [isPending, setIsPending] = useState(false);
   const navigate = useNavigate();
 
-  // if (errors) {
-  //   toast.error(`${errors.topic?.message}`);
-  // }
+  const { data: userSubjects } = useQuery(queryUserSubjectsOptions(user.id));
+
+  const validateSubjectCreation = (): boolean => {
+    const subjectCount = userSubjects?.length || 0;
+
+    if (!user.isPro && subjectCount >= FREE_TIER_MAX_SUBJECTS) {
+      toast.info(
+        `Free users can create up to ${FREE_TIER_MAX_SUBJECTS} subject. Upgrade to Pro for unlimited subjects!`
+      );
+      return false;
+    }
+
+    return true;
+  };
 
   const onSubmit = async (data: ExploreSyllabusForm) => {
+    if (!validateSubjectCreation()) {
+      return;
+    }
+
     setIsPending(true);
-    const subject = await registerSubjectAndTreeFn({
-      data: { name: data.subject, syllabus: data.syllabus, userId },
-    });
-    navigate({ to: `/app/${subject.id}` });
+    try {
+      const subject = await registerSubjectAndTreeFn({
+        data: { name: data.subject, syllabus: data.syllabus, userId: user.id },
+      });
+      navigate({ to: `/app/${subject.id}` });
+    } catch (error) {
+      toast.error("Failed to create subject. Please try again.");
+      setIsPending(false);
+    }
   };
 
   return (
@@ -99,7 +128,6 @@ export default function ExploreSyllabusForm({ userId }: { userId: string }) {
             rows={8}
             placeholder="Paste your syllabus here (formatting doesn't matter)..."
             {...register("syllabus")}
-            // className="w-full min-h-[200px] sm:min-h-[300px] border-transparent bg-muted shadow-none px-3 sm:px-4 py-2 sm:py-3 focus:ring-2 focus:ring-border resize-y"
             className="w-full min-h-[200px] sm:min-h-[300px] border-input bg-secondary/20 px-3 sm:px-4 py-2 sm:py-3 focus:ring-2 focus:ring-border resize-y"
           />
         </div>

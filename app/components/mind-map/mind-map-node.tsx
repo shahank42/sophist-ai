@@ -5,6 +5,8 @@ import { Button } from "../ui/button";
 import { ChevronRight, ChevronDown, Plus, Check } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { setNodeCompletedFn } from "@/lib/server/rpc/nodes";
+import { getRouteApi } from "@tanstack/react-router";
+import { toast } from "sonner";
 
 interface MindmapNodeProps {
   data: {
@@ -18,6 +20,9 @@ interface MindmapNodeProps {
 }
 
 const MindmapNode = memo<MindmapNodeProps>(({ data, id }) => {
+  const rootContext = getRouteApi("__root__").useRouteContext();
+  const user = rootContext.user!;
+
   const handleExpand = (e: React.MouseEvent) => {
     e.stopPropagation();
     const event = new CustomEvent("nodeexpandtoggle", {
@@ -46,6 +51,12 @@ const MindmapNode = memo<MindmapNodeProps>(({ data, id }) => {
 
   const handleCompletion = async (e: React.MouseEvent) => {
     e.stopPropagation();
+
+    if (!user.isPro) {
+      toast.info("You need to be a Pro user to mark nodes as completed!");
+      return;
+    }
+
     const newCompleted = !data.completed;
 
     // Dispatch event for recursive completion

@@ -14,6 +14,19 @@ export const auth = betterAuth({
     },
   },
 
+  user: {
+    additionalFields: {
+      isPro: {
+        type: "boolean",
+        default: false,
+      },
+      razorpayCustomerId: {
+        type: "string",
+        required: false,
+      },
+    },
+  },
+
   socialProviders: {
     github: {
       clientId: process.env.GITHUB_CLIENT_ID!,
