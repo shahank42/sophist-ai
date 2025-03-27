@@ -87,6 +87,16 @@ export const articles = pgTable(
   }
 );
 
+// export const payments = pgTable("payments", {
+//   id: text("id")
+//     .$defaultFn(() => generateRandomString(10))
+//     .primaryKey(),
+//     razorpayPaymentId: varchar("razorpay_payment_id", { length: 255 }).unique(),
+//     razorpaySignature: varchar("razorpay_signature", { length: 255 }).unique(),
+//     status: varchar("status", { length: 50 }).notNull(),
+
+// });
+
 export const subscriptions = pgTable(
   "subscriptions",
   {
@@ -96,21 +106,21 @@ export const subscriptions = pgTable(
     userId: text("user_id")
       .notNull()
       .references(() => user.id),
-    razorpaySubscriptionId: varchar("razorpay_subscription_id", { length: 255 })
-      .notNull()
-      .unique(),
-    // Make these fields optional by removing .notNull()
+    razorpayCustomerId: varchar("razorpay_customer_id", {
+      length: 255,
+    }).unique(),
+    razorpaySubscriptionId: varchar("razorpay_subscription_id", {
+      length: 255,
+    }).unique(),
     razorpayPaymentId: varchar("razorpay_payment_id", { length: 255 }).unique(),
     razorpaySignature: varchar("razorpay_signature", { length: 255 }).unique(),
     status: varchar("status", { length: 50 }).notNull(),
-    amount: numeric("amount", { precision: 10, scale: 2 }).notNull(),
-    currency: varchar("currency", { length: 3 }).default("INR").notNull(),
     currentPeriodStart: timestamp("current_period_start", {
       withTimezone: true,
-    }).notNull(),
+    }),
     currentPeriodEnd: timestamp("current_period_end", {
       withTimezone: true,
-    }).notNull(),
+    }),
     lastPaymentDate: timestamp("last_payment_date", { withTimezone: true }),
     createdAt: timestamp("created_at", { withTimezone: true })
       .defaultNow()

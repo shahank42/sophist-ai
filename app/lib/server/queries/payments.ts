@@ -56,7 +56,6 @@ export const createOrUpdateInactiveSubscription = async (
         userId,
         status: SubscriptionStatus.INACTIVE,
         razorpaySubscriptionId,
-        amount: amount.toString(),
         currentPeriodStart: currentPeriodStart || now,
         currentPeriodEnd: currentPeriodEnd || now,
         updatedAt: now,

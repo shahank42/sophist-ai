@@ -1,5 +1,5 @@
 {
-  "id": "b2819a5a-838f-4d5b-b365-3b7defcb285b",
+  "id": "ee86e422-2d71-4c34-8cb8-027457480378",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "version": "7",
   "dialect": "postgresql",
@@ -269,11 +269,17 @@
           "primaryKey": false,
           "notNull": true
         },
+        "razorpay_customer_id": {
+          "name": "razorpay_customer_id",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": false
+        },
         "razorpay_subscription_id": {
           "name": "razorpay_subscription_id",
           "type": "varchar(255)",
           "primaryKey": false,
-          "notNull": true
+          "notNull": false
         },
         "razorpay_payment_id": {
           "name": "razorpay_payment_id",
@@ -293,30 +299,17 @@
           "primaryKey": false,
           "notNull": true
         },
-        "amount": {
-          "name": "amount",
-          "type": "numeric(10, 2)",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "currency": {
-          "name": "currency",
-          "type": "varchar(3)",
-          "primaryKey": false,
-          "notNull": true,
-          "default": "'INR'"
-        },
         "current_period_start": {
           "name": "current_period_start",
           "type": "timestamp with time zone",
           "primaryKey": false,
-          "notNull": true
+          "notNull": false
         },
         "current_period_end": {
           "name": "current_period_end",
           "type": "timestamp with time zone",
           "primaryKey": false,
-          "notNull": true
+          "notNull": false
         },
         "last_payment_date": {
           "name": "last_payment_date",
@@ -388,6 +381,13 @@
       },
       "compositePrimaryKeys": {},
       "uniqueConstraints": {
+        "subscriptions_razorpay_customer_id_unique": {
+          "name": "subscriptions_razorpay_customer_id_unique",
+          "nullsNotDistinct": false,
+          "columns": [
+            "razorpay_customer_id"
+          ]
+        },
         "subscriptions_razorpay_subscription_id_unique": {
           "name": "subscriptions_razorpay_subscription_id_unique",
           "nullsNotDistinct": false,
