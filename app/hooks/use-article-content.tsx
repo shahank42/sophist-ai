@@ -1,8 +1,10 @@
 import { getNodeParentPath } from "@/components/mind-map/utils";
 import { getArticleContentFn } from "@/lib/server/rpc/articles";
+import { Article, parseMarkdownArticle } from "@/lib/utils/article-parser";
 import { useQuery, useSuspenseQuery } from "@tanstack/react-query";
 import { getRouteApi } from "@tanstack/react-router";
 import { Node, useReactFlow } from "@xyflow/react";
+import { useEffect, useState } from "react";
 
 // export const articleContentQueryOptions = (node: Node) => ()
 
@@ -38,3 +40,20 @@ export const useArticleContent = (
     gcTime: 1000 * 60 * 30,
   });
 };
+
+export function useStructuredArticle(markdown: string) {
+  const [article, setArticle] = useState<Article | null>(null);
+
+  useEffect(() => {
+    if (!markdown) {
+      setArticle(null);
+      return;
+    }
+
+    // console.log("raw", markdown);
+    const parsedArticle = parseMarkdownArticle(markdown);
+    setArticle(parsedArticle);
+  }, [markdown]);
+
+  return article;
+}

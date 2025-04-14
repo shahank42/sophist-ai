@@ -30,6 +30,7 @@ import {
 import { useArticleContent } from "@/hooks/use-article-content";
 import { getRouteApi } from "@tanstack/react-router";
 import { set } from "zod";
+import { useIsMobile } from "@/hooks/use-mobile";
 
 interface MindmapProps {
   data: HeadingNode;
@@ -78,6 +79,8 @@ const Mindmap: React.FC<MindmapProps> = ({
       ),
     [data, expandedNodes, selectedNode]
   );
+
+  const isMobile = useIsMobile();
 
   const [nodes, setNodes, onNodesChange] = useNodesState(initialNodes);
   const [edges, setEdges, onEdgesChange] = useEdgesState(initialEdges);
@@ -223,6 +226,9 @@ const Mindmap: React.FC<MindmapProps> = ({
 
         handleNodeSelection(e.detail.id);
         centerAndSelectNode(e.detail.id);
+        if (isMobile) {
+          console.log("open sheet");
+        }
       },
       nodeexpandtoggle: (e: CustomEvent) => {
         const { id: nodeId } = e.detail;
