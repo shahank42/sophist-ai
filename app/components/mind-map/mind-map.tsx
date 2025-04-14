@@ -51,9 +51,6 @@ const Mindmap: React.FC<MindmapProps> = ({
   setSelectedNode,
   centeringOffset = DEFAULT_OFFSET,
 }) => {
-  // const {
-  //   subject: { name: topic, rawSyllabus: syllabus },
-  // } = getRouteApi("/(app)/app/$subjectId").useRouteContext();
   const {
     subject: { name: topic, rawSyllabus: syllabus },
   } = getRouteApi("/(app)/app/$subjectId").useLoaderData();
@@ -140,37 +137,31 @@ const Mindmap: React.FC<MindmapProps> = ({
       setData((prevData) => {
         if (!prevData) return prevData;
 
-        // Get the path to the current node
         const path = findPathToNode(prevData, nodeId)?.slice(0, -1) || [];
 
-        // First update the node and its children
         const updatedData = updateNodeAndChildrenCompletion(
           prevData,
           nodeId,
           completed
         );
 
-        // Then update parent nodes
         const finalData = updateParentNodesCompletion(
           updatedData,
           nodeId,
           path
         );
 
-        // Collect all affected nodes and their new completion states
         interface NodeUpdate {
           nodeId: string;
           completed: boolean;
         }
         const nodeUpdates: NodeUpdate[] = [];
 
-        // Add the target node and all its children
         const collectChildUpdates = (node: HeadingNode) => {
           nodeUpdates.push({ nodeId: node.id, completed: node.data.completed });
           node.children?.forEach(collectChildUpdates);
         };
 
-        // Find and add the target node and its subtree
         const findAndCollectUpdates = (node: HeadingNode) => {
           if (node.id === nodeId) {
             collectChildUpdates(node);
@@ -180,7 +171,6 @@ const Mindmap: React.FC<MindmapProps> = ({
         };
         findAndCollectUpdates(finalData);
 
-        // Add parent nodes
         path.forEach((parentId) => {
           const parentNode = findNodeById(finalData, parentId);
           if (parentNode) {
@@ -191,7 +181,6 @@ const Mindmap: React.FC<MindmapProps> = ({
           }
         });
 
-        // Sync with database
         setNodeAndParentsCompletedFn({ data: { nodeUpdates } });
 
         return finalData;
@@ -200,7 +189,6 @@ const Mindmap: React.FC<MindmapProps> = ({
     [setData]
   );
 
-  // Add this helper function at the component level or in utils.ts
   const findNodeById = (
     tree: HeadingNode,
     nodeId: string
@@ -214,12 +202,12 @@ const Mindmap: React.FC<MindmapProps> = ({
     return null;
   };
 
-  useEffect(() => {
-    setSelectedNode(nodes[0]);
-  }, []);
+  const [generatingNodes, setGeneratingNodes] = useState<{
+    [key: string]: boolean;
+  }>({});
 
-  useEffect(() => {
-    const handlers = {
+  const handlers = useMemo(
+    () => ({
       nodeselect: (e: CustomEvent) => {
         const node = getNode(e.detail.id);
         if (!node) return;
@@ -252,28 +240,38 @@ const Mindmap: React.FC<MindmapProps> = ({
         centerAndSelectNode(nodeId, isMobile ? 150 : 0);
       },
       nodegeneratechildren: async (e: CustomEvent) => {
-        const node = getNode(e.detail.id);
-        if (!node) return;
+        const nodeId = e.detail.id;
+        const node = getNode(nodeId);
+        if (!node || generatingNodes[nodeId]) return;
 
-        const childNodes = await generateNodeChildrenFn({
-          data: {
-            title: node.data.label as string,
-            topic,
-            currentArticle,
-            syllabus,
-          },
-        });
-        const insertedNodes = await appendNodesFn({
-          data: { parentId: e.detail.id, children: childNodes },
-        });
-        const transformedNodes = insertedNodes.map((node) => ({
-          ...node,
-          data: { completed: node.completed },
-        }));
-        setData(
-          (prev) =>
-            prev && updateTreeNodeChildren(prev, e.detail.id, transformedNodes)
-        );
+        try {
+          setGeneratingNodes((prev) => ({ ...prev, [nodeId]: true }));
+
+          const childNodes = await generateNodeChildrenFn({
+            data: {
+              title: node.data.label as string,
+              topic,
+              currentArticle,
+              syllabus,
+            },
+          });
+
+          const insertedNodes = await appendNodesFn({
+            data: { parentId: nodeId, children: childNodes },
+          });
+
+          const transformedNodes = insertedNodes.map((node) => ({
+            ...node,
+            data: { completed: node.completed },
+          }));
+
+          setData(
+            (prev) =>
+              prev && updateTreeNodeChildren(prev, nodeId, transformedNodes)
+          );
+        } finally {
+          setGeneratingNodes((prev) => ({ ...prev, [nodeId]: false }));
+        }
       },
       treenodeselect: (e: CustomEvent) => {
         expandPathToNode(e.detail.id);
@@ -283,8 +281,24 @@ const Mindmap: React.FC<MindmapProps> = ({
         const { id, completed } = e.detail;
         handleNodeCompletion(id, completed);
       },
-    };
+    }),
+    [
+      getNode,
+      handleNodeSelection,
+      centerAndSelectNode,
+      isMobile,
+      data,
+      topic,
+      currentArticle,
+      syllabus,
+      setData,
+      expandPathToNode,
+      handleNodeCompletion,
+      generatingNodes,
+    ]
+  );
 
+  useEffect(() => {
     const controller = new AbortController();
     Object.entries(handlers).forEach(([event, handler]) => {
       document.addEventListener(event, handler as EventListener, {
@@ -292,18 +306,11 @@ const Mindmap: React.FC<MindmapProps> = ({
       });
     });
     return () => controller.abort();
-  }, [
-    data,
-    getNode,
-    centerAndSelectNode,
-    topic,
-    syllabus,
-    currentArticle,
-    edges,
-    expandPathToNode,
-    handleNodeSelection,
-    handleNodeCompletion,
-  ]);
+  }, [handlers]);
+
+  useEffect(() => {
+    setSelectedNode(nodes[0]);
+  }, []);
 
   useEffect(() => {
     const { nodes: newNodes, edges: newEdges } = convertToReactFlowElements(
@@ -313,9 +320,17 @@ const Mindmap: React.FC<MindmapProps> = ({
       expandedNodes,
       selectedNode?.id
     );
-    setNodes(newNodes);
+    setNodes(
+      newNodes.map((node) => ({
+        ...node,
+        data: {
+          ...node.data,
+          isGenerating: generatingNodes[node.id] || false,
+        },
+      }))
+    );
     setEdges(newEdges);
-  }, [expandedNodes, data, setNodes, setEdges, selectedNode]);
+  }, [expandedNodes, data, setNodes, setEdges, selectedNode, generatingNodes]);
 
   return (
     <div className="h-[calc(100dvh-48px-24px)] w-full">

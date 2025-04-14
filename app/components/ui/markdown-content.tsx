@@ -6,6 +6,14 @@ import ReactMarkdown, { type Components } from "react-markdown";
 import rehypeKatex from "rehype-katex";
 import remarkGfm from "remark-gfm";
 import remarkMath from "remark-math";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
 
 const DEFAULT_PRE_BLOCK_CLASS =
   "my-4 overflow-x-scroll w-full rounded-xl bg-zinc-950 text-zinc-50 dark:bg-zinc-900 border border-border p-4";
@@ -17,8 +25,13 @@ const extractTextContent = (node: React.ReactNode): string => {
   if (Array.isArray(node)) {
     return node.map(extractTextContent).join("");
   }
-  if (isValidElement(node)) {
-    return extractTextContent(node.props.children);
+  if (
+    isValidElement(node) &&
+    typeof node.props === "object" &&
+    node.props !== null &&
+    "children" in node.props
+  ) {
+    return extractTextContent(node.props.children as React.ReactNode);
   }
   return "";
 };
@@ -210,35 +223,30 @@ const components: Partial<Components> = {
     <hr className="my-4 md:my-8" {...props} />
   ),
   table: ({ children, ...props }: React.HTMLAttributes<HTMLTableElement>) => (
-    <div className="my-6 w-full overflow-y-auto">
-      <table
-        className="relative w-full overflow-hidden border-none text-sm"
-        {...props}
-      >
-        {children}
-      </table>
+    <div className="my-6 overflow-y-auto grid grid-cols-1">
+      <Table>{children}</Table>
     </div>
   ),
+  thead: ({
+    children,
+    ...props
+  }: React.HTMLAttributes<HTMLTableSectionElement>) => (
+    <TableHeader>{children}</TableHeader>
+  ),
+  tbody: ({
+    children,
+    ...props
+  }: React.HTMLAttributes<HTMLTableSectionElement>) => (
+    <TableBody>{children}</TableBody>
+  ),
   tr: ({ children, ...props }: React.HTMLAttributes<HTMLTableRowElement>) => (
-    <tr className="last:border-b-none m-0 border-b" {...props}>
-      {children}
-    </tr>
+    <TableRow>{children}</TableRow>
   ),
   th: ({ children, ...props }: React.HTMLAttributes<HTMLTableCellElement>) => (
-    <th
-      className="px-4 py-2 text-left font-bold [&[align=center]]:text-center [&[align=right]]:text-right"
-      {...props}
-    >
-      {children}
-    </th>
+    <TableHead className="text-sm">{children}</TableHead>
   ),
   td: ({ children, ...props }: React.HTMLAttributes<HTMLTableCellElement>) => (
-    <td
-      className="px-4 py-2 text-left [&[align=center]]:text-center [&[align=right]]:text-right"
-      {...props}
-    >
-      {children}
-    </td>
+    <TableCell className="text-sm">{children}</TableCell>
   ),
   img: ({ alt, ...props }: React.ImgHTMLAttributes<HTMLImageElement>) => (
     // biome-ignore lint/a11y/useAltText: alt is not required
