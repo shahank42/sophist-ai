@@ -225,7 +225,7 @@ const Mindmap: React.FC<MindmapProps> = ({
         if (!node) return;
 
         handleNodeSelection(e.detail.id);
-        centerAndSelectNode(e.detail.id);
+        centerAndSelectNode(e.detail.id, isMobile ? -100 : -200);
         if (isMobile) {
           console.log("open sheet");
         }
@@ -249,7 +249,7 @@ const Mindmap: React.FC<MindmapProps> = ({
           }
           return next;
         });
-        centerAndSelectNode(nodeId, 0);
+        centerAndSelectNode(nodeId, isMobile ? 150 : 0);
       },
       nodegeneratechildren: async (e: CustomEvent) => {
         const node = getNode(e.detail.id);
