@@ -16,7 +16,7 @@ import {
   redirect,
   Router,
 } from "@tanstack/react-router";
-import { use, useState } from "react";
+import { use, useState, useRef, useEffect } from "react";
 import { Separator } from "@/components/ui/separator";
 import { querySubjectFn } from "@/lib/server/rpc/subjects";
 import { getSubjectTreeFn } from "@/lib/server/rpc/nodes";
@@ -27,20 +27,17 @@ async function loadSubjectTreeFn(subjectId: string) {
   const tree = await getSubjectTreeFn({
     data: { subjectId },
   });
-
   if (!tree) {
     // TODO: handle no tree found in db
     throw redirect({
       to: "/",
     });
   }
-
   return { subject, tree };
 }
 
 export const Route = createFileRoute("/(app)/app/$subjectId")({
   staleTime: 1000 * 60 * 5,
-
   beforeLoad: async ({ params: { subjectId }, context: { user } }) => {
     if (!user) {
       throw redirect({
@@ -48,26 +45,52 @@ export const Route = createFileRoute("/(app)/app/$subjectId")({
       });
     }
   },
-
   loader: async ({ params: { subjectId } }) => {
     return loadSubjectTreeFn(subjectId);
   },
-
   component: RouteComponent,
 });
 
 function RouteComponent() {
-  // const { subject, tree } = Route.useRouteContext();
   const { tree } = Route.useLoaderData();
   const [nodeData, setNodeData] = useState<HeadingNode>(tree);
   const [selectedNode, setSelectedNode] = useState<Node | null>(null);
+  const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
+  const mindmapRef = useRef<HTMLDivElement>(null);
+  const mobileMindmapContainerRef = useRef<HTMLDivElement>(null);
+  const desktopMindmapContainerRef = useRef<HTMLDivElement>(null);
+
+  // Handle responsive layout changes
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+
+    window.addEventListener("resize", checkMobile);
+    return () => window.removeEventListener("resize", checkMobile);
+  }, []);
+
+  // Move the mindmap component to the appropriate container based on viewport size
+  useEffect(() => {
+    if (!mindmapRef.current) return;
+
+    const targetContainer = isMobile
+      ? mobileMindmapContainerRef.current
+      : desktopMindmapContainerRef.current;
+
+    if (
+      targetContainer &&
+      mindmapRef.current.parentElement !== targetContainer
+    ) {
+      targetContainer.appendChild(mindmapRef.current);
+    }
+  }, [isMobile]);
 
   return (
     <>
       {nodeData && (
         <AppSidebar data={nodeData} selectedNodeId={selectedNode?.id ?? null} />
       )}
-
       <SidebarInset>
         <header className="flex h-14 shrink-0 items-center gap-2 border-b">
           <div className="flex items-center justify-between w-full gap-2 px-4">
@@ -76,41 +99,36 @@ function RouteComponent() {
               <Separator orientation="vertical" className="mr-2 h-4" />
               {nodeData?.title}
             </div>
-
             <ThemeToggle />
           </div>
         </header>
 
-        <div className="flex md:hidden h-[calc(100dvh-48px-24px)] flex-col">
-          <div className="w-full">
-            {nodeData && (
+        {/* Create a single instance of the MindmapWithProvider that will be moved to the appropriate container */}
+        <div style={{ display: "none" }}>
+          {nodeData && (
+            <div ref={mindmapRef}>
               <MindmapWithProvider
                 data={nodeData}
                 setData={setNodeData}
                 selectedNode={selectedNode}
                 setSelectedNode={setSelectedNode}
               />
-            )}
-          </div>
+            </div>
+          )}
         </div>
 
+        {/* Mobile layout container */}
+        <div className="flex md:hidden h-[calc(100dvh-48px-24px)] flex-col">
+          <div className="w-full" ref={mobileMindmapContainerRef}></div>
+        </div>
+
+        {/* Desktop layout container */}
         <div className="hidden md:flex h-[calc(100dvh-48px-24px)] flex-col">
           <ResizablePanelGroup direction="horizontal" className="w-full">
             <ResizablePanel defaultSize={50}>
-              <div className="w-full ">
-                {nodeData && (
-                  <MindmapWithProvider
-                    data={nodeData}
-                    setData={setNodeData}
-                    selectedNode={selectedNode}
-                    setSelectedNode={setSelectedNode}
-                  />
-                )}
-              </div>
+              <div className="w-full" ref={desktopMindmapContainerRef}></div>
             </ResizablePanel>
-
             <ResizableHandle withHandle />
-
             <ResizablePanel defaultSize={50}>
               <ContentPanel selectedNode={selectedNode} />
             </ResizablePanel>

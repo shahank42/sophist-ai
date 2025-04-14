@@ -2,7 +2,7 @@ import { memo, useEffect, useState } from "react";
 import { Handle, Position, useEdges, useReactFlow } from "@xyflow/react";
 import { Card, CardContent, CardHeader } from "../ui/card";
 import { Button } from "../ui/button";
-import { ChevronRight, ChevronDown, Plus, Check } from "lucide-react";
+import { ChevronRight, ChevronDown, Plus, Check, Loader2 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { setNodeCompletedFn } from "@/lib/server/rpc/nodes";
 import { getRouteApi } from "@tanstack/react-router";
@@ -25,6 +25,7 @@ interface MindmapNodeProps {
     expanded: boolean;
     selected?: boolean;
     completed: boolean;
+    isGenerating?: boolean;
   };
   id: string;
 }
@@ -98,8 +99,13 @@ const NodeCard = ({
           size="icon"
           className="h-6 w-6 ml-2"
           onClick={handleGenerateChildren}
+          disabled={data.isGenerating}
         >
-          <Plus className="size-4" />
+          {data.isGenerating ? (
+            <Loader2 className="size-4 animate-spin" />
+          ) : (
+            <Plus className="size-4" />
+          )}
         </Button>
       )}
     </CardHeader>
