@@ -53,7 +53,13 @@ export const Route = createFileRoute("/(app)/app/$subjectId")({
 });
 
 // Create a layout wrapper component using the custom hook
-function LayoutWrapper({ children }: { children: React.ReactNode }) {
+function LayoutWrapper({
+  children,
+  selectedNode,
+}: {
+  children: React.ReactNode;
+  selectedNode: Node | null;
+}) {
   const isMobile = useIsMobile();
 
   return (
@@ -74,7 +80,7 @@ function LayoutWrapper({ children }: { children: React.ReactNode }) {
             </ResizablePanel>
             <ResizableHandle withHandle />
             <ResizablePanel defaultSize={50}>
-              <ContentPanel selectedNode={null} />
+              <ContentPanel selectedNode={selectedNode} />
             </ResizablePanel>
           </ResizablePanelGroup>
         </div>
@@ -105,7 +111,7 @@ function RouteComponent() {
           </div>
         </header>
 
-        <LayoutWrapper>
+        <LayoutWrapper selectedNode={selectedNode}>
           {nodeData && (
             <MindmapWithProvider
               data={nodeData}
