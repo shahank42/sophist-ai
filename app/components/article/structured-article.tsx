@@ -22,7 +22,7 @@ export function StructuredArticle({ content }: StructuredArticleProps) {
 
   return (
     <article className="prose prose-slate dark:prose-invert prose-headings:font-semibold max-w-none">
-      <h1 className="text-3xl font-extrabold tracking-tight text-foreground mb-6 scroll-m-20">
+      <h1 className="text-2xl md:text-3xl px-3 font-extrabold tracking-tight text-foreground mb-6 scroll-m-20">
         {structuredArticle.title}
       </h1>
       <p className="leading-7 text-muted-foreground mb-6 text-base">

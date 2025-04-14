@@ -1,3 +1,4 @@
+import { cn } from "@/lib/utils";
 import type { JSX, ReactNode } from "react";
 import ShikiHighlighter, { Element, isInlineCode } from "react-shiki";
 
@@ -19,11 +20,26 @@ export const CodeHighlight = ({
   const isInline: boolean | undefined = node ? isInlineCode(node) : undefined;
 
   return !isInline ? (
-    <ShikiHighlighter language={language} theme={"ayu-dark"} {...props}>
-      {String(children)}
-    </ShikiHighlighter>
+    <div className="w-20">
+      <ShikiHighlighter
+        language={language}
+        theme={"ayu-dark"}
+        className="w-1/2"
+        {...props}
+      >
+        {String(children)}
+      </ShikiHighlighter>
+    </div>
   ) : (
-    <code className={className} {...props}>
+    // <ShikiHighlighter
+    //   language={language}
+    //   theme={"ayu-dark"}
+    //   className="w-1/2"
+    //   {...props}
+    // >
+    //   {String(children)}
+    // </ShikiHighlighter>
+    <code className={cn(className)} {...props}>
       {children}
     </code>
   );

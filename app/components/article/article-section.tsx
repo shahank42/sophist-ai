@@ -6,7 +6,7 @@ import { Skeleton } from "../ui/skeleton";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { getRouteApi } from "@tanstack/react-router";
 import { ContentSegment } from "@/lib/utils/article-parser";
-import { SectionContent } from "./section-content";
+import { MarkdownContent } from "../ui/markdown-content";
 
 // Section component to handle hover highlighting
 export const ArticleSection = ({
@@ -55,7 +55,7 @@ export const ArticleSection = ({
       onTouchStart={handleTouchStart}
       onTouchEnd={handleTouchEnd}
     >
-      <CardHeader className="pb-0 flex flex-row items-center justify-between">
+      <CardHeader className="pb-0 px-4 flex flex-row items-center justify-between">
         <CardTitle
           className={cn(
             section.headingLevel === "h2"
@@ -80,7 +80,7 @@ export const ArticleSection = ({
           onPopoverOpenChange={handlePopoverOpenChange}
         /> */}
       </CardHeader>
-      <CardContent className="pb-0">
+      <CardContent className="pb-0 px-4 self-center">
         {/* {isElaborating || isRegenerating ? ( */}
         {/* {false ? (
           <div className="space-y-3 py-2 my-6">
@@ -93,7 +93,13 @@ export const ArticleSection = ({
             <Skeleton className="h-4 w-[94%]" />
           </div>
         ) : ( */}
-        <SectionContent content={section.content} />
+        {/* <SectionContent content={section.content} /> */}
+        <div className="w-full">
+          <MarkdownContent
+            id="markdown-content-demo"
+            content={section.content}
+          />
+        </div>
         {/* )} */}
       </CardContent>
     </Card>
