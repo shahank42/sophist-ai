@@ -16,7 +16,7 @@ import {
   redirect,
   Router,
 } from "@tanstack/react-router";
-import { useState } from "react";
+import { use, useState } from "react";
 import { Separator } from "@/components/ui/separator";
 import { querySubjectFn } from "@/lib/server/rpc/subjects";
 import { getSubjectTreeFn } from "@/lib/server/rpc/nodes";
@@ -59,7 +59,6 @@ export const Route = createFileRoute("/(app)/app/$subjectId")({
 function RouteComponent() {
   // const { subject, tree } = Route.useRouteContext();
   const { tree } = Route.useLoaderData();
-  // TODO: better initial structure
   const [nodeData, setNodeData] = useState<HeadingNode>(tree);
   const [selectedNode, setSelectedNode] = useState<Node | null>(null);
 

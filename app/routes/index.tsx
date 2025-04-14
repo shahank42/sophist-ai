@@ -17,7 +17,7 @@ export const Route = createFileRoute("/")({
       // const userSubjects = await queryUserSubjectsFn({
       //   data: { userId: context.user.id },
       // });
-      const userSubjects = await context.queryClient.ensureQueryData(
+      const userSubjects = await context.queryClient.prefetchQuery(
         queryUserSubjectsOptions(context.user.id)
       );
 

@@ -48,6 +48,22 @@ import {
 import { useQuery, useSuspenseQuery } from "@tanstack/react-query";
 import { Session } from "@/lib/utils/auth-client";
 import { useTheme } from "../providers/theme-provider";
+import { MatchRoute } from "@tanstack/react-router";
+import { Route as appRoute } from "@/routes/(app)/app.$subjectId";
+
+function Spinner({ show, wait }: { show?: boolean; wait?: `delay-${number}` }) {
+  return (
+    <div
+      className={`animate-spin px-3 transition ${
+        (show ?? true)
+          ? `opacity-1 duration-500 ${wait ?? "delay-300"}`
+          : "duration-500 opacity-0 delay-0"
+      }`}
+    >
+      ⍥
+    </div>
+  );
+}
 
 export function HomeSidebar({
   user,
@@ -62,19 +78,29 @@ export function HomeSidebar({
     isPending,
     isError,
     refetch,
-  } = useQuery(queryUserSubjectsOptions(user.id));
+  } = useSuspenseQuery(queryUserSubjectsOptions(user.id));
   const router = useRouter();
   const { theme } = useTheme();
+  const { setOpenMobile } = useSidebar();
 
   return (
     <Sidebar variant="inset" {...props}>
       <SidebarHeader className="flex flex-row items-center justify-between h-16">
-        <Link to="/" className="relative w-full z-20">
+        <Link
+          to="/"
+          onClick={() => setOpenMobile(false)}
+          className="relative w-full z-20"
+        >
           <img
             src={theme === "dark" ? "/logo-dark.svg" : "/logo-light.svg"}
             alt="SophistAI"
             className="h-8 w-auto mx-auto"
           />
+          {/* <MatchRoute to={"/"} pending>
+            {(match) => {
+              return <Spinner show={!!match} wait="delay-0" />;
+            }}
+          </MatchRoute> */}
         </Link>
 
         {/* <SidebarTrigger /> */}
@@ -98,9 +124,15 @@ export function HomeSidebar({
                   <SidebarMenuButton asChild>
                     <Link
                       to="/app/$subjectId"
+                      onClick={() => setOpenMobile(false)}
                       params={{ subjectId: subject.id }}
                     >
                       <span className="text-sm">{subject.name}</span>
+                      {/* <MatchRoute to={appRoute.to} pending>
+                        {(match) => {
+                          return <Spinner show={!!match} wait="delay-0" />;
+                        }}
+                      </MatchRoute> */}
                     </Link>
                   </SidebarMenuButton>
                   <DropdownMenu>

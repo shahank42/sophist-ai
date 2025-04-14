@@ -85,7 +85,7 @@ export default function ContentPanel({
   // }
 
   return (
-    <ScrollArea className="flex h-[calc(100dvh-48px-24px)] w-full justify-center md:bg-secondary/20 px-6 md:text-secondary-foreground/80">
+    <ScrollArea className="flex h-[calc(100dvh-48px-24px)] w-full justify-center md:bg-secondary/20 px-3 md:text-secondary-foreground/80">
       <div className="mx-auto max-w-2xl py-6">
         {isPending ? (
           <SkeletonContent />

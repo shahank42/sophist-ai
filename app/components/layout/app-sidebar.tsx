@@ -135,11 +135,14 @@ export function AppSidebar({
   ...props
 }: AppSidebarProps) {
   const { theme } = useTheme();
+  const { setOpenMobile } = useSidebar();
+
   return (
     <Sidebar variant="inset" {...props}>
       <SidebarHeader className="flex flex-row items-center justify-between h-16">
         <Link
           to="/"
+          onClick={() => setOpenMobile(false)}
           className="relative w-full z-20 bg-gradient-to-b from-zinc-600 to-zinc-900 bg-clip-text text-xl text-center font-extrabold text-transparent dark:from-zinc-100 dark:to-zinc-500"
         >
           <img
