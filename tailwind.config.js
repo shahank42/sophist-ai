@@ -17,7 +17,7 @@ export default {
 				sm: 'calc(var(--radius) - 4px)'
 			},
 			fontFamily: {
-				"space-grotesk": ["Space Grotesk", "sans-serif"],
+				"nunito": ["Nunito", "sans-serif"],
 				"atkinson-hyperlegible": ["Atkinson Hyperlegible", "serif"]
 			},
 			colors: {

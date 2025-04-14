@@ -98,7 +98,7 @@ function RootDocument({ children }: Readonly<{ children: ReactNode }>) {
       <head>
         <Meta />
       </head>
-      <body className="font-space-grotesk">
+      <body className="font-nunito">
         <SidebarProvider>{children}</SidebarProvider>
         <ScrollRestoration />
         <Toaster richColors />

@@ -59,12 +59,12 @@ export const ArticleSection = ({
         <CardTitle
           className={cn(
             section.headingLevel === "h2"
-              ? "text-2xl"
+              ? "text-3xl"
               : section.headingLevel === "h3"
-                ? "text-xl"
+                ? "text-2xl"
                 : section.headingLevel === "h4"
-                  ? "text-lg"
-                  : "text-base"
+                  ? "text-xl"
+                  : "text-lg"
           )}
         >
           {section.heading}
@@ -80,7 +80,7 @@ export const ArticleSection = ({
           onPopoverOpenChange={handlePopoverOpenChange}
         /> */}
       </CardHeader>
-      <CardContent className="pb-0 px-4 self-center max-w-fit">
+      <CardContent className="pb-0 px-4 self-center max-w-fit text-lg">
         {/* {isElaborating || isRegenerating ? ( */}
         {/* {false ? (
           <div className="space-y-3 py-2 my-6">
