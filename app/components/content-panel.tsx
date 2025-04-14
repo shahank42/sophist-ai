@@ -7,6 +7,7 @@ import { Button } from "./ui/button";
 import { AlertCircle } from "lucide-react";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { DrawerContent } from "./ui/drawer";
+import { StructuredArticle } from "./article/structured-article";
 
 function ErrorContent({ retry }: { retry: () => void }) {
   return (
@@ -91,7 +92,8 @@ export default function ContentPanel({
         ) : isError ? (
           <ErrorContent retry={refetch} />
         ) : (
-          <Article content={article} />
+          // <Article content={article} />
+          <StructuredArticle content={article} />
         )}
       </div>
     </ScrollArea>
