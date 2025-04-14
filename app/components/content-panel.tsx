@@ -5,6 +5,8 @@ import { Node } from "@xyflow/react";
 import { Article } from "./article";
 import { Button } from "./ui/button";
 import { AlertCircle } from "lucide-react";
+import { useIsMobile } from "@/hooks/use-mobile";
+import { DrawerContent } from "./ui/drawer";
 
 function ErrorContent({ retry }: { retry: () => void }) {
   return (
@@ -66,8 +68,23 @@ export default function ContentPanel({
     refetch,
   } = useArticleContent(selectedNode);
 
+  // const isMobile = useIsMobile();
+  // if (isMobile) {
+  //   return (
+  //     <DrawerContent>
+  //       {isPending ? (
+  //         <SkeletonContent />
+  //       ) : isError ? (
+  //         <ErrorContent retry={refetch} />
+  //       ) : (
+  //         <Article content={article} />
+  //       )}
+  //     </DrawerContent>
+  //   );
+  // }
+
   return (
-    <ScrollArea className="flex h-[calc(100dvh-48px-24px)] w-full justify-center bg-secondary/20 px-6 text-secondary-foreground/80">
+    <ScrollArea className="flex h-[calc(100dvh-48px-24px)] w-full justify-center md:bg-secondary/20 px-6 md:text-secondary-foreground/80">
       <div className="mx-auto max-w-2xl py-6">
         {isPending ? (
           <SkeletonContent />

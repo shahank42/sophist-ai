@@ -82,7 +82,20 @@ function RouteComponent() {
           </div>
         </header>
 
-        <div className="flex h-[calc(100dvh-48px-24px)] flex-col">
+        <div className="flex md:hidden h-[calc(100dvh-48px-24px)] flex-col">
+          <div className="w-full">
+            {nodeData && (
+              <MindmapWithProvider
+                data={nodeData}
+                setData={setNodeData}
+                selectedNode={selectedNode}
+                setSelectedNode={setSelectedNode}
+              />
+            )}
+          </div>
+        </div>
+
+        <div className="hidden md:flex h-[calc(100dvh-48px-24px)] flex-col">
           <ResizablePanelGroup direction="horizontal" className="w-full">
             <ResizablePanel defaultSize={50}>
               <div className="w-full ">
