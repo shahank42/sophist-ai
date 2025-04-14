@@ -16,11 +16,12 @@ import {
   redirect,
   Router,
 } from "@tanstack/react-router";
-import { use, useState, useRef, useEffect } from "react";
+import { use, useState } from "react";
 import { Separator } from "@/components/ui/separator";
 import { querySubjectFn } from "@/lib/server/rpc/subjects";
 import { getSubjectTreeFn } from "@/lib/server/rpc/nodes";
 import { Node } from "@xyflow/react";
+import { useIsMobile } from "@/hooks/use-mobile";
 
 async function loadSubjectTreeFn(subjectId: string) {
   const subject = await querySubjectFn({ data: { id: subjectId } });
@@ -51,40 +52,41 @@ export const Route = createFileRoute("/(app)/app/$subjectId")({
   component: RouteComponent,
 });
 
+// Create a layout wrapper component using the custom hook
+function LayoutWrapper({ children }: { children: React.ReactNode }) {
+  const isMobile = useIsMobile();
+
+  return (
+    <>
+      {/* Mobile layout - only render if we're in mobile view */}
+      {isMobile && (
+        <div className="flex h-[calc(100dvh-48px-24px)] flex-col">
+          <div className="w-full">{children}</div>
+        </div>
+      )}
+
+      {/* Desktop layout - only render if we're in desktop view */}
+      {!isMobile && (
+        <div className="flex h-[calc(100dvh-48px-24px)] flex-col">
+          <ResizablePanelGroup direction="horizontal" className="w-full">
+            <ResizablePanel defaultSize={50}>
+              <div className="w-full">{children}</div>
+            </ResizablePanel>
+            <ResizableHandle withHandle />
+            <ResizablePanel defaultSize={50}>
+              <ContentPanel selectedNode={null} />
+            </ResizablePanel>
+          </ResizablePanelGroup>
+        </div>
+      )}
+    </>
+  );
+}
+
 function RouteComponent() {
   const { tree } = Route.useLoaderData();
   const [nodeData, setNodeData] = useState<HeadingNode>(tree);
   const [selectedNode, setSelectedNode] = useState<Node | null>(null);
-  const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
-  const mindmapRef = useRef<HTMLDivElement>(null);
-  const mobileMindmapContainerRef = useRef<HTMLDivElement>(null);
-  const desktopMindmapContainerRef = useRef<HTMLDivElement>(null);
-
-  // Handle responsive layout changes
-  useEffect(() => {
-    const checkMobile = () => {
-      setIsMobile(window.innerWidth < 768);
-    };
-
-    window.addEventListener("resize", checkMobile);
-    return () => window.removeEventListener("resize", checkMobile);
-  }, []);
-
-  // Move the mindmap component to the appropriate container based on viewport size
-  useEffect(() => {
-    if (!mindmapRef.current) return;
-
-    const targetContainer = isMobile
-      ? mobileMindmapContainerRef.current
-      : desktopMindmapContainerRef.current;
-
-    if (
-      targetContainer &&
-      mindmapRef.current.parentElement !== targetContainer
-    ) {
-      targetContainer.appendChild(mindmapRef.current);
-    }
-  }, [isMobile]);
 
   return (
     <>
@@ -103,37 +105,16 @@ function RouteComponent() {
           </div>
         </header>
 
-        {/* Create a single instance of the MindmapWithProvider that will be moved to the appropriate container */}
-        <div style={{ display: "none" }}>
+        <LayoutWrapper>
           {nodeData && (
-            <div ref={mindmapRef}>
-              <MindmapWithProvider
-                data={nodeData}
-                setData={setNodeData}
-                selectedNode={selectedNode}
-                setSelectedNode={setSelectedNode}
-              />
-            </div>
+            <MindmapWithProvider
+              data={nodeData}
+              setData={setNodeData}
+              selectedNode={selectedNode}
+              setSelectedNode={setSelectedNode}
+            />
           )}
-        </div>
-
-        {/* Mobile layout container */}
-        <div className="flex md:hidden h-[calc(100dvh-48px-24px)] flex-col">
-          <div className="w-full" ref={mobileMindmapContainerRef}></div>
-        </div>
-
-        {/* Desktop layout container */}
-        <div className="hidden md:flex h-[calc(100dvh-48px-24px)] flex-col">
-          <ResizablePanelGroup direction="horizontal" className="w-full">
-            <ResizablePanel defaultSize={50}>
-              <div className="w-full" ref={desktopMindmapContainerRef}></div>
-            </ResizablePanel>
-            <ResizableHandle withHandle />
-            <ResizablePanel defaultSize={50}>
-              <ContentPanel selectedNode={selectedNode} />
-            </ResizablePanel>
-          </ResizablePanelGroup>
-        </div>
+        </LayoutWrapper>
       </SidebarInset>
     </>
   );
