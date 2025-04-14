@@ -43,7 +43,7 @@ export const ArticleSection = ({
   return (
     <Card
       className={cn(
-        "my-4 transition-all duration-300 border",
+        "my-4 transition-all duration-300 border flex flex-col",
         selectedSection === index
           ? "border-accent shadow-md"
           : "border-transparent bg-transparent shadow-none",
@@ -80,7 +80,7 @@ export const ArticleSection = ({
           onPopoverOpenChange={handlePopoverOpenChange}
         /> */}
       </CardHeader>
-      <CardContent className="pb-0 px-4 self-center">
+      <CardContent className="pb-0 px-4 self-center max-w-fit">
         {/* {isElaborating || isRegenerating ? ( */}
         {/* {false ? (
           <div className="space-y-3 py-2 my-6">
@@ -94,12 +94,7 @@ export const ArticleSection = ({
           </div>
         ) : ( */}
         {/* <SectionContent content={section.content} /> */}
-        <div className="w-full">
-          <MarkdownContent
-            id="markdown-content-demo"
-            content={section.content}
-          />
-        </div>
+        <MarkdownContent id="markdown-content-demo" content={section.content} />
         {/* )} */}
       </CardContent>
     </Card>
