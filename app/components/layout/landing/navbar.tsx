@@ -1,0 +1,119 @@
+// components/landing/Navbar.tsx
+import React, { useState, useEffect } from "react";
+import { Button } from "@/components/ui/button";
+import { useTheme } from "@/components/providers/theme-provider";
+
+const Navbar = () => {
+  const { theme } = useTheme();
+  const [isScrolled, setIsScrolled] = useState(false);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      setIsScrolled(window.scrollY > 50);
+    };
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
+  return (
+    <header
+      className={`fixed top-0 w-full z-50 transition-all duration-300 ${
+        isScrolled
+          ? "bg-background/80 backdrop-blur-md shadow-sm"
+          : "bg-transparent"
+      }`}
+      role="banner"
+    >
+      <nav
+        className="flex items-center justify-center sm:justify-between px-6 py-4 max-w-7xl mx-auto"
+        aria-label="Main navigation"
+        role="navigation"
+      >
+        <a
+          href="/"
+          className="flex items-center"
+          tabIndex={0}
+          aria-label="SophistAI Home"
+        >
+          <img
+            src="/logo-lightmode.svg"
+            alt="SophistAI logo light"
+            className="dark:hidden h-8 w-auto mx-auto"
+          />
+          <img
+            src="/logo-darkmode.svg"
+            alt="SophistAI logo dark"
+            className="hidden dark:block h-8 w-auto mx-auto"
+          />
+          {/* <span className="ml-2 font-medium text-lg">SophistAI</span> */}
+        </a>
+        <ul
+          className="flex items-center gap-4"
+          role="tablist"
+          aria-label="Primary"
+        >
+          <li role="presentation">
+            <Button
+              asChild
+              variant="ghost"
+              className="hidden sm:flex"
+              tabIndex={0}
+            >
+              <a
+                href="#about"
+                role="tab"
+                aria-selected="true"
+                aria-current="page"
+              >
+                About
+              </a>
+            </Button>
+          </li>
+          <li role="presentation">
+            <Button
+              asChild
+              variant="ghost"
+              className="hidden sm:flex"
+              tabIndex={0}
+            >
+              <a href="#features" role="tab" aria-selected="false">
+                Features
+              </a>
+            </Button>
+          </li>
+          <li role="presentation">
+            <Button
+              asChild
+              variant="ghost"
+              className="hidden sm:flex"
+              tabIndex={0}
+            >
+              <a href="#pricing" role="tab" aria-selected="false">
+                Pricing
+              </a>
+            </Button>
+          </li>
+          {/* <li role="presentation">
+            <Button
+              asChild
+              variant="default"
+              tabIndex={0}
+              className="flex items-center gap-2"
+            >
+              <a href="/api/auth/google" aria-label="Sign in with Google">
+                <img
+                  src="https://www.svgrepo.com/show/475656/google-color.svg"
+                  alt="Google"
+                  className="h-5 w-5"
+                />
+                <span>Login with Google</span>
+              </a>
+            </Button>
+          </li> */}
+        </ul>
+      </nav>
+    </header>
+  );
+};
+
+export default Navbar;
