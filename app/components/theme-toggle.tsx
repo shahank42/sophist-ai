@@ -12,7 +12,19 @@ import {
 import { MoonIcon, SunIcon } from "lucide-react";
 
 export function ThemeToggle() {
-  const { setTheme, theme } = useTheme();
+  function toggleTheme() {
+    if (
+      document.documentElement.classList.contains("dark") ||
+      (!("theme" in localStorage) &&
+        window.matchMedia("(prefers-color-scheme: dark)").matches)
+    ) {
+      document.documentElement.classList.remove("dark");
+      localStorage.theme = "light";
+    } else {
+      document.documentElement.classList.add("dark");
+      localStorage.theme = "dark";
+    }
+  }
 
   return (
     <TooltipProvider disableHoverableContent>
@@ -22,7 +34,7 @@ export function ThemeToggle() {
             className="mr-2 h-8 w-8 rounded-full bg-background"
             variant="outline"
             size="icon"
-            onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
+            onClick={toggleTheme}
           >
             <SunIcon className="h-[1.2rem] w-[1.2rem] rotate-90 scale-0 transition-transform duration-500 ease-in-out dark:rotate-0 dark:scale-100" />
             <MoonIcon className="scale-1000 absolute h-[1.2rem] w-[1.2rem] rotate-0 transition-transform duration-500 ease-in-out dark:-rotate-90 dark:scale-0" />

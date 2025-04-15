@@ -80,7 +80,6 @@ export function HomeSidebar({
     refetch,
   } = useSuspenseQuery(queryUserSubjectsOptions(user.id));
   const router = useRouter();
-  const { theme } = useTheme();
   const { setOpenMobile } = useSidebar();
 
   return (
@@ -92,9 +91,14 @@ export function HomeSidebar({
           className="relative w-full z-20"
         >
           <img
-            src={theme === "dark" ? "/logo-dark.svg" : "/logo-light.svg"}
+            src="/logo-lightmode.svg"
             alt="SophistAI"
-            className="h-8 w-auto mx-auto"
+            className="dark:hidden h-8 w-auto mx-auto"
+          />
+          <img
+            src="/logo-darkmode.svg"
+            alt="SophistAI"
+            className="hidden dark:block h-8 w-auto mx-auto"
           />
           {/* <MatchRoute to={"/"} pending>
             {(match) => {

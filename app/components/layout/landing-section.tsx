@@ -18,9 +18,14 @@ export function LandingSection() {
           <div className="mx-auto max-w-3xl px-4 py-32 sm:py-48 lg:py-56">
             <div className="text-center">
               <img
-                src={theme === "dark" ? "/logo-dark.svg" : "/logo-light.svg"}
+                src="/logo-lightmode.svg"
                 alt="SophistAI"
-                className="h-32 mx-auto"
+                className="dark:hidden h-32 w-auto mx-auto"
+              />
+              <img
+                src="/logo-darkmode.svg"
+                alt="SophistAI"
+                className="hidden dark:block h-32 w-auto mx-auto"
               />
               <p className="mt-5 text-2xl leading-8 text-muted-foreground tracking-wide font-semibold">
                 Your Personal Syllabus Navigator

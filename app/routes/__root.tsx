@@ -13,13 +13,17 @@ import {
 } from "@tanstack/react-router";
 import appCss from "../styles/app.css?url";
 import { seo } from "@/lib/seo";
-import { Meta, Scripts } from "@tanstack/start";
+import { Meta } from "@tanstack/start";
 import React, { ReactNode, Suspense } from "react";
 import { NotFound } from "@/components/not-found";
 import { getUser } from "@/lib/server/rpc/users";
 import { QueryClient } from "@tanstack/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import { Toaster } from "@/components/ui/sonner";
+import { ThemeProvider } from "@/components/providers/theme-provider";
+import { ScriptOnce } from "@tanstack/react-router";
+import { Scripts } from "@tanstack/react-router";
+import { HeadContent } from "@tanstack/react-router";
 
 const TanStackRouterDevtools =
   process.env.NODE_ENV === "production"
@@ -53,24 +57,24 @@ export const Route = createRootRouteWithContext<{
     links: [
       { rel: "stylesheet", href: appCss },
       {
+        rel: "icon",
+        type: "image/png",
+        sizes: "96x96",
+        href: "/favicon-96x96.png",
+      },
+      {
+        rel: "icon",
+        type: "image/svg+xml",
+        href: "/favicon.svg",
+      },
+      { rel: "shortcut icon", href: "/favicon.ico" },
+      {
         rel: "apple-touch-icon",
         sizes: "180x180",
         href: "/apple-touch-icon.png",
       },
-      {
-        rel: "icon",
-        type: "image/png",
-        sizes: "32x32",
-        href: "/favicon-32x32.png",
-      },
-      {
-        rel: "icon",
-        type: "image/png",
-        sizes: "16x16",
-        href: "/favicon-16x16.png",
-      },
-      { rel: "manifest", href: "/site.webmanifest", color: "#fffff" },
-      { rel: "icon", href: "/favicon.ico" },
+      { rel: "apple-mobile-web-app-title", content: "SophistAI" },
+      { rel: "manifest", href: "/site.webmanifest" },
     ],
   }),
 
@@ -94,14 +98,24 @@ function RootComponent() {
 
 function RootDocument({ children }: Readonly<{ children: ReactNode }>) {
   return (
-    <html>
+    // suppress since we're updating the "dark" class in a custom script below
+    <html suppressHydrationWarning>
       <head>
-        <Meta />
+        <HeadContent />
       </head>
+
       <body className="font-nunito">
+        <ScriptOnce>
+          {`document.documentElement.classList.toggle(
+            'dark',
+            localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)
+            )`}
+        </ScriptOnce>
+
         <SidebarProvider>{children}</SidebarProvider>
         <ScrollRestoration />
         <Toaster richColors />
+
         <Suspense>
           <ReactQueryDevtools
             initialIsOpen={false}
@@ -110,6 +124,7 @@ function RootDocument({ children }: Readonly<{ children: ReactNode }>) {
           />
           <TanStackRouterDevtools position="bottom-right" />
         </Suspense>
+
         <Scripts />
       </body>
     </html>

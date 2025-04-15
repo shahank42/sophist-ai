@@ -134,7 +134,6 @@ export function AppSidebar({
   selectedNodeId,
   ...props
 }: AppSidebarProps) {
-  const { theme } = useTheme();
   const { setOpenMobile } = useSidebar();
 
   return (
@@ -146,9 +145,14 @@ export function AppSidebar({
           className="relative w-full z-20 bg-gradient-to-b from-zinc-600 to-zinc-900 bg-clip-text text-xl text-center font-extrabold text-transparent dark:from-zinc-100 dark:to-zinc-500"
         >
           <img
-            src={theme === "dark" ? "/logo-dark.svg" : "/logo-light.svg"}
+            src="/logo-lightmode.svg"
             alt="SophistAI"
-            className="h-8 w-auto mx-auto"
+            className="dark:hidden h-8 w-auto mx-auto"
+          />
+          <img
+            src="/logo-darkmode.svg"
+            alt="SophistAI"
+            className="hidden dark:block h-8 w-auto mx-auto"
           />
         </Link>
       </SidebarHeader>
