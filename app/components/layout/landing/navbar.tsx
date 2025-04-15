@@ -2,6 +2,7 @@
 import React, { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { useTheme } from "@/components/providers/theme-provider";
+import { ThemeToggle } from "@/components/theme-toggle";
 
 const Navbar = () => {
   const { theme } = useTheme();
@@ -25,7 +26,7 @@ const Navbar = () => {
       role="banner"
     >
       <nav
-        className="flex items-center justify-center sm:justify-between px-6 py-4 max-w-7xl mx-auto"
+        className="flex items-center justify-between px-6 py-4 max-w-7xl mx-auto"
         aria-label="Main navigation"
         role="navigation"
       >
@@ -38,12 +39,12 @@ const Navbar = () => {
           <img
             src="/logo-lightmode.svg"
             alt="SophistAI logo light"
-            className="dark:hidden h-8 w-auto mx-auto"
+            className="dark:hidden h-7 sm:h-8 w-auto mx-auto"
           />
           <img
             src="/logo-darkmode.svg"
             alt="SophistAI logo dark"
-            className="hidden dark:block h-8 w-auto mx-auto"
+            className="hidden dark:block h-7 sm:h-8 w-auto mx-auto"
           />
           {/* <span className="ml-2 font-medium text-lg">SophistAI</span> */}
         </a>
@@ -52,7 +53,7 @@ const Navbar = () => {
           role="tablist"
           aria-label="Primary"
         >
-          <li role="presentation">
+          {/* <li role="presentation">
             <Button
               asChild
               variant="ghost"
@@ -92,24 +93,10 @@ const Navbar = () => {
                 Pricing
               </a>
             </Button>
-          </li>
-          {/* <li role="presentation">
-            <Button
-              asChild
-              variant="default"
-              tabIndex={0}
-              className="flex items-center gap-2"
-            >
-              <a href="/api/auth/google" aria-label="Sign in with Google">
-                <img
-                  src="https://www.svgrepo.com/show/475656/google-color.svg"
-                  alt="Google"
-                  className="h-5 w-5"
-                />
-                <span>Login with Google</span>
-              </a>
-            </Button>
           </li> */}
+          <li role="presentation" className="ml-2">
+            <ThemeToggle />
+          </li>
         </ul>
       </nav>
     </header>
