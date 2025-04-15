@@ -1,5 +1,5 @@
 import { HomeSidebar } from "@/components/layout/home-sidebar";
-import { LandingSection } from "@/components/layout/landing-section";
+import { LandingSection } from "@/components/layout/landing/landing-section";
 import { MainSection } from "@/components/layout/main-section";
 import { ThemeToggle } from "@/components/theme-toggle";
 import { SidebarInset, SidebarTrigger } from "@/components/ui/sidebar";
@@ -28,26 +28,9 @@ export const Route = createFileRoute("/")({
 });
 
 function RouteComponent() {
-  const { user } = getRouteApi("__root__").useRouteContext();
-  // const { user } = Route.useLoaderData();
-
   return (
     <>
-      {user ? <HomeSidebar user={user} /> : <></>}
-      <SidebarInset>
-        {user ? (
-          <div className="py-3 px-3 flex w-full justify-between">
-            <SidebarTrigger className="" />
-            <ThemeToggle />
-          </div>
-        ) : (
-          <></>
-        )}
-
-        <div className="w-full py-3">
-          {user ? <MainSection /> : <LandingSection />}
-        </div>
-      </SidebarInset>
+      <LandingSection />
     </>
   );
 }

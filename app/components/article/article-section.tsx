@@ -21,7 +21,7 @@ export const ArticleSection = ({
   setSelectedSection: React.Dispatch<React.SetStateAction<number | null>>;
 }) => {
   const queryClient = useQueryClient();
-  const { subject } = getRouteApi("/(app)/app/$subjectId").useLoaderData();
+  const { subject } = getRouteApi("/study/$subjectId").useLoaderData();
 
   const [isHovered, setIsHovered] = useState(false);
   const [isPopoverOpen, setIsPopoverOpen] = useState(false);

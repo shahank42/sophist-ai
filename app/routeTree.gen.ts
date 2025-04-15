@@ -12,7 +12,8 @@
 
 import { Route as rootRoute } from './routes/__root'
 import { Route as IndexImport } from './routes/index'
-import { Route as appAppSubjectIdImport } from './routes/(app)/app.$subjectId'
+import { Route as StudyIndexImport } from './routes/study/index'
+import { Route as StudySubjectIdImport } from './routes/study/$subjectId'
 
 // Create/Update Routes
 
@@ -22,9 +23,15 @@ const IndexRoute = IndexImport.update({
   getParentRoute: () => rootRoute,
 } as any)
 
-const appAppSubjectIdRoute = appAppSubjectIdImport.update({
-  id: '/(app)/app/$subjectId',
-  path: '/app/$subjectId',
+const StudyIndexRoute = StudyIndexImport.update({
+  id: '/study/',
+  path: '/study/',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const StudySubjectIdRoute = StudySubjectIdImport.update({
+  id: '/study/$subjectId',
+  path: '/study/$subjectId',
   getParentRoute: () => rootRoute,
 } as any)
 
@@ -39,11 +46,18 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexImport
       parentRoute: typeof rootRoute
     }
-    '/(app)/app/$subjectId': {
-      id: '/(app)/app/$subjectId'
-      path: '/app/$subjectId'
-      fullPath: '/app/$subjectId'
-      preLoaderRoute: typeof appAppSubjectIdImport
+    '/study/$subjectId': {
+      id: '/study/$subjectId'
+      path: '/study/$subjectId'
+      fullPath: '/study/$subjectId'
+      preLoaderRoute: typeof StudySubjectIdImport
+      parentRoute: typeof rootRoute
+    }
+    '/study/': {
+      id: '/study/'
+      path: '/study'
+      fullPath: '/study'
+      preLoaderRoute: typeof StudyIndexImport
       parentRoute: typeof rootRoute
     }
   }
@@ -53,37 +67,42 @@ declare module '@tanstack/react-router' {
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
-  '/app/$subjectId': typeof appAppSubjectIdRoute
+  '/study/$subjectId': typeof StudySubjectIdRoute
+  '/study': typeof StudyIndexRoute
 }
 
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
-  '/app/$subjectId': typeof appAppSubjectIdRoute
+  '/study/$subjectId': typeof StudySubjectIdRoute
+  '/study': typeof StudyIndexRoute
 }
 
 export interface FileRoutesById {
   __root__: typeof rootRoute
   '/': typeof IndexRoute
-  '/(app)/app/$subjectId': typeof appAppSubjectIdRoute
+  '/study/$subjectId': typeof StudySubjectIdRoute
+  '/study/': typeof StudyIndexRoute
 }
 
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/app/$subjectId'
+  fullPaths: '/' | '/study/$subjectId' | '/study'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/app/$subjectId'
-  id: '__root__' | '/' | '/(app)/app/$subjectId'
+  to: '/' | '/study/$subjectId' | '/study'
+  id: '__root__' | '/' | '/study/$subjectId' | '/study/'
   fileRoutesById: FileRoutesById
 }
 
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
-  appAppSubjectIdRoute: typeof appAppSubjectIdRoute
+  StudySubjectIdRoute: typeof StudySubjectIdRoute
+  StudyIndexRoute: typeof StudyIndexRoute
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
-  appAppSubjectIdRoute: appAppSubjectIdRoute,
+  StudySubjectIdRoute: StudySubjectIdRoute,
+  StudyIndexRoute: StudyIndexRoute,
 }
 
 export const routeTree = rootRoute
@@ -97,14 +116,18 @@ export const routeTree = rootRoute
       "filePath": "__root.tsx",
       "children": [
         "/",
-        "/(app)/app/$subjectId"
+        "/study/$subjectId",
+        "/study/"
       ]
     },
     "/": {
       "filePath": "index.tsx"
     },
-    "/(app)/app/$subjectId": {
-      "filePath": "(app)/app.$subjectId.tsx"
+    "/study/$subjectId": {
+      "filePath": "study/$subjectId.tsx"
+    },
+    "/study/": {
+      "filePath": "study/index.tsx"
     }
   }
 }

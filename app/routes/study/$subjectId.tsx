@@ -37,7 +37,7 @@ async function loadSubjectTreeFn(subjectId: string) {
   return { subject, tree };
 }
 
-export const Route = createFileRoute("/(app)/app/$subjectId")({
+export const Route = createFileRoute("/study/$subjectId")({
   staleTime: 1000 * 60 * 5,
   beforeLoad: async ({ params: { subjectId }, context: { user } }) => {
     if (!user) {

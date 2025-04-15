@@ -14,8 +14,7 @@ export const useArticleContent = (
   // topic: string,
   // syllabus?: string
 ) => {
-  // const { subject } = getRouteApi("/(app)/app/$subjectId").useRouteContext();
-  const { subject } = getRouteApi("/(app)/app/$subjectId").useLoaderData();
+  const { subject } = getRouteApi("/study/$subjectId").useLoaderData();
   // TODO: Get parent path from node
   // const { getNode } = useReactFlow();
   // const parentPath = getNodeParentPath(node.id, getNode, edges).map(
