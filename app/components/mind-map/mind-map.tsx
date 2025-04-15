@@ -53,7 +53,7 @@ const Mindmap: React.FC<MindmapProps> = ({
 }) => {
   const {
     subject: { name: topic, rawSyllabus: syllabus },
-  } = getRouteApi("/(app)/app/$subjectId").useLoaderData();
+  } = getRouteApi("/study/$subjectId").useLoaderData();
 
   const { data: currentArticle } = useArticleContent(selectedNode);
 

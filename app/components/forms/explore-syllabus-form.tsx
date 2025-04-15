@@ -98,7 +98,7 @@ export default function ExploreSyllabusForm() {
       const subject = await registerSubjectAndTreeFn({
         data: { name: data.subject, syllabus: data.syllabus, userId: user.id },
       });
-      navigate({ to: `/app/${subject.id}` });
+      navigate({ to: `/study/${subject.id}` });
     } catch (error) {
       toast.error("Failed to create subject. Please try again.");
       setIsPending(false);

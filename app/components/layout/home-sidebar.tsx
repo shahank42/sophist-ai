@@ -49,7 +49,7 @@ import { useQuery, useSuspenseQuery } from "@tanstack/react-query";
 import { Session } from "@/lib/utils/auth-client";
 import { useTheme } from "../providers/theme-provider";
 import { MatchRoute } from "@tanstack/react-router";
-import { Route as appRoute } from "@/routes/(app)/app.$subjectId";
+import { Route as appRoute } from "@/routes/study/$subjectId";
 
 function Spinner({ show, wait }: { show?: boolean; wait?: `delay-${number}` }) {
   return (
@@ -72,14 +72,14 @@ export function HomeSidebar({
   user: Session["user"];
 }) {
   const { isMobile } = useSidebar();
-  const loaderData = getRouteApi("/").useLoaderData();
+  // const loaderData = getRouteApi("/study").useLoaderData();
   const {
     data: userSubjects,
     isPending,
     isError,
     refetch,
   } = useSuspenseQuery(queryUserSubjectsOptions(user.id));
-  const router = useRouter();
+  // const router = useRouter();
   const { setOpenMobile } = useSidebar();
 
   return (
@@ -127,7 +127,7 @@ export function HomeSidebar({
                 <SidebarMenuItem key={subject.name}>
                   <SidebarMenuButton asChild>
                     <Link
-                      to="/app/$subjectId"
+                      to="/study/$subjectId"
                       onClick={() => setOpenMobile(false)}
                       params={{ subjectId: subject.id }}
                     >

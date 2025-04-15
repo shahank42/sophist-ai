@@ -1,10 +1,16 @@
 // components/landing/HeroSection.tsx
 import React from "react";
-import { Button } from "@/components/ui/button";
+import { Button, buttonVariants } from "@/components/ui/button";
 import { motion } from "framer-motion";
 import { ChevronRight } from "lucide-react";
+import { authClient } from "@/lib/utils/auth-client";
+import { getRouteApi, Link } from "@tanstack/react-router";
+import { cn } from "@/lib/utils";
+import { DeviconGoogleWordmark } from "@/components/icons/devicon-google-wordmark";
 
 const HeroSection = () => {
+  const { user } = getRouteApi("__root__").useRouteContext();
+
   return (
     <section
       className="w-full relative flex min-h-screen flex-col items-center justify-center overflow-hidden bg-grid-zinc-700/[0.3] dark:bg-grid-zinc-100/[0.1] py-8 sm:py-0"
@@ -39,25 +45,39 @@ const HeroSection = () => {
             aria-label="Primary actions"
             className="flex flex-col sm:flex-row gap-4 sm:gap-6 w-3/4 sm:w-auto justify-center mt-6 sm:mt-8"
           >
-            <Button
-              size="lg"
-              className="w-full sm:w-auto py-5 sm:py-7 px-8 sm:px-12 text-lg sm:text-xl font-bold shadow-lg"
-              aria-label="Get Started"
-            >
-              <span>Study Now</span>
-              <ChevronRight
-                className="ml-2 sm:ml-3 h-5 sm:h-6 w-5 sm:w-6"
-                aria-hidden="true"
-              />
-            </Button>
-            <Button
-              size="lg"
-              variant="outline"
-              className="w-full sm:w-auto py-5 sm:py-7 px-8 sm:px-12 text-lg sm:text-xl font-semibold"
-              aria-label="See How It Works"
-            >
-              Convince Yourself
-            </Button>
+            {!user ? (
+              <Button
+                size="lg"
+                className="w-full sm:w-auto py-5 sm:py-7 px-8 sm:px-12 text-lg sm:text-xl font-bold shadow-lg flex items-center justify-center gap-3"
+                aria-label="Log in with Google"
+                onClick={async () => {
+                  await authClient.signIn.social({
+                    provider: "google",
+                    callbackURL: "/study",
+                  });
+                }}
+              >
+                <span className="flex items-center gap-2 w-full">
+                  <span>Log in with Google</span>
+                  {/* <DeviconGoogleWordmark className="w-full" /> */}
+                </span>
+              </Button>
+            ) : (
+              <Link
+                to={"/study"}
+                className={cn(
+                  buttonVariants({ variant: "default", size: "lg" }),
+                  "w-full sm:w-auto py-5 sm:py-7 px-8 sm:px-12 text-lg sm:text-xl font-bold shadow-lg"
+                )}
+                aria-label="Get Started"
+              >
+                Study Now
+                <ChevronRight
+                  className="ml-2 sm:ml-3 h-5 sm:h-6 w-5 sm:w-6"
+                  aria-hidden="true"
+                />
+              </Link>
+            )}
           </nav>
         </motion.header>
       </div>
