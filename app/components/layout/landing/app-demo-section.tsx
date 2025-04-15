@@ -6,6 +6,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { motion } from "framer-motion";
+import { useIsMobile } from "@/hooks/use-mobile";
 
 // Animation variants
 const containerVariants = {
@@ -13,6 +14,15 @@ const containerVariants = {
   show: {
     transition: {
       staggerChildren: 0.18,
+    },
+  },
+};
+
+const containerVariantsMobile = {
+  hidden: {},
+  show: {
+    transition: {
+      staggerChildren: 0.1,
     },
   },
 };
@@ -28,6 +38,21 @@ const itemVariants = {
       damping: 18,
       mass: 0.7,
       duration: 0.28,
+    },
+  },
+};
+
+const itemVariantsMobile = {
+  hidden: { opacity: 0, y: 16 },
+  show: {
+    opacity: 1,
+    y: 0,
+    transition: {
+      type: "spring",
+      stiffness: 60,
+      damping: 18,
+      mass: 0.7,
+      duration: 0.16,
     },
   },
 };
@@ -49,7 +74,27 @@ const imageVariants = {
   },
 };
 
+const imageVariantsMobile = {
+  hidden: { opacity: 0, scale: 0.98, y: 16 },
+  show: {
+    opacity: 1,
+    scale: 1,
+    y: 0,
+    transition: {
+      type: "spring",
+      stiffness: 54,
+      damping: 16,
+      mass: 0.7,
+      duration: 0.18,
+      delay: 0.04,
+    },
+  },
+};
+
 const AppDemoSection = () => {
+  // Use your useIsMobile hook
+  const isMobile = useIsMobile();
+
   return (
     <motion.section
       className="py-12 sm:py-16 md:py-24"
@@ -58,13 +103,13 @@ const AppDemoSection = () => {
       initial="hidden"
       whileInView="show"
       viewport={{ amount: 0.3 }}
-      variants={containerVariants}
+      variants={isMobile ? containerVariantsMobile : containerVariants}
     >
       <MaxWidthWrapper>
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 items-center">
           <motion.div
             className="order-2 lg:order-1 px-1"
-            variants={itemVariants}
+            variants={isMobile ? itemVariantsMobile : itemVariants}
           >
             <header>
               <h2
@@ -82,26 +127,32 @@ const AppDemoSection = () => {
             <motion.ol
               className="space-y-4 md:space-y-6"
               aria-label="Demo steps"
-              variants={containerVariants}
+              variants={isMobile ? containerVariantsMobile : containerVariants}
               initial="hidden"
               whileInView="show"
               viewport={{ amount: 0.3 }}
             >
-              <motion.li variants={itemVariants}>
+              <motion.li
+                variants={isMobile ? itemVariantsMobile : itemVariants}
+              >
                 <DemoFeature
                   number="01"
                   title="Upload Your Syllabus"
                   description="Just paste your syllabus text - formatting doesn't matter."
                 />
               </motion.li>
-              <motion.li variants={itemVariants}>
+              <motion.li
+                variants={isMobile ? itemVariantsMobile : itemVariants}
+              >
                 <DemoFeature
                   number="02"
                   title="Explore Your Knowledge Map"
                   description="Navigate through topics and subtopics in an intuitive interface."
                 />
               </motion.li>
-              <motion.li variants={itemVariants}>
+              <motion.li
+                variants={isMobile ? itemVariantsMobile : itemVariants}
+              >
                 <DemoFeature
                   number="03"
                   title="Master One Topic at a Time"
@@ -109,7 +160,10 @@ const AppDemoSection = () => {
                 />
               </motion.li>
             </motion.ol>
-            <motion.div className="mt-6 md:mt-8" variants={itemVariants}>
+            <motion.div
+              className="mt-6 md:mt-8"
+              variants={isMobile ? itemVariantsMobile : itemVariants}
+            >
               <Button
                 variant={"secondary"}
                 className="text-lg"
@@ -124,7 +178,7 @@ const AppDemoSection = () => {
           </motion.div>
           <motion.div
             className="order-1 lg:order-2 relative mx-auto w-[90%] lg:w-full max-w-xl"
-            variants={imageVariants}
+            variants={isMobile ? imageVariantsMobile : imageVariants}
           >
             <figure className="aspect-square relative rounded-2xl border border-border shadow-xl">
               <Card className="w-full h-full p-0 border-none shadow-none">

@@ -57,8 +57,8 @@ const HeroSection = () => {
                   });
                 }}
               >
-                <span className="flex items-center gap-2 w-full">
-                  <span>Log in with Google</span>
+                <span className="flex items-center gap-2">
+                  Log in with Google
                   {/* <DeviconGoogleWordmark className="w-full" /> */}
                 </span>
               </Button>
