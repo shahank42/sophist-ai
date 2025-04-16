@@ -8,7 +8,7 @@ export default function Navbar({ sticky = false }: { sticky?: boolean }) {
   return (
     <nav
       className={cn(
-        "z-[100] h-14 w-full bg-background/80 text-foreground transition-all",
+        "z-100 h-14 w-full bg-background/80 text-foreground transition-all",
         {
           "sticky top-0": sticky,
         }

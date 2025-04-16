@@ -17,7 +17,7 @@ function getInitials(name: string) {
 const TestimonialCard = ({ quote, author }: TestimonialCardProps) => {
   return (
     <figure>
-      <Card className="rounded-lg border bg-background shadow-sm flex flex-col h-full">
+      <Card className="rounded-lg border bg-background shadow-xs flex flex-col h-full">
         <CardContent className="flex-1 flex flex-col gap-2 pt-4 pb-2 px-3 md:pt-6 md:pb-3 md:px-5">
           {/* <span className="text-muted-foreground mb-1" aria-hidden="true">
             <svg

@@ -71,7 +71,7 @@ export function StructuredArticle({ content }: StructuredArticleProps) {
         //         value={customPrompt}
         //         onChange={(e) => setCustomPrompt(e.target.value)}
         //         placeholder="Enter custom regeneration prompt..."
-        //         className="flex-grow"
+        //         className="grow"
         //       />
         //       <Button
         //         onClick={() => handleCustomPromptSubmit(index)}

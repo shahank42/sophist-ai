@@ -26,7 +26,7 @@ const HeroSection = () => {
           className="flex flex-col items-center space-y-6 sm:space-y-8 text-center w-full"
         >
           <span
-            className="inline-block rounded-full bg-primary/10 px-3 py-1 sm:px-4 sm:py-2 text-base sm:text-lg md:text-xl text-primary font-semibold tracking-wide shadow"
+            className="inline-block rounded-full bg-primary/10 px-3 py-1 sm:px-4 sm:py-2 text-base sm:text-lg md:text-xl text-primary font-semibold tracking-wide shadow-sm"
             aria-label="Section tagline"
           >
             Study Harder and Smarter

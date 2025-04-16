@@ -65,7 +65,7 @@ function Tree({ node, selectedNodeId, depth = 0 }: TreeProps) {
         <SidebarMenuButton
           isActive={node.id === selectedNodeId}
           className={cn(
-            "whitespace-nowrap overflow-hidden h-7 text-ellipsis pl-[--index] pr-2 transition-colors hover:bg-zinc-700/50 hover:text-white focus:bg-zinc-700/50 focus:text-white data-[active=true]:bg-zinc-700/50",
+            "whitespace-nowrap overflow-hidden h-7 text-ellipsis pl-(--index) pr-2 transition-colors hover:bg-zinc-700/50 hover:text-white focus:bg-zinc-700/50 focus:text-white data-[active=true]:bg-zinc-700/50",
             {
               "w-[250px]": isMobile,
               "w-[200px]": !isMobile,
@@ -74,7 +74,7 @@ function Tree({ node, selectedNodeId, depth = 0 }: TreeProps) {
           onClick={onNodeClick}
           style={indentStyle}
         >
-          <ChevronRight className="invisible h-4 w-4 flex-shrink-0" />
+          <ChevronRight className="invisible h-4 w-4 shrink-0" />
           <span className="overflow-hidden text-ellipsis text-xs min-w-0">
             {node.title}
           </span>
@@ -92,7 +92,7 @@ function Tree({ node, selectedNodeId, depth = 0 }: TreeProps) {
         <SidebarMenuButton
           onClick={onNodeClick}
           className={cn(
-            "whitespace-nowrap overflow-hidden text-ellipsis pl-[--index] pr-2 transition-colors hover:bg-zinc-700/50 hover:text-white focus:bg-zinc-700/50 focus:text-white data-[active=true]:bg-zinc-700/50",
+            "whitespace-nowrap overflow-hidden text-ellipsis pl-(--index) pr-2 transition-colors hover:bg-zinc-700/50 hover:text-white focus:bg-zinc-700/50 focus:text-white data-[active=true]:bg-zinc-700/50",
             {
               "w-[250px]": isMobile,
               "w-[200px]": !isMobile,
@@ -100,7 +100,7 @@ function Tree({ node, selectedNodeId, depth = 0 }: TreeProps) {
           )}
           style={indentStyle}
         >
-          <ChevronRight className="h-4 w-4 transition-transform flex-shrink-0" />
+          <ChevronRight className="h-4 w-4 transition-transform shrink-0" />
           <span className="overflow-hidden text-ellipsis text-xs min-w-0">
             {node.title}
           </span>
@@ -142,7 +142,7 @@ export function AppSidebar({
         <Link
           to="/study"
           onClick={() => setOpenMobile(false)}
-          className="relative w-full z-20 bg-gradient-to-b from-zinc-600 to-zinc-900 bg-clip-text text-xl text-center font-extrabold text-transparent dark:from-zinc-100 dark:to-zinc-500"
+          className="relative w-full z-20 bg-linear-to-b from-zinc-600 to-zinc-900 bg-clip-text text-xl text-center font-extrabold text-transparent dark:from-zinc-100 dark:to-zinc-500"
         >
           <img
             src="/logo-lightmode.svg"

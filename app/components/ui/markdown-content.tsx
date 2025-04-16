@@ -174,7 +174,7 @@ const components: Partial<Components> = {
     </h6>
   ),
   p: ({ children, ...props }: React.HTMLAttributes<HTMLParagraphElement>) => (
-    <p className="leading-6 [&:not(:first-child)]:mt-4" {...props}>
+    <p className="leading-6 not-first:mt-4" {...props}>
       {children}
     </p>
   ),
