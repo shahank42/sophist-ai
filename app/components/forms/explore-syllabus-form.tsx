@@ -7,7 +7,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { useNavigate } from "@tanstack/react-router";
 import { Button } from "@/components/ui/button";
 import { useState } from "react";
-import { createServerFn } from "@tanstack/start";
+import { createServerFn } from "@tanstack/react-start";
 import { insertSubject } from "@/lib/server/queries/subjects";
 import { fetchInitialStructure } from "@/lib/server/prompts/generateInitialTopics";
 import { transformInitialStructure } from "@/lib/utils";

@@ -1,5 +1,5 @@
 import { buildTree, HeadingNode } from "@/components/mind-map/utils";
-import { createServerFn } from "@tanstack/start";
+import { createServerFn } from "@tanstack/react-start";
 import { notFound } from "@tanstack/react-router";
 import { z } from "zod";
 import {

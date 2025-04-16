@@ -13,7 +13,7 @@ import {
 } from "@tanstack/react-router";
 import appCss from "../styles/app.css?url";
 import { seo } from "@/lib/seo";
-import { Meta } from "@tanstack/start";
+import { Meta } from "@tanstack/react-start";
 import React, { ReactNode, Suspense } from "react";
 import { NotFound } from "@/components/not-found";
 import { getUser } from "@/lib/server/rpc/users";
