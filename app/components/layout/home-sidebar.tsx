@@ -45,11 +45,12 @@ import {
   deleteSubjectFn,
   queryUserSubjectsOptions,
 } from "@/lib/server/rpc/subjects";
-import { useQuery, useSuspenseQuery } from "@tanstack/react-query";
+import { useQuery, useSuspenseQuery, useMutation } from "@tanstack/react-query";
 import { Session } from "@/lib/utils/auth-client";
 import { useTheme } from "../providers/theme-provider";
 import { MatchRoute } from "@tanstack/react-router";
 import { Route as appRoute } from "@/routes/study/$subjectId";
+import { toast } from "sonner";
 
 function Spinner({ show, wait }: { show?: boolean; wait?: `delay-${number}` }) {
   return (
@@ -81,6 +82,19 @@ export function HomeSidebar({
   } = useSuspenseQuery(queryUserSubjectsOptions(user.id));
   // const router = useRouter();
   const { setOpenMobile } = useSidebar();
+
+  // Add mutation for deleting subject
+  const {
+    mutate: deleteSubject,
+    status: deleteStatus,
+    variables: deletingVars,
+  } = useMutation({
+    mutationFn: ({ id }: { id: string }) => deleteSubjectFn({ data: { id } }),
+    onSuccess: () => {
+      toast.error("Subject deleted!");
+      refetch();
+    },
+  });
 
   return (
     <Sidebar variant="inset" {...props}>
@@ -161,12 +175,18 @@ export function HomeSidebar({
                     </DropdownMenuItem> */}
                       <DropdownMenuSeparator />
                       <DropdownMenuItem
-                        onClick={async () => {
-                          await deleteSubjectFn({ data: { id: subject.id } });
-                          await refetch();
-                        }}
+                        onClick={() => deleteSubject({ id: subject.id })}
+                        disabled={
+                          deleteStatus === "pending" &&
+                          deletingVars?.id === subject.id
+                        }
                       >
-                        <Trash2 className="text-muted-foreground" />
+                        {deleteStatus === "pending" &&
+                        deletingVars?.id === subject.id ? (
+                          <Spinner show />
+                        ) : (
+                          <Trash2 className="text-muted-foreground" />
+                        )}
                         <span>Delete Subject</span>
                       </DropdownMenuItem>
                     </DropdownMenuContent>
