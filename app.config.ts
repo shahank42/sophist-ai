@@ -1,12 +1,10 @@
 import { defineConfig } from "@tanstack/react-start/config";
-import { cloudflare } from "unenv";
 import tsConfigPaths from "vite-tsconfig-paths";
 import tailwindcss from "@tailwindcss/vite";
 
 export default defineConfig({
   server: {
-    preset: "cloudflare-pages",
-    unenv: cloudflare,
+    preset: "netlify",
   },
   vite: {
     plugins: [
