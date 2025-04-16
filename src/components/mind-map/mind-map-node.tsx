@@ -1,20 +1,20 @@
-import { memo } from "react";
-import { Handle, Position, useReactFlow } from "@xyflow/react";
-import { Card, CardContent, CardHeader } from "../ui/card";
-import { Button } from "../ui/button";
-import { ChevronRight, ChevronDown, Plus, Check, Loader2 } from "lucide-react";
-import { cn } from "@/lib/utils";
+import { useIsMobile } from "@/hooks/use-mobile";
 import { setNodeCompletedFn } from "@/lib/server/rpc/nodes";
+import { cn } from "@/lib/utils";
 import { getRouteApi } from "@tanstack/react-router";
+import { Handle, Position, useReactFlow } from "@xyflow/react";
+import { Check, ChevronDown, ChevronRight, Loader2, Plus } from "lucide-react";
+import { memo } from "react";
 import { toast } from "sonner";
+import ContentPanel from "../content-panel";
+import { Button } from "../ui/button";
+import { Card, CardContent, CardHeader } from "../ui/card";
 import {
   Drawer,
   DrawerContent,
   DrawerHeader,
   DrawerTrigger,
 } from "../ui/drawer";
-import { useIsMobile } from "@/hooks/use-mobile";
-import ContentPanel from "../content-panel";
 
 interface MindmapNodeProps {
   data: {
@@ -30,14 +30,12 @@ interface MindmapNodeProps {
 
 const NodeCard = ({
   data,
-  id,
   handleNodeClick,
   handleCompletion,
   handleExpand,
   handleGenerateChildren,
 }: {
   data: MindmapNodeProps["data"];
-  id: string;
   handleNodeClick: () => void;
   handleCompletion: (e: React.MouseEvent) => void;
   handleExpand: (e: React.MouseEvent) => void;
@@ -194,7 +192,6 @@ const MindmapNode = memo<MindmapNodeProps>(({ data, id }) => {
       />
       <NodeCard
         data={data}
-        id={id}
         handleNodeClick={handleNodeClick}
         handleCompletion={handleCompletion}
         handleExpand={handleExpand}

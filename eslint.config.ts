@@ -19,6 +19,7 @@ export default tseslint.config(
       ".netlify",
       ".output",
       "build/",
+      "src/components/ui",
     ],
   },
   {
@@ -65,7 +66,17 @@ export default tseslint.config(
       // "@eslint-react/no-forward-ref": "off",
       // "@eslint-react/no-context-provider": "off",
       // "react-compiler/react-compiler": "warn",
+      "@typescript-eslint/no-unused-vars": "off",
       "unused-imports/no-unused-imports": "error",
+      "unused-imports/no-unused-vars": [
+        "warn",
+        {
+          vars: "all",
+          varsIgnorePattern: "^_",
+          args: "after-used",
+          argsIgnorePattern: "^_",
+        },
+      ],
     },
   }
 );

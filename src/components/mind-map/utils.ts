@@ -1,4 +1,4 @@
-import { Node, Edge, MarkerType } from "@xyflow/react";
+import { Edge, MarkerType, Node } from "@xyflow/react";
 
 // Deep clone utility to avoid direct state mutations
 const deepClone = <T>(obj: T): T => JSON.parse(JSON.stringify(obj));
@@ -55,7 +55,6 @@ interface Position {
 }
 
 const nodeWidth = 200;
-const nodeHeight = 40;
 const horizontalSpacing = 100;
 const verticalSpacing = 150;
 
@@ -87,7 +86,7 @@ export function convertToReactFlowElements(
   nodes.push(node);
 
   if (hasChildren && expandedNodes.has(data.id)) {
-    const childrenCount = data.children?.length!;
+    const childrenCount = data.children ? data.children.length : 0;
     const totalChildHeight = (childrenCount - 1) * verticalSpacing;
     const startY = position.y - totalChildHeight / 2;
 

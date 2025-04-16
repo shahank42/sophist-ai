@@ -21,7 +21,14 @@ export const useArticleContent = (
   // );
 
   return useQuery({
-    queryKey: ["article", node?.id],
+    queryKey: [
+      "article",
+      node?.id,
+      node,
+      node?.data.label,
+      subject.name,
+      subject.rawSyllabus,
+    ],
     queryFn: () => {
       if (!node) return "";
       return getArticleContentFn({

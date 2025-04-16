@@ -1,10 +1,8 @@
 // components/landing/Navbar.tsx
-import React, { useState, useEffect } from "react";
-import { useTheme } from "@/components/providers/theme-provider";
 import { ThemeToggle } from "@/components/theme-toggle";
+import { useEffect, useState } from "react";
 
 const Navbar = () => {
-  const { theme } = useTheme();
   const [isScrolled, setIsScrolled] = useState(false);
 
   useEffect(() => {
