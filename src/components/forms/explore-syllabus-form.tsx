@@ -16,7 +16,6 @@ import { getRouteApi } from "@tanstack/react-router";
 import { toast } from "sonner";
 import { useQuery } from "@tanstack/react-query";
 import { queryUserSubjectsOptions } from "@/lib/server/rpc/subjects";
-import { WordRotate } from "../magicui/word-rotate";
 
 export const registerSubjectAndTreeFn = createServerFn({ method: "POST" })
   .validator((data: unknown) =>

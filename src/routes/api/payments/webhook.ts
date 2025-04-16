@@ -1,13 +1,10 @@
 import { json } from "@tanstack/react-start";
 import { createAPIFileRoute } from "@tanstack/react-start/api";
-import Razorpay from "razorpay";
 import {
   markSubscriptionAsPending,
   haltSubscription,
   cancelSubscriptionByRazorpayId,
 } from "../../../lib/server/queries/payments";
-import { c } from "node_modules/better-auth/dist/index-Y--3ocl8";
-import { setUserProFn } from "@/lib/server/rpc/users";
 import { setUserProStatus } from "@/lib/server/queries/users";
 
 // const razorpay = new Razorpay({

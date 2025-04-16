@@ -89,7 +89,7 @@ export function convertToReactFlowElements(
   if (hasChildren && expandedNodes.has(data.id)) {
     const childrenCount = data.children?.length!;
     const totalChildHeight = (childrenCount - 1) * verticalSpacing;
-    let startY = position.y - totalChildHeight / 2;
+    const startY = position.y - totalChildHeight / 2;
 
     data.children?.forEach((child, index) => {
       const childPosition = {

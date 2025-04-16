@@ -1,13 +1,8 @@
-import { HomeSidebar } from "@/components/layout/home-sidebar";
 import { LandingSection } from "@/components/layout/landing/landing-section";
-import { MainSection } from "@/components/layout/main-section";
-import { ThemeToggle } from "@/components/theme-toggle";
-import { SidebarInset, SidebarTrigger } from "@/components/ui/sidebar";
 import {
-  queryUserSubjectsFn,
   queryUserSubjectsOptions,
 } from "@/lib/server/rpc/subjects";
-import { createFileRoute, getRouteApi } from "@tanstack/react-router";
+import { createFileRoute } from "@tanstack/react-router";
 
 export const Route = createFileRoute("/")({
   staleTime: 1000 * 60 * 5,

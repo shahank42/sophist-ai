@@ -2,11 +2,10 @@
 import React, { useState } from "react";
 import { Button, buttonVariants } from "@/components/ui/button";
 import { motion } from "framer-motion";
-import { ChevronRight, Loader2 } from "lucide-react";
+import { ChevronRight } from "lucide-react";
 import { authClient } from "@/lib/utils/auth-client";
 import { getRouteApi, Link } from "@tanstack/react-router";
 import { cn } from "@/lib/utils";
-import { DeviconGoogleWordmark } from "@/components/icons/devicon-google-wordmark";
 
 const HeroSection = () => {
   const { user } = getRouteApi("__root__").useRouteContext();

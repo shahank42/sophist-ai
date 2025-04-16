@@ -1,10 +1,4 @@
 import React, { useState } from "react";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Loader2, RefreshCw, Maximize } from "lucide-react";
-import { cn } from "@/lib/utils";
-import { Skeleton } from "@/components/ui/skeleton";
-import { Node } from "@xyflow/react";
 import { useStructuredArticle } from "@/hooks/use-article-content";
 import { ArticleSection } from "./article-section";
 

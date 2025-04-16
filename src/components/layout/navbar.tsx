@@ -1,8 +1,6 @@
 import { cn } from "@/lib/utils";
 import MaxWidthWrapper from "@/components/max-width-wrapper";
 import { ThemeToggle } from "@/components/theme-toggle";
-import { Link } from "@tanstack/react-router";
-import { SidebarTrigger } from "../ui/sidebar";
 
 export default function Navbar({ sticky = false }: { sticky?: boolean }) {
   return (

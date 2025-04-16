@@ -1,10 +1,7 @@
 "use client";
 
 import {
-  BadgeCheck,
-  Bell,
   ChevronsUpDown,
-  CreditCard,
   LogOut,
   Sparkles,
 } from "lucide-react";
@@ -27,7 +24,7 @@ import {
 } from "@/components/ui/sidebar";
 import { getRouteApi, useRouter } from "@tanstack/react-router";
 import { authClient } from "@/lib/utils/auth-client";
-import { useRazorpay, RazorpayOrderOptions } from "react-razorpay";
+import { useRazorpay } from "react-razorpay";
 import { useServerFn } from "@tanstack/react-start";
 import {
   createOrderFn,

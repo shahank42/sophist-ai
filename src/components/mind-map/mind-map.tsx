@@ -8,13 +8,11 @@ import {
   ReactFlowProvider,
   useReactFlow,
   Node,
-  Edge,
 } from "@xyflow/react";
 import "@xyflow/react/dist/style.css";
 import {
   HeadingNode,
   convertToReactFlowElements,
-  getNodeParentPath,
   findPathToNode,
   getNodeLevel,
   updateNodeAndChildrenCompletion,
@@ -29,7 +27,6 @@ import {
 } from "@/lib/server/rpc/nodes";
 import { useArticleContent } from "@/hooks/use-article-content";
 import { getRouteApi } from "@tanstack/react-router";
-import { set } from "zod";
 import { useIsMobile } from "@/hooks/use-mobile";
 
 interface MindmapProps {

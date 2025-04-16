@@ -1,5 +1,5 @@
-import { memo, useEffect, useState } from "react";
-import { Handle, Position, useEdges, useReactFlow } from "@xyflow/react";
+import { memo } from "react";
+import { Handle, Position, useReactFlow } from "@xyflow/react";
 import { Card, CardContent, CardHeader } from "../ui/card";
 import { Button } from "../ui/button";
 import { ChevronRight, ChevronDown, Plus, Check, Loader2 } from "lucide-react";
@@ -10,9 +10,7 @@ import { toast } from "sonner";
 import {
   Drawer,
   DrawerContent,
-  DrawerDescription,
   DrawerHeader,
-  DrawerTitle,
   DrawerTrigger,
 } from "../ui/drawer";
 import { useIsMobile } from "@/hooks/use-mobile";

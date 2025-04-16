@@ -2,14 +2,8 @@
 import React from "react";
 import { Brain, BookOpen, Check, GitBranch } from "lucide-react";
 import MaxWidthWrapper from "@/components/max-width-wrapper";
-import {
-  Card,
-  CardHeader,
-  CardTitle,
-  CardDescription,
-  CardContent,
-} from "@/components/ui/card";
-import { Separator } from "@/components/ui/separator";
+
+
 import FeatureCard from "./feature-card";
 
 const features = [

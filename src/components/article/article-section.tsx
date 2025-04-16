@@ -1,9 +1,7 @@
 import { useState } from "react";
 import { cn } from "@/lib/utils";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Node } from "@xyflow/react";
-import { Skeleton } from "../ui/skeleton";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useQueryClient } from "@tanstack/react-query";
 import { getRouteApi } from "@tanstack/react-router";
 import { ContentSegment } from "@/lib/utils/article-parser";
 import { MarkdownContent } from "../ui/markdown-content";

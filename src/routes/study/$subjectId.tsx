@@ -1,8 +1,7 @@
 import { AppSidebar } from "@/components/layout/app-sidebar";
 import ContentPanel from "@/components/content-panel";
-import TitleBar from "@/components/layout/title-bar";
 import MindmapWithProvider from "@/components/mind-map/mind-map";
-import { buildTree, HeadingNode } from "@/components/mind-map/utils";
+import { HeadingNode } from "@/components/mind-map/utils";
 import { ThemeToggle } from "@/components/theme-toggle";
 import {
   ResizableHandle,
@@ -12,11 +11,9 @@ import {
 import { SidebarInset, SidebarTrigger } from "@/components/ui/sidebar";
 import {
   createFileRoute,
-  Navigate,
   redirect,
-  Router,
 } from "@tanstack/react-router";
-import { use, useState } from "react";
+import { useState } from "react";
 import { Separator } from "@/components/ui/separator";
 import { querySubjectFn } from "@/lib/server/rpc/subjects";
 import { getSubjectTreeFn } from "@/lib/server/rpc/nodes";

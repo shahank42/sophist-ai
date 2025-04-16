@@ -1,33 +1,28 @@
-import * as React from "react";
-import { ChevronRight } from "lucide-react";
-import { HeadingNode } from "../mind-map/utils";
-import { ScrollArea } from "@/components/ui/scroll-area";
 import {
   Collapsible,
   CollapsibleContent,
   CollapsibleTrigger,
 } from "@/components/ui/collapsible";
+import { ScrollArea } from "@/components/ui/scroll-area";
 import {
   Sidebar,
   SidebarContent,
   SidebarFooter,
   SidebarGroup,
   SidebarGroupContent,
-  SidebarGroupLabel,
   SidebarHeader,
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
   SidebarMenuSub,
-  SidebarRail,
-  SidebarTrigger,
   useSidebar,
 } from "@/components/ui/sidebar";
-import { Link } from "@tanstack/react-router";
-import { ThemeToggle } from "../theme-toggle";
 import { cn } from "@/lib/utils";
+import { Link } from "@tanstack/react-router";
+import { ChevronRight } from "lucide-react";
+import * as React from "react";
+import { HeadingNode } from "../mind-map/utils";
 import { UserDetailsSelect } from "../user-details-select";
-import { useTheme } from "../providers/theme-provider";
 
 type TreeProps = {
   node: HeadingNode;

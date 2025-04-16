@@ -1,19 +1,7 @@
 import * as React from "react";
 import {
-  BookOpen,
-  Bot,
-  Command,
-  Folder,
-  Frame,
-  LifeBuoy,
-  Map,
   MoreHorizontal,
-  PieChart,
   RefreshCcw,
-  Send,
-  Settings2,
-  Share,
-  SquareTerminal,
   Trash2,
 } from "lucide-react";
 
@@ -29,10 +17,9 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
   SidebarMenuSkeleton,
-  SidebarTrigger,
   useSidebar,
 } from "@/components/ui/sidebar";
-import { getRouteApi, Link, useRouter } from "@tanstack/react-router";
+import { Link } from "@tanstack/react-router";
 import { UserDetailsSelect } from "../user-details-select";
 import {
   DropdownMenu,
@@ -45,11 +32,8 @@ import {
   deleteSubjectFn,
   queryUserSubjectsOptions,
 } from "@/lib/server/rpc/subjects";
-import { useQuery, useSuspenseQuery, useMutation } from "@tanstack/react-query";
+import { useSuspenseQuery, useMutation } from "@tanstack/react-query";
 import { Session } from "@/lib/utils/auth-client";
-import { useTheme } from "../providers/theme-provider";
-import { MatchRoute } from "@tanstack/react-router";
-import { Route as appRoute } from "@/routes/study/$subjectId";
 import { toast } from "sonner";
 
 function Spinner({ show, wait }: { show?: boolean; wait?: `delay-${number}` }) {

@@ -1,5 +1,5 @@
 import { createServerFn } from "@tanstack/react-start";
-import { symbol, z } from "zod";
+import { z } from "zod";
 import { getArticleByNode, insertArticle } from "../queries/articles";
 import { generateArticle } from "../prompts/generateArticle";
 

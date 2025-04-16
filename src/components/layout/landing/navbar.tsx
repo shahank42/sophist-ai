@@ -1,6 +1,5 @@
 // components/landing/Navbar.tsx
 import React, { useState, useEffect } from "react";
-import { Button } from "@/components/ui/button";
 import { useTheme } from "@/components/providers/theme-provider";
 import { ThemeToggle } from "@/components/theme-toggle";
 
