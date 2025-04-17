@@ -43,16 +43,19 @@ const NodeCard = ({
 }) => (
   <Card
     className={cn(
-      "size-[100%] overflow-hidden rounded-xl transition-all duration-300 ease-in-out hover:shadow-md hover:ring-4 dark:ring-zinc-500",
+      "size-[100%] overflow-hidden rounded-xl hover:shadow-md hover:ring-4 hover:ring-blue-200 dark:ring-zinc-500 pt-0",
       {
-        "ring-4 dark:ring-zinc-400": data.selected,
+        "ring-4 ring-blue-400 hover:ring-blue-400 dark:ring-zinc-400":
+          data.selected,
+        "bg-green-200 border-green-500 dark:bg-green-900 dark:border-green-800":
+          data.completed,
       }
     )}
     onClick={handleNodeClick}
   >
     <CardHeader
       className={cn(
-        "flex flex-row items-center justify-between border-b border-zinc-200 bg-zinc-100 px-3 py-0.5 dark:border-zinc-700 dark:bg-zinc-800",
+        "flex flex-row items-center justify-between border-b border-zinc-200 px-3 py-0.5 dark:border-zinc-700 [.border-b]:py-2",
         {
           "bg-green-400 border-green-500 dark:bg-green-700 dark:border-green-800":
             data.completed,
@@ -107,7 +110,7 @@ const NodeCard = ({
     </CardHeader>
     <CardContent
       className={cn(
-        "flex h-full items-center justify-center bg-white px-2 py-3 dark:bg-zinc-900",
+        "flex h-full items-center justify-center bg-white px-2 dark:bg-zinc-900",
         {
           "bg-green-200 dark:bg-green-900": data.completed,
           "": data.selected,
