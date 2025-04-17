@@ -1,21 +1,20 @@
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { z } from "zod";
-import { Input } from "@/components/ui/input";
-import { ArrowRight } from "lucide-react";
-import { Textarea } from "@/components/ui/textarea";
-import { useNavigate } from "@tanstack/react-router";
 import { Button } from "@/components/ui/button";
-import { useState } from "react";
-import { createServerFn } from "@tanstack/react-start";
-import { insertSubject } from "@/lib/server/queries/subjects";
+import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
 import { fetchInitialStructure } from "@/lib/server/prompts/generateInitialTopics";
-import { transformInitialStructure } from "@/lib/utils";
+import { insertSubject } from "@/lib/server/queries/subjects";
 import { storeTreeFn } from "@/lib/server/rpc/nodes";
-import { getRouteApi } from "@tanstack/react-router";
-import { toast } from "sonner";
-import { useQuery } from "@tanstack/react-query";
 import { queryUserSubjectsOptions } from "@/lib/server/rpc/subjects";
+import { transformInitialStructure } from "@/lib/utils";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useQuery } from "@tanstack/react-query";
+import { getRouteApi, useNavigate } from "@tanstack/react-router";
+import { createServerFn } from "@tanstack/react-start";
+import { ArrowRight } from "lucide-react";
+import { useState } from "react";
+import { useForm } from "react-hook-form";
+import { toast } from "sonner";
+import { z } from "zod";
 
 export const registerSubjectAndTreeFn = createServerFn({ method: "POST" })
   .validator((data: unknown) =>
@@ -106,7 +105,7 @@ export default function ExploreSyllabusForm() {
 
   return (
     <div className="flex items-center justify-center w-full min-h-screen bg-background">
-      <div className="w-full max-w-3xl mx-auto md:p-6 bg-card rounded-2xl shadow-xs">
+      <div className="w-full max-w-3xl mx-auto md:p-6 rounded-2xl shadow-xs">
         <div className="mb-8 text-center">
           <span className="flex justify-center items-center gap-4 text-3xl md:text-4xl font-semibold text-foreground">
             {/* <span className="">
