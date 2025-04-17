@@ -1,22 +1,20 @@
-import {
-  SidebarProvider,
-} from "@/components/ui/sidebar";
-import {
-  createRootRouteWithContext,
-  Outlet,
-  ScrollRestoration,
-} from "@tanstack/react-router";
-import appCss from "../styles/app.css?url";
-import { seo } from "@/lib/seo";
-import React, { ReactNode, Suspense } from "react";
 import { NotFound } from "@/components/not-found";
+import { SidebarProvider } from "@/components/ui/sidebar";
+import { Toaster } from "@/components/ui/sonner";
+import { seo } from "@/lib/seo";
 import { getUser } from "@/lib/server/rpc/users";
 import { QueryClient } from "@tanstack/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
-import { Toaster } from "@/components/ui/sonner";
-import { ScriptOnce } from "@tanstack/react-router";
-import { Scripts } from "@tanstack/react-router";
-import { HeadContent } from "@tanstack/react-router";
+import {
+  createRootRouteWithContext,
+  HeadContent,
+  Outlet,
+  ScriptOnce,
+  Scripts,
+  ScrollRestoration,
+} from "@tanstack/react-router";
+import React, { ReactNode, Suspense } from "react";
+import appCss from "../styles/app.css?url";
 
 const TanStackRouterDevtools =
   process.env.NODE_ENV === "production"
@@ -105,7 +103,9 @@ function RootDocument({ children }: Readonly<{ children: ReactNode }>) {
             )`}
         </ScriptOnce>
 
-        <SidebarProvider>{children}</SidebarProvider>
+        <SidebarProvider data-vaul-drawer-wrapper="">
+          {children}
+        </SidebarProvider>
         <ScrollRestoration />
         <Toaster richColors />
 

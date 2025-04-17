@@ -216,7 +216,7 @@ const MindmapNode = memo<MindmapNodeProps>(({ data, id }) => {
 
   if (isMobile) {
     return (
-      <Drawer>
+      <Drawer shouldScaleBackground setBackgroundColorOnScale>
         <DrawerTrigger>{nodeContent}</DrawerTrigger>
         <DrawerContent>
           <DrawerHeader className="h-1"></DrawerHeader>
