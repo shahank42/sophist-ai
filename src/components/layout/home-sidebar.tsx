@@ -1,9 +1,5 @@
+import { MoreHorizontal, RefreshCcw, Trash2 } from "lucide-react";
 import * as React from "react";
-import {
-  MoreHorizontal,
-  RefreshCcw,
-  Trash2,
-} from "lucide-react";
 
 import {
   Sidebar,
@@ -19,8 +15,14 @@ import {
   SidebarMenuSkeleton,
   useSidebar,
 } from "@/components/ui/sidebar";
+import {
+  deleteSubjectFn,
+  queryUserSubjectsOptions,
+} from "@/lib/server/rpc/subjects";
+import { Session } from "@/lib/utils/auth-client";
+import { useMutation, useSuspenseQuery } from "@tanstack/react-query";
 import { Link } from "@tanstack/react-router";
-import { UserDetailsSelect } from "../user-details-select";
+import { toast } from "sonner";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -28,13 +30,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "../ui/dropdown-menu";
-import {
-  deleteSubjectFn,
-  queryUserSubjectsOptions,
-} from "@/lib/server/rpc/subjects";
-import { useSuspenseQuery, useMutation } from "@tanstack/react-query";
-import { Session } from "@/lib/utils/auth-client";
-import { toast } from "sonner";
+import { UserDetailsSelect } from "../user-details-select";
 
 function Spinner({ show, wait }: { show?: boolean; wait?: `delay-${number}` }) {
   return (
