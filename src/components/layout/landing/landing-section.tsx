@@ -1,19 +1,18 @@
 // components/landing/LandingPage.tsx
-import React from "react";
-import Navbar from "./navbar";
-import HeroSection from "./hero-section";
-import FeaturesSection from "./features-section";
+import HeroSection from "@/components/layout/landing/hero-section-2";
 import AppDemoSection from "./app-demo-section";
-import TestimonialsSection from "./testimonials-section";
 import CTASection from "./cta-section";
+import Features from "./features";
 import Footer from "./footer";
+import TestimonialsSection from "./testimonials-section";
 
 export function LandingSection() {
   return (
     <div className="relative">
-      <Navbar />
+      {/* <Navbar /> */}
       <HeroSection />
-      <FeaturesSection />
+      {/* <FeaturesSection /> */}
+      <Features />
       <AppDemoSection />
       <TestimonialsSection />
       <CTASection />
