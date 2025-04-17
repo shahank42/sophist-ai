@@ -141,10 +141,9 @@ export default function ExploreSyllabusForm() {
           <div>
             <Textarea
               id="syllabus"
-              rows={8}
               placeholder="Paste your syllabus here (formatting doesn't matter)..."
               {...register("syllabus")}
-              className="w-full border-input focus:border-ring focus:ring-ring rounded-lg bg-background text-foreground placeholder-muted-foreground "
+              className="w-full h-52 border-input focus:border-ring focus:ring-ring rounded-lg bg-background text-foreground placeholder-muted-foreground "
             />
             {errors.syllabus && (
               <p className="mt-1 text-sm text-destructive">
