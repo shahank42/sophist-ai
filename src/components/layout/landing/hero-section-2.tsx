@@ -109,7 +109,7 @@ export default function HeroSection() {
                   preset="fade-in-blur"
                   speedSegment={0.3}
                   as="h1"
-                  className="mt-8 text-balance text-6xl md:text-7xl lg:mt-16 xl:text-[5.25rem]"
+                  className="mt-8 text-balance text-5xl md:text-7xl lg:mt-16 xl:text-[5.25rem]"
                 >
                   Your Personal Syllabus Navigator
                 </TextEffect>
@@ -119,7 +119,7 @@ export default function HeroSection() {
                   speedSegment={0.3}
                   delay={0.5}
                   as="p"
-                  className="mx-auto mt-8 max-w-2xl text-balance text-lg"
+                  className="mx-auto mt-8 max-w-2xl text-balance text-md md:text-lg"
                 >
                   Stop Cramming and start mastering with our interactive AI
                   syllabus mapping.
