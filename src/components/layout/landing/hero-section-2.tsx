@@ -4,7 +4,7 @@ import { TextEffect } from "@/components/motion-primitives/text-effect";
 import { Button, buttonVariants } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { authClient } from "@/lib/utils/auth-client";
-import { Link } from "@tanstack/react-router";
+import { getRouteApi, Link } from "@tanstack/react-router";
 import { ArrowRight } from "lucide-react";
 
 const transitionVariants = {
@@ -28,6 +28,8 @@ const transitionVariants = {
 };
 
 export default function HeroSection() {
+  const { user } = getRouteApi("__root__").useRouteContext();
+
   return (
     <>
       <HeroHeader />
@@ -86,7 +88,7 @@ export default function HeroSection() {
                     className="hover:bg-background dark:hover:border-t-border bg-muted group mx-auto flex w-fit items-center gap-4 rounded-full border p-1 pl-4 shadow-md shadow-zinc-950/5 transition-colors duration-300 dark:border-t-white/5 dark:shadow-zinc-950"
                   >
                     <span className="text-foreground text-sm">
-                      Diversion 2k25 winner!
+                      Winners of Diversion 2k25!
                     </span>
                     <span className="dark:border-background block h-4 w-0.5 border-l bg-white dark:bg-zinc-700"></span>
 
@@ -137,29 +139,46 @@ export default function HeroSection() {
                   }}
                   className="mt-12 flex flex-col items-center justify-center gap-2 md:flex-row"
                 >
-                  <div
-                    key={1}
-                    className="bg-foreground/10 rounded-[calc(var(--radius-xl)+0.125rem)] border p-0.5"
-                  >
-                    <a
-                      // asChild
-                      // size="lg"
-                      className={cn(
-                        buttonVariants({ variant: "default", size: "lg" }),
-                        "rounded-xl px-5 text-base cursor-pointer"
-                      )}
-                      onClick={async () => {
-                        await authClient.signIn.social({
-                          provider: "google",
-                          callbackURL: "/study",
-                        });
-                      }}
+                  {!user ? (
+                    <div
+                      key={1}
+                      className="bg-foreground/10 rounded-[calc(var(--radius-xl)+0.125rem)] border p-0.5"
                     >
-                      {/* <Link to="/study"> */}
-                      <span className="text-nowrap">Study Now</span>
-                      {/* </Link> */}
-                    </a>
-                  </div>
+                      <a
+                        // asChild
+                        // size="lg"
+                        className={cn(
+                          buttonVariants({ variant: "default", size: "lg" }),
+                          "rounded-xl px-5 text-base cursor-pointer"
+                        )}
+                        onClick={async () => {
+                          await authClient.signIn.social({
+                            provider: "google",
+                            callbackURL: "/study",
+                          });
+                        }}
+                      >
+                        {/* <Link to="/study"> */}
+                        <span className="text-nowrap">Log in with Google</span>
+                        {/* </Link> */}
+                      </a>
+                    </div>
+                  ) : (
+                    <div
+                      key={1}
+                      className="bg-foreground/10 rounded-[calc(var(--radius-xl)+0.125rem)] border p-0.5"
+                    >
+                      <Button
+                        asChild
+                        size="lg"
+                        className={"rounded-xl px-5 text-base"}
+                      >
+                        <Link to="/study">
+                          <span className="text-nowrap">Study Now</span>
+                        </Link>
+                      </Button>
+                    </div>
+                  )}
                   <Button
                     key={2}
                     asChild
@@ -203,7 +222,7 @@ export default function HeroSection() {
                   />
                   <img
                     className="z-2 border-border/25 aspect-15/8 relative rounded-2xl border dark:hidden"
-                    src="/landing/hero.png"
+                    src="/landing/hero-light.png"
                     alt="app screen"
                     width="2700"
                     height="1440"
