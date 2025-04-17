@@ -1,5 +1,6 @@
-@import url("https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400;1,700&family=Nunito:ital,wght@0,200..1000;1,200..1000&display=swap")
-layer(base);
+@import url("https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400;1,700&family=Nunito+Sans:ital,opsz,wght@0,6..12,200..1000;1,6..12,200..1000&display=swap");
+
+/* layer(base); */
 
 @import "tailwindcss";
 @import "tw-animate-css";
@@ -71,6 +72,9 @@ layer(base);
   --animate-accordion-down: accordion-down 0.2s ease-out;
   --animate-accordion-up: accordion-up 0.2s ease-out;
 
+  --font-sans: var(--font-sans);
+  --font-atkinson-hyperlegible: var(--font-atkinson-hyperlegible);
+
   @keyframes accordion-down {
     from {
       height: 0;
@@ -123,6 +127,9 @@ layer(base);
   --sidebar-accent-foreground: oklch(0.21 0.006 285.885);
   --sidebar-border: oklch(0.92 0.004 286.32);
   --sidebar-ring: oklch(0.705 0.015 286.067);
+
+  --font-sans: Nunito Sans, monospace;
+  --font-atkinson-hyperlegible: Atkinson Hyperlegible, monospace;
 }
 
 .dark {
@@ -157,6 +164,9 @@ layer(base);
   --sidebar-accent-foreground: oklch(0.985 0 0);
   --sidebar-border: oklch(1 0 0 / 10%);
   --sidebar-ring: oklch(0.552 0.016 285.938);
+
+  --font-sans: Nunito Sans, monospace;
+  --font-atkinson-hyperlegible: Atkinson Hyperlegible, monospace;
 }
 
 @layer base {

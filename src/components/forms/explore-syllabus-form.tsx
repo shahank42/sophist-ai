@@ -107,7 +107,7 @@ export default function ExploreSyllabusForm() {
     <div className="flex items-center justify-center w-full min-h-screen">
       <div className="w-full max-w-3xl mx-auto md:p-6 rounded-2xl shadow-xs">
         <div className="mb-8 text-center">
-          <span className="flex justify-center items-center gap-4 text-3xl md:text-4xl font-semibold text-foreground">
+          <span className="flex justify-center items-center gap-4 text-3xl md:text-4xl text-foreground">
             {/* <span className="">
               What do you want to
             </span>
