@@ -1,36 +1,33 @@
-import React, { useState, useCallback, useMemo, useEffect } from "react";
-import {
-  ReactFlow,
-  Background,
-  useNodesState,
-  useEdgesState,
-  addEdge,
-  ReactFlowProvider,
-  useReactFlow,
-  Node,
-  Edge,
-} from "@xyflow/react";
-import "@xyflow/react/dist/style.css";
-import {
-  HeadingNode,
-  convertToReactFlowElements,
-  getNodeParentPath,
-  findPathToNode,
-  getNodeLevel,
-  updateNodeAndChildrenCompletion,
-  updateParentNodesCompletion,
-} from "./utils";
-import MindmapNode from "./mind-map-node";
-import { updateTreeNodeChildren } from "./utils";
+import { useArticleContent } from "@/hooks/use-article-content";
+import { useIsMobile } from "@/hooks/use-mobile";
 import {
   appendNodesFn,
   generateNodeChildrenFn,
   setNodeAndParentsCompletedFn,
 } from "@/lib/server/rpc/nodes";
-import { useArticleContent } from "@/hooks/use-article-content";
 import { getRouteApi } from "@tanstack/react-router";
-import { set } from "zod";
-import { useIsMobile } from "@/hooks/use-mobile";
+import {
+  addEdge,
+  Background,
+  Node,
+  ReactFlow,
+  ReactFlowProvider,
+  useEdgesState,
+  useNodesState,
+  useReactFlow,
+} from "@xyflow/react";
+import "@xyflow/react/dist/style.css";
+import React, { useCallback, useEffect, useMemo, useState } from "react";
+import MindmapNode from "./mind-map-node";
+import {
+  convertToReactFlowElements,
+  findPathToNode,
+  getNodeLevel,
+  HeadingNode,
+  updateNodeAndChildrenCompletion,
+  updateParentNodesCompletion,
+  updateTreeNodeChildren,
+} from "./utils";
 
 interface MindmapProps {
   data: HeadingNode;
@@ -58,7 +55,7 @@ const Mindmap: React.FC<MindmapProps> = ({
   const { data: currentArticle } = useArticleContent(selectedNode);
 
   const [expandedByLevel, setExpandedByLevel] = useState(
-    new Map([[0, data.id]])
+    () => new Map([[0, data.id]])
   );
 
   const expandedNodes = useMemo(
@@ -95,7 +92,7 @@ const Mindmap: React.FC<MindmapProps> = ({
         setSelectedNode(node);
       }
     },
-    [getNode, setCenter, centeringOffset]
+    [getNode, setCenter, centeringOffset, setSelectedNode]
   );
 
   const expandPathToNode = useCallback(
@@ -134,6 +131,19 @@ const Mindmap: React.FC<MindmapProps> = ({
 
   const handleNodeCompletion = useCallback(
     async (nodeId: string, completed: boolean) => {
+      const findNodeById = (
+        tree: HeadingNode,
+        nodeId: string
+      ): HeadingNode | null => {
+        if (tree.id === nodeId) return tree;
+        if (!tree.children) return null;
+        for (const child of tree.children) {
+          const found = findNodeById(child, nodeId);
+          if (found) return found;
+        }
+        return null;
+      };
+
       setData((prevData) => {
         if (!prevData) return prevData;
 
@@ -188,19 +198,6 @@ const Mindmap: React.FC<MindmapProps> = ({
     },
     [setData]
   );
-
-  const findNodeById = (
-    tree: HeadingNode,
-    nodeId: string
-  ): HeadingNode | null => {
-    if (tree.id === nodeId) return tree;
-    if (!tree.children) return null;
-    for (const child of tree.children) {
-      const found = findNodeById(child, nodeId);
-      if (found) return found;
-    }
-    return null;
-  };
 
   const [generatingNodes, setGeneratingNodes] = useState<{
     [key: string]: boolean;
@@ -309,8 +306,8 @@ const Mindmap: React.FC<MindmapProps> = ({
   }, [handlers]);
 
   useEffect(() => {
-    setSelectedNode(nodes[0]);
-  }, []);
+    setSelectedNode((prev) => (prev ? prev : nodes[0]));
+  }, [setSelectedNode, nodes]);
 
   useEffect(() => {
     const { nodes: newNodes, edges: newEdges } = convertToReactFlowElements(

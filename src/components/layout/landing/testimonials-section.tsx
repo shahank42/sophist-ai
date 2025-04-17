@@ -1,5 +1,4 @@
 // components/landing/TestimonialsSection.tsx
-import React from "react";
 import MaxWidthWrapper from "@/components/max-width-wrapper";
 import TestimonialCard from "./testimonial-card";
 
@@ -78,7 +77,7 @@ const TestimonialsSection = () => {
         >
           {testimonials.map((t, i) => (
             <div
-              key={i}
+              key={t.quote}
               className="mb-4 md:mb-5 break-inside-avoid"
               style={{
                 transform: `rotate(${getRotation(i)}deg)`,

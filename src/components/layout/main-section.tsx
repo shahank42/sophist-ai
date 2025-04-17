@@ -1,9 +1,5 @@
-import { getRouteApi, Link } from "@tanstack/react-router";
-import { buttonVariants } from "@/components/ui/button";
-import { cn } from "@/lib/utils";
 import ExploreSyllabusForm from "../forms/explore-syllabus-form";
 import MaxWidthWrapper from "../max-width-wrapper";
-import { RetroGrid } from "../retro-grid";
 
 export function MainSection() {
   return (

@@ -1,26 +1,19 @@
-import { AppSidebar } from "@/components/layout/app-sidebar";
-import Navbar from "@/components/layout/navbar";
 import {
-  SidebarInset,
   SidebarProvider,
-  SidebarTrigger,
 } from "@/components/ui/sidebar";
 import {
-  createRootRoute,
   createRootRouteWithContext,
   Outlet,
   ScrollRestoration,
 } from "@tanstack/react-router";
 import appCss from "../styles/app.css?url";
 import { seo } from "@/lib/seo";
-import { Meta } from "@tanstack/react-start";
 import React, { ReactNode, Suspense } from "react";
 import { NotFound } from "@/components/not-found";
 import { getUser } from "@/lib/server/rpc/users";
 import { QueryClient } from "@tanstack/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import { Toaster } from "@/components/ui/sonner";
-import { ThemeProvider } from "@/components/providers/theme-provider";
 import { ScriptOnce } from "@tanstack/react-router";
 import { Scripts } from "@tanstack/react-router";
 import { HeadContent } from "@tanstack/react-router";
@@ -40,6 +33,11 @@ const TanStackRouterDevtools =
 export const Route = createRootRouteWithContext<{
   queryClient: QueryClient;
 }>()({
+  beforeLoad: async () => {
+    const user = await getUser();
+    return { user };
+  },
+
   head: () => ({
     meta: [
       {
@@ -77,11 +75,6 @@ export const Route = createRootRouteWithContext<{
       { rel: "manifest", href: "/site.webmanifest" },
     ],
   }),
-
-  beforeLoad: async () => {
-    const user = await getUser();
-    return { user };
-  },
 
   component: RootComponent,
 

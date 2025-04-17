@@ -1,7 +1,6 @@
 import { HeadingNode } from "@/components/mind-map/utils";
 import { clsx, type ClassValue } from "clsx";
 import { twMerge } from "tailwind-merge";
-import { randomUUID } from "node:crypto";
 import { nanoid } from "nanoid";
 import { ChildrenStructure } from "./server/prompts/generateChildren";
 import { InitialStructure } from "./server/prompts/generateInitialTopics";

@@ -1,13 +1,9 @@
 // components/landing/CTASection.tsx
-import React from "react";
+import MaxWidthWrapper from "@/components/max-width-wrapper";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardFooter } from "@/components/ui/card";
-import { useTheme } from "@/components/providers/theme-provider";
-import MaxWidthWrapper from "@/components/max-width-wrapper";
 
 const CTASection = () => {
-  const { theme } = useTheme();
-
   return (
     <section
       className="py-12 md:py-24 relative overflow-hidden"
@@ -36,7 +32,7 @@ const CTASection = () => {
           </CardContent>
           <CardFooter className="flex justify-center">
             <Button
-              variant={theme === "dark" ? "outline" : "default"}
+              variant={"outline"}
               className="w-full md:w-60 py-4 md:py-6 text-lg md:text-xl"
               aria-label="Get Started"
             >

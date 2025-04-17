@@ -1,15 +1,12 @@
 import {
   AnyPgColumn,
-  foreignKey,
   integer,
   pgTable,
   text,
   timestamp,
-  uuid,
   index,
   boolean,
   varchar,
-  numeric,
   uniqueIndex, // add this import
 } from "drizzle-orm/pg-core";
 import { user } from "./auth-schema";

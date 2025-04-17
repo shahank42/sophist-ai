@@ -1,5 +1,4 @@
 import { HomeSidebar } from "@/components/layout/home-sidebar";
-import LandingSection from "@/components/layout/landing/landing-section";
 import { MainSection } from "@/components/layout/main-section";
 import { ThemeToggle } from "@/components/theme-toggle";
 import { SidebarInset, SidebarTrigger } from "@/components/ui/sidebar";

@@ -1,12 +1,11 @@
 // components/landing/HeroSection.tsx
-import React, { useState } from "react";
 import { Button, buttonVariants } from "@/components/ui/button";
-import { motion } from "framer-motion";
-import { ChevronRight, Loader2 } from "lucide-react";
+import { cn } from "@/lib/utils";
 import { authClient } from "@/lib/utils/auth-client";
 import { getRouteApi, Link } from "@tanstack/react-router";
-import { cn } from "@/lib/utils";
-import { DeviconGoogleWordmark } from "@/components/icons/devicon-google-wordmark";
+import { motion } from "framer-motion";
+import { ChevronRight } from "lucide-react";
+import { useState } from "react";
 
 const HeroSection = () => {
   const { user } = getRouteApi("__root__").useRouteContext();
@@ -17,7 +16,7 @@ const HeroSection = () => {
       className="w-full relative flex min-h-screen flex-col items-center justify-center overflow-hidden bg-grid-zinc-700/[0.3] dark:bg-grid-zinc-100/[0.1] py-8 sm:py-0"
       aria-label="Hero section"
     >
-      <div className="pointer-events-none absolute inset-0 flex items-center justify-center bg-background [mask-image:radial-gradient(ellipse_at_center,transparent_20%,black)]"></div>
+      <div className="pointer-events-none absolute inset-0 flex items-center justify-center bg-white [mask-image:radial-gradient(ellipse_at_center,transparent_20%,black)] dark:bg-black"></div>
       <div className="relative z-10 w-full max-w-3xl px-4 sm:px-6 lg:px-8 flex flex-col items-center">
         <motion.header
           initial={{ opacity: 0, y: 20 }}

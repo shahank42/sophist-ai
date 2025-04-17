@@ -1,10 +1,9 @@
 // components/landing/Footer.tsx
-import React, { useState } from "react";
-import { Button } from "@/components/ui/button";
-import { useTheme } from "@/components/providers/theme-provider";
 import MaxWidthWrapper from "@/components/max-width-wrapper";
+import { Button } from "@/components/ui/button";
 import { Link } from "@tanstack/react-router";
 import { ChevronDown, ChevronUp } from "lucide-react";
+import React, { useState } from "react";
 
 const FooterSection = ({
   title,
@@ -38,8 +37,6 @@ const FooterSection = ({
 };
 
 const Footer = () => {
-  const { theme } = useTheme();
-
   return (
     <footer
       className="bg-background border-t border-border py-8 md:py-12"

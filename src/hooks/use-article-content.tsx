@@ -1,9 +1,8 @@
-import { getNodeParentPath } from "@/components/mind-map/utils";
 import { getArticleContentFn } from "@/lib/server/rpc/articles";
 import { Article, parseMarkdownArticle } from "@/lib/utils/article-parser";
-import { useQuery, useSuspenseQuery } from "@tanstack/react-query";
+import { useQuery } from "@tanstack/react-query";
 import { getRouteApi } from "@tanstack/react-router";
-import { Node, useReactFlow } from "@xyflow/react";
+import { Node } from "@xyflow/react";
 import { useEffect, useState } from "react";
 
 // export const articleContentQueryOptions = (node: Node) => ()
@@ -22,7 +21,14 @@ export const useArticleContent = (
   // );
 
   return useQuery({
-    queryKey: ["article", node?.id],
+    queryKey: [
+      "article",
+      node?.id,
+      node,
+      node?.data.label,
+      subject.name,
+      subject.rawSyllabus,
+    ],
     queryFn: () => {
       if (!node) return "";
       return getArticleContentFn({

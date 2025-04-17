@@ -2,11 +2,8 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import { Skeleton } from "./ui/skeleton";
 import { useArticleContent } from "@/hooks/use-article-content";
 import { Node } from "@xyflow/react";
-import { Article } from "./article";
 import { Button } from "./ui/button";
 import { AlertCircle } from "lucide-react";
-import { useIsMobile } from "@/hooks/use-mobile";
-import { DrawerContent } from "./ui/drawer";
 import { StructuredArticle } from "./article/structured-article";
 
 function ErrorContent({ retry }: { retry: () => void }) {

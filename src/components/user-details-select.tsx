@@ -1,13 +1,6 @@
 "use client";
 
-import {
-  BadgeCheck,
-  Bell,
-  ChevronsUpDown,
-  CreditCard,
-  LogOut,
-  Sparkles,
-} from "lucide-react";
+import { ChevronsUpDown, LogOut, Sparkles } from "lucide-react";
 
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import {
@@ -25,17 +18,13 @@ import {
   SidebarMenuItem,
   useSidebar,
 } from "@/components/ui/sidebar";
-import { getRouteApi, useRouter } from "@tanstack/react-router";
+import { createSubscriptionFn, verifyOrderFn } from "@/lib/server/rpc/payments";
 import { authClient } from "@/lib/utils/auth-client";
-import { useRazorpay, RazorpayOrderOptions } from "react-razorpay";
+import { getRouteApi, useRouter } from "@tanstack/react-router";
 import { useServerFn } from "@tanstack/react-start";
-import {
-  createOrderFn,
-  createSubscriptionFn,
-  verifyOrderFn,
-} from "@/lib/server/rpc/payments";
-import { toast } from "sonner";
 import { useCallback } from "react";
+import { useRazorpay } from "react-razorpay";
+import { toast } from "sonner";
 import Premium from "./icons/premium";
 
 function UserAvatar({ username }: { username: string }) {
@@ -52,30 +41,26 @@ function UserAvatar({ username }: { username: string }) {
 
 export function UserDetailsSelect() {
   const { isMobile } = useSidebar();
-  const { user, queryClient: rootRouteApiQueryClient } =
-    getRouteApi("__root__").useRouteContext();
+  const { user } = getRouteApi("__root__").useRouteContext();
   const router = useRouter();
 
-  if (!user) {
-    return null;
-  }
-
-  const getRazorpayOrder = useServerFn(createOrderFn);
   const getRazorpaySubscription = useServerFn(createSubscriptionFn);
   const verifyRazorpayOrder = useServerFn(verifyOrderFn);
+  const { error: _error, Razorpay } = useRazorpay();
 
-  const paymentSuccess = () => {
+  const paymentSuccess = useCallback(() => {
     toast("Payment Successful! Thanks for buying ^_^");
-  };
+  }, []);
 
-  const paymentFailure = () => {
+  const paymentFailure = useCallback(() => {
     toast("Payment Failed! Please try again.");
-  };
-
-  const { error, Razorpay } = useRazorpay();
+  }, []);
 
   const handlePayment = useCallback(async () => {
-    const { razorpaySubscription: subscriptionOrder, dbSubscription } =
+    // Safety check inside the callback
+    if (!user) return;
+
+    const { razorpaySubscription: subscriptionOrder } =
       await getRazorpaySubscription({ data: { userId: user.id } });
     console.log(subscriptionOrder);
 
@@ -90,7 +75,12 @@ export function UserDetailsSelect() {
         name: user.name,
         email: user.email,
       },
-      handler: async function (response: any) {
+      handler: async function (response: {
+        razorpay_subscription_id: string;
+        razorpay_payment_id: string;
+        razorpay_signature: string;
+        [key: string]: unknown;
+      }) {
         const data = await verifyRazorpayOrder({
           data: {
             subscriptionId: response.razorpay_subscription_id,
@@ -109,14 +99,27 @@ export function UserDetailsSelect() {
       },
     };
 
-    //@ts-ignore
+    // @ts-expect-error options type won't match
     const razorpayInstance = new Razorpay(options);
     razorpayInstance.open();
 
-    razorpayInstance.on("payment.failed", function (response) {
+    razorpayInstance.on("payment.failed", function (_response) {
       paymentFailure();
     });
-  }, [Razorpay]);
+  }, [
+    Razorpay,
+    getRazorpaySubscription,
+    verifyRazorpayOrder,
+    user,
+    router,
+    paymentSuccess,
+    paymentFailure,
+  ]);
+
+  // Now perform the conditional return after all hooks
+  if (!user) {
+    return null;
+  }
 
   return (
     <SidebarMenu>

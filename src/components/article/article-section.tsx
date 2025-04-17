@@ -1,10 +1,5 @@
-import { useState } from "react";
-import { cn } from "@/lib/utils";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Node } from "@xyflow/react";
-import { Skeleton } from "../ui/skeleton";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { getRouteApi } from "@tanstack/react-router";
+import { cn } from "@/lib/utils";
 import { ContentSegment } from "@/lib/utils/article-parser";
 import { MarkdownContent } from "../ui/markdown-content";
 
@@ -20,23 +15,20 @@ export const ArticleSection = ({
   selectedSection: number | null;
   setSelectedSection: React.Dispatch<React.SetStateAction<number | null>>;
 }) => {
-  const queryClient = useQueryClient();
-  const { subject } = getRouteApi("/study/$subjectId").useLoaderData();
-
-  const [isHovered, setIsHovered] = useState(false);
-  const [isPopoverOpen, setIsPopoverOpen] = useState(false);
+  // const [isHovered, setIsHovered] = useState(false);
+  // const [isPopoverOpen, setIsPopoverOpen] = useState(false);
 
   // Section should appear hovered when either mouse is over it OR popover is open
-  const shouldShowHovered = isHovered || isPopoverOpen;
+  // const shouldShowHovered = isHovered || isPopoverOpen;
 
   const handleTouchStart = () => {
     setSelectedSection(index);
-    setIsHovered(true);
+    // setIsHovered(true);
   };
 
   const handleTouchEnd = () => {
     // Add a small delay before removing the hover state to make the effect visible
-    setTimeout(() => setIsHovered(false), 1000);
+    // setTimeout(() => setIsHovered(false), 1000);
     // setSelectedSection(null);
   };
 

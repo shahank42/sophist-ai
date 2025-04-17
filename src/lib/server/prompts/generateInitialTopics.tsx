@@ -2,11 +2,8 @@
 import { z } from "zod";
 import { ChatGroq } from "@langchain/groq";
 import {
-  CLOUDFLARE_ACCOUNT_ID,
-  CLOUDFLARE_API_TOKEN,
   GROQ_API_KEY,
 } from "@/lib/langchain";
-import { CloudflareWorkersAI } from "@langchain/cloudflare";
 
 export const initialStructureSchema = z.object({
   id: z.string().describe("The unique identifier for the node."),

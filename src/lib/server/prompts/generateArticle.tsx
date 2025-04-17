@@ -2,12 +2,9 @@
 // import { model } from "../langchain";
 
 import {
-  CLOUDFLARE_ACCOUNT_ID,
-  CLOUDFLARE_API_TOKEN,
   GROQ_API_KEY,
 } from "@/lib/langchain";
 import { ChatGroq } from "@langchain/groq";
-import { CloudflareWorkersAI } from "@langchain/cloudflare";
 
 export async function generateArticle(
   title: string,
