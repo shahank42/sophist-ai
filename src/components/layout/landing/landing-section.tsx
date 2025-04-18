@@ -1,8 +1,8 @@
 // components/landing/LandingPage.tsx
 import HeroSection from "@/components/layout/landing/hero-section-2";
-import AppDemoSection from "./app-demo-section";
-import CTASection from "./cta-section";
+import CallToAction from "./cta";
 import Features from "./features";
+import AppDemo from "./features-12";
 import Footer from "./footer";
 import TestimonialsSection from "./testimonials-section";
 
@@ -13,9 +13,10 @@ export function LandingSection() {
       <HeroSection />
       {/* <FeaturesSection /> */}
       <Features />
-      <AppDemoSection />
+      {/* <AppDemoSection /> */}
+      <AppDemo />
       <TestimonialsSection />
-      <CTASection />
+      <CallToAction />
       <Footer />
     </div>
   );
