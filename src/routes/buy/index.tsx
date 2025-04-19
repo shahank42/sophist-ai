@@ -1,5 +1,15 @@
 import { HeroHeader } from "@/components/layout/landing/hero6-header";
 import { Button } from "@/components/ui/button";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+import { Input } from "@/components/ui/input";
 import { checkoutMonthFn } from "@/lib/server/rpc/payments";
 import {
   createFileRoute,
@@ -9,6 +19,7 @@ import {
 } from "@tanstack/react-router";
 import { useServerFn } from "@tanstack/react-start";
 import { Check } from "lucide-react";
+import React from "react";
 
 export const Route = createFileRoute("/buy/")({
   component: RouteComponent,
@@ -18,6 +29,14 @@ function RouteComponent() {
   const { user } = getRouteApi("__root__").useRouteContext();
   const navigate = useNavigate();
   const checkoutMonth = useServerFn(checkoutMonthFn);
+
+  const [billing, setBilling] = React.useState({
+    city: "",
+    country: "",
+    state: "",
+    street: "",
+    zipcode: "",
+  });
 
   const checkoutMonthHandler = async () => {
     if (!user) {
@@ -30,13 +49,7 @@ function RouteComponent() {
         userId: user.id,
         name: user.name,
         email: user.email,
-        billing: {
-          city: "Delhi",
-          country: "IN",
-          state: "Delhi",
-          street: "Connaught Place",
-          zipcode: "110001",
-        },
+        billing,
       },
     });
 
@@ -65,15 +78,13 @@ function RouteComponent() {
             <div className="rounded-(--radius) flex flex-col justify-between space-y-8 border p-6 md:col-span-2 md:my-2 md:rounded-r-none md:border-r-0 lg:p-10">
               <div className="space-y-4">
                 <div>
-                  <h2 className="font-medium">Buy For a Week</h2>
-                  <span className="my-3 block text-2xl font-semibold">
-                    ₹200
-                  </span>
+                  <h2 className="font-medium">SophistAI Basic</h2>
+                  <span className="my-3 block text-2xl font-semibold">₹0</span>
                   <p className="text-muted-foreground text-sm">Per editor</p>
                 </div>
 
                 <Button asChild variant="outline" className="w-full">
-                  <Link to="/">Get Started</Link>
+                  <Link to="/study">Get Started</Link>
                 </Button>
 
                 <hr className="border-dashed" />
@@ -104,19 +115,88 @@ function RouteComponent() {
                     <p className="text-muted-foreground text-sm">Per editor</p>
                   </div>
 
-                  <Button
-                    onClick={() => checkoutMonthHandler()}
-                    className="w-full"
-                  >
-                    Get Started
-                  </Button>
-                  {/* <Button asChild className="w-full">
-                    <a
-                      href={`https://test.checkout.dodopayments.com/buy/${"pdt_dIAbS43JcxN2JH8VG730t"}?quantity=1&redirect_url=${"localhost:3000"}%2Fstudy`}
-                    >
-                      Get Started
-                    </a>
-                  </Button> */}
+                  <Dialog>
+                    <DialogTrigger asChild>
+                      <Button className="w-full">Buy Now!</Button>
+                    </DialogTrigger>
+                    <DialogContent className="sm:max-w-[425px]">
+                      <DialogHeader>
+                        <DialogTitle>Billing Information</DialogTitle>
+                        <DialogDescription>
+                          Please provide your billing address details to proceed
+                          with checkout.
+                        </DialogDescription>
+                      </DialogHeader>
+                      <div className="grid gap-4 py-4">
+                        <div className="grid gap-4">
+                          <Input
+                            id="street"
+                            value={billing.street}
+                            onChange={(e) =>
+                              setBilling((prev) => ({
+                                ...prev,
+                                street: e.target.value,
+                              }))
+                            }
+                            placeholder="Street Address"
+                          />
+                        </div>
+                        <div className="grid sm:grid-cols-2 gap-4">
+                          <Input
+                            id="city"
+                            value={billing.city}
+                            onChange={(e) =>
+                              setBilling((prev) => ({
+                                ...prev,
+                                city: e.target.value,
+                              }))
+                            }
+                            placeholder="City"
+                          />
+                          <Input
+                            id="zipcode"
+                            value={billing.zipcode}
+                            onChange={(e) =>
+                              setBilling((prev) => ({
+                                ...prev,
+                                zipcode: e.target.value,
+                              }))
+                            }
+                            placeholder="Postal Code"
+                          />
+                        </div>
+                        <div className="grid sm:grid-cols-2 gap-4">
+                          <Input
+                            id="state"
+                            value={billing.state}
+                            onChange={(e) =>
+                              setBilling((prev) => ({
+                                ...prev,
+                                state: e.target.value,
+                              }))
+                            }
+                            placeholder="State"
+                          />
+                          <Input
+                            id="country"
+                            value={billing.country}
+                            onChange={(e) =>
+                              setBilling((prev) => ({
+                                ...prev,
+                                country: e.target.value,
+                              }))
+                            }
+                            placeholder="Country"
+                          />
+                        </div>
+                      </div>
+                      <DialogFooter>
+                        <Button onClick={checkoutMonthHandler} type="submit">
+                          Proceed to Checkout
+                        </Button>
+                      </DialogFooter>
+                    </DialogContent>
+                  </Dialog>
                 </div>
 
                 <div>
