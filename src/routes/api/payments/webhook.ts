@@ -1,57 +1,54 @@
-import { setUserProStatus } from "@/lib/server/queries/users";
-import { json } from "@tanstack/react-start";
+import { WebhookPayload } from "@/lib/types/api-types";
 import { createAPIFileRoute } from "@tanstack/react-start/api";
-import {
-  cancelSubscriptionByRazorpayId,
-  haltSubscription,
-  markSubscriptionAsPending,
-} from "../../../lib/server/queries/payments";
+import { Webhook } from "standardwebhooks";
 
-// const razorpay = new Razorpay({
-// key_id: process.env.VITE_RAZORPAY_API_KEY_ID!,
-// key_secret: process.env.RAZORPAY_API_SECRET!,
-// });
+const webhook = new Webhook(process.env.NEXT_PUBLIC_DODO_WEBHOOK_KEY!);
 
 export const APIRoute = createAPIFileRoute("/api/payments/webhook")({
-  POST: async ({ request }) => {
-    // TODO: verify webhook signature
-    console.log("Webhook hit!");
-    const { event, payload } = await request.json();
-    switch (event) {
-      case "subscription.pending": {
-        console.log(
-          `Marking subscription as pending: ${payload.subscription.entity.id}`
-        );
-        await markSubscriptionAsPending(payload.subscription.entity.id);
-        break;
+  GET: async ({ request, params }) => {
+    try {
+      const rawBody = await request.text();
+      console.log("Received webhook request", { rawBody });
+
+      // const webhookHeaders = {
+      //   "webhook-id": headersList.get("webhook-id") || "",
+      //   "webhook-signature": headersList.get("webhook-signature") || "",
+      //   "webhook-timestamp": headersList.get("webhook-timestamp") || "",
+      // };
+
+      // await webhook.verify(rawBody, webhookHeaders);
+      // logger.info("Webhook verified successfully");
+
+      const payload = JSON.parse(rawBody) as WebhookPayload;
+
+      if (!payload.data?.customer?.email) {
+        throw new Error("Missing customer email in payload");
       }
-      case "subscription.halted": {
-        console.log(`Halting subscription: ${payload.subscription.entity.id}`);
-        const haltedSubscription = await haltSubscription(
-          payload.subscription.entity.id
-        );
-        if (haltedSubscription)
-          await setUserProStatus(haltedSubscription.userId, false);
-        break;
+
+      const email = payload.data.customer.email;
+
+      if (
+        payload.data.payload_type === "Payment" &&
+        payload.type === "payment.succeeded" &&
+        !payload.data.subscription_id
+      ) {
+        // await handleOneTimePayment(email, payload);
+        console.log("One-time payment succeeded for email:", email);
       }
-      case "subscription.cancelled": {
-        console.log(
-          `Cancelling subscription: ${payload.subscription.entity.id}`
-        );
-        const cancelledSubscription = await cancelSubscriptionByRazorpayId(
-          payload.subscription.entity.id
-        );
-        if (cancelledSubscription)
-          await setUserProStatus(cancelledSubscription.userId, false);
-        break;
-      }
-      default: {
-        console.log(
-          `Unhandled event: ${event} for subscription: ${payload.subscription.entity.id}`
-        );
-        break;
-      }
+
+      return Response.json(
+        { message: "Webhook processed successfully" },
+        { status: 200 }
+      );
+    } catch (error) {
+      console.error("Webhook processing failed", error);
+      return Response.json(
+        {
+          error: "Webhook processing failed",
+          details: error instanceof Error ? error.message : "Unknown error",
+        },
+        { status: 400 }
+      );
     }
-    return json({ success: true }, { status: 200 });
   },
 });
