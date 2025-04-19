@@ -4,7 +4,7 @@ import { createAPIFileRoute } from "@tanstack/react-start/api";
 // const webhook = new Webhook(process.env.NEXT_PUBLIC_DODO_WEBHOOK_KEY!);
 
 export const APIRoute = createAPIFileRoute("/api/payments/webhook")({
-  GET: async ({ request, params }) => {
+  POST: async ({ request, params }) => {
     try {
       const rawBody = await request.text();
       console.log("Received webhook request", { rawBody });
