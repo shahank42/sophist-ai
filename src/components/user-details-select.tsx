@@ -19,7 +19,7 @@ import {
   useSidebar,
 } from "@/components/ui/sidebar";
 import { authClient } from "@/lib/utils/auth-client";
-import { getRouteApi, useRouter } from "@tanstack/react-router";
+import { getRouteApi, Link, useRouter } from "@tanstack/react-router";
 import Premium from "./icons/premium";
 
 function UserAvatar({ username }: { username: string }) {
@@ -84,9 +84,11 @@ export function UserDetailsSelect() {
                   <span>SophistAI Pro</span>
                 </DropdownMenuLabel>
               ) : (
-                <DropdownMenuItem>
-                  <Sparkles className="size-4 mr-2" />
-                  Upgrade to Pro
+                <DropdownMenuItem asChild>
+                  <Link to="/buy">
+                    <Sparkles className="size-4 mr-2" />
+                    Upgrade to Pro
+                  </Link>
                 </DropdownMenuItem>
               )}
             </DropdownMenuGroup>
