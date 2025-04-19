@@ -1,3 +1,7 @@
+import {
+  BillingAddress,
+  BillingAddressForm,
+} from "@/components/forms/billing-address-form";
 import { HeroHeader } from "@/components/layout/landing/hero6-header";
 import { Button } from "@/components/ui/button";
 import {
@@ -9,7 +13,6 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import { Input } from "@/components/ui/input";
 import { checkoutMonthFn } from "@/lib/server/rpc/payments";
 import {
   createFileRoute,
@@ -30,7 +33,7 @@ function RouteComponent() {
   const navigate = useNavigate();
   const checkoutMonth = useServerFn(checkoutMonthFn);
 
-  const [billing, setBilling] = React.useState({
+  const [billing, setBilling] = React.useState<BillingAddress>({
     city: "",
     country: "",
     state: "",
@@ -127,69 +130,10 @@ function RouteComponent() {
                           with checkout.
                         </DialogDescription>
                       </DialogHeader>
-                      <div className="grid gap-4 py-4">
-                        <div className="grid gap-4">
-                          <Input
-                            id="street"
-                            value={billing.street}
-                            onChange={(e) =>
-                              setBilling((prev) => ({
-                                ...prev,
-                                street: e.target.value,
-                              }))
-                            }
-                            placeholder="Street Address"
-                          />
-                        </div>
-                        <div className="grid sm:grid-cols-2 gap-4">
-                          <Input
-                            id="city"
-                            value={billing.city}
-                            onChange={(e) =>
-                              setBilling((prev) => ({
-                                ...prev,
-                                city: e.target.value,
-                              }))
-                            }
-                            placeholder="City"
-                          />
-                          <Input
-                            id="zipcode"
-                            value={billing.zipcode}
-                            onChange={(e) =>
-                              setBilling((prev) => ({
-                                ...prev,
-                                zipcode: e.target.value,
-                              }))
-                            }
-                            placeholder="Postal Code"
-                          />
-                        </div>
-                        <div className="grid sm:grid-cols-2 gap-4">
-                          <Input
-                            id="state"
-                            value={billing.state}
-                            onChange={(e) =>
-                              setBilling((prev) => ({
-                                ...prev,
-                                state: e.target.value,
-                              }))
-                            }
-                            placeholder="State"
-                          />
-                          <Input
-                            id="country"
-                            value={billing.country}
-                            onChange={(e) =>
-                              setBilling((prev) => ({
-                                ...prev,
-                                country: e.target.value,
-                              }))
-                            }
-                            placeholder="Country"
-                          />
-                        </div>
-                      </div>
+                      <BillingAddressForm
+                        billing={billing}
+                        onChange={setBilling}
+                      />
                       <DialogFooter>
                         <Button onClick={checkoutMonthHandler} type="submit">
                           Proceed to Checkout
