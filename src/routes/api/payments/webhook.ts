@@ -1,8 +1,7 @@
 import { WebhookPayload } from "@/lib/types/api-types";
 import { createAPIFileRoute } from "@tanstack/react-start/api";
-import { Webhook } from "standardwebhooks";
 
-const webhook = new Webhook(process.env.NEXT_PUBLIC_DODO_WEBHOOK_KEY!);
+// const webhook = new Webhook(process.env.NEXT_PUBLIC_DODO_WEBHOOK_KEY!);
 
 export const APIRoute = createAPIFileRoute("/api/payments/webhook")({
   GET: async ({ request, params }) => {
