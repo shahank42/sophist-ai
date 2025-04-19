@@ -9,6 +9,7 @@ export const user = pgTable("user", {
   createdAt: timestamp("created_at").notNull(),
   updatedAt: timestamp("updated_at").notNull(),
   isPro: boolean("is_pro"),
+  customerId: text("customer_id"),
   proStartDate: timestamp("pro_start_date"),
   proEndDate: timestamp("pro_end_date"),
 });

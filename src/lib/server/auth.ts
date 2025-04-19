@@ -20,6 +20,9 @@ export const auth = betterAuth({
         type: "boolean",
         default: false,
       },
+      customerId: {
+        type: "string",
+      },
       proStartDate: {
         type: "date",
       },

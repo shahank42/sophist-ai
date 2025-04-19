@@ -1,10 +1,11 @@
+import { handleOneTimePayment } from "@/lib/server/queries/payments";
 import { WebhookPayload } from "@/lib/types/api-types";
 import { createAPIFileRoute } from "@tanstack/react-start/api";
 
 // const webhook = new Webhook(process.env.NEXT_PUBLIC_DODO_WEBHOOK_KEY!);
 
 export const APIRoute = createAPIFileRoute("/api/payments/webhook")({
-  POST: async ({ request, params }) => {
+  POST: async ({ request }) => {
     try {
       const rawBody = await request.text();
       console.log("Received webhook request", { rawBody });
@@ -31,7 +32,7 @@ export const APIRoute = createAPIFileRoute("/api/payments/webhook")({
         payload.type === "payment.succeeded" &&
         !payload.data.subscription_id
       ) {
-        // await handleOneTimePayment(email, payload);
+        await handleOneTimePayment(payload);
         console.log("One-time payment succeeded for email:", email);
       }
 

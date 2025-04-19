@@ -1,6 +1,6 @@
 {
-  "id": "d30330b1-36d7-4460-bd3b-e2cca5ae804a",
-  "prevId": "9608df05-9ea2-4404-8ac9-44212b993bc8",
+  "id": "081bc30b-f82a-4aac-8d6e-8b5c7fb4bbab",
+  "prevId": "6922beeb-eacd-462f-8334-10ec635e31fe",
   "version": "7",
   "dialect": "postgresql",
   "tables": {
@@ -213,6 +213,12 @@
           "primaryKey": false,
           "notNull": true
         },
+        "payment_id": {
+          "name": "payment_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
         "payment_type": {
           "name": "payment_type",
           "type": "payment_type",
@@ -221,59 +227,23 @@
           "notNull": true,
           "default": "'one_time'"
         },
+        "payment_link": {
+          "name": "payment_link",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
         "payment_method": {
           "name": "payment_method",
           "type": "text",
           "primaryKey": false,
           "notNull": false
         },
-        "transaction_id": {
-          "name": "transaction_id",
+        "customer_id": {
+          "name": "customer_id",
           "type": "text",
           "primaryKey": false,
           "notNull": true
-        },
-        "customer_email": {
-          "name": "customer_email",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "customer_name": {
-          "name": "customer_name",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "billing_city": {
-          "name": "billing_city",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "billing_country": {
-          "name": "billing_country",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "billing_state": {
-          "name": "billing_state",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "billing_street": {
-          "name": "billing_street",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "billing_zipcode": {
-          "name": "billing_zipcode",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": false
         },
         "created_at": {
           "name": "created_at",
@@ -306,11 +276,11 @@
           "method": "btree",
           "with": {}
         },
-        "payments_transaction_id_idx": {
-          "name": "payments_transaction_id_idx",
+        "payments_payment_id_idx": {
+          "name": "payments_payment_id_idx",
           "columns": [
             {
-              "expression": "transaction_id",
+              "expression": "payment_id",
               "isExpression": false,
               "asc": true,
               "nulls": "last"
@@ -321,11 +291,11 @@
           "method": "btree",
           "with": {}
         },
-        "payments_customer_email_idx": {
-          "name": "payments_customer_email_idx",
+        "payments_customer_id_idx": {
+          "name": "payments_customer_id_idx",
           "columns": [
             {
-              "expression": "customer_email",
+              "expression": "customer_id",
               "isExpression": false,
               "asc": true,
               "nulls": "last"
@@ -669,6 +639,24 @@
         "is_pro": {
           "name": "is_pro",
           "type": "boolean",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "customer_id": {
+          "name": "customer_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "pro_start_date": {
+          "name": "pro_start_date",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "pro_end_date": {
+          "name": "pro_end_date",
+          "type": "timestamp",
           "primaryKey": false,
           "notNull": false
         }

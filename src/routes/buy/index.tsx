@@ -1,6 +1,13 @@
 import { HeroHeader } from "@/components/layout/landing/hero6-header";
 import { Button } from "@/components/ui/button";
-import { createFileRoute, getRouteApi, Link } from "@tanstack/react-router";
+import { checkoutMonthFn } from "@/lib/server/rpc/payments";
+import {
+  createFileRoute,
+  getRouteApi,
+  Link,
+  useNavigate,
+} from "@tanstack/react-router";
+import { useServerFn } from "@tanstack/react-start";
 import { Check } from "lucide-react";
 
 export const Route = createFileRoute("/buy/")({
@@ -9,6 +16,34 @@ export const Route = createFileRoute("/buy/")({
 
 function RouteComponent() {
   const { user } = getRouteApi("__root__").useRouteContext();
+  const navigate = useNavigate();
+  const checkoutMonth = useServerFn(checkoutMonthFn);
+
+  const checkoutMonthHandler = async () => {
+    if (!user) {
+      console.error("User not logged in");
+      return;
+    }
+
+    const payment = await checkoutMonth({
+      data: {
+        userId: user.id,
+        name: user.name,
+        email: user.email,
+        billing: {
+          city: "Delhi",
+          country: "IN",
+          state: "Delhi",
+          street: "Connaught Place",
+          zipcode: "110001",
+        },
+      },
+    });
+
+    console.log("payment created", payment);
+
+    navigate({ href: payment.payment_link ?? "/", reloadDocument: true });
+  };
 
   return (
     <>
@@ -69,19 +104,19 @@ function RouteComponent() {
                     <p className="text-muted-foreground text-sm">Per editor</p>
                   </div>
 
-                  {/* <Button
+                  <Button
                     onClick={() => checkoutMonthHandler()}
                     className="w-full"
                   >
                     Get Started
-                  </Button> */}
-                  <Button asChild className="w-full">
+                  </Button>
+                  {/* <Button asChild className="w-full">
                     <a
                       href={`https://test.checkout.dodopayments.com/buy/${"pdt_dIAbS43JcxN2JH8VG730t"}?quantity=1&redirect_url=${"localhost:3000"}%2Fstudy`}
                     >
                       Get Started
                     </a>
-                  </Button>
+                  </Button> */}
                 </div>
 
                 <div>

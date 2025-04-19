@@ -1,15 +1,10 @@
 import { Payment, WebhookPayload } from "@/lib/types/api-types";
-import { User } from "better-auth";
 import { db } from "../db";
 import { payments } from "../db/schema";
 import { setUserProStatus } from "./users";
 
-export async function handleOneTimePayment(
-  user: User,
-  payload: WebhookPayload
-) {
+export async function handleOneTimePayment(payload: WebhookPayload) {
   await db.insert(payments).values({
-    userId: user.id,
     amount: (payload.data as Payment).total_amount,
     currency: (payload.data as Payment).currency,
     status: payload.type,
@@ -24,5 +19,10 @@ export async function handleOneTimePayment(
   const proEndDate = new Date();
   proEndDate.setMonth(proStartDate.getMonth() + 1);
 
-  await setUserProStatus(user.id, true, proStartDate, proEndDate);
+  await setUserProStatus(
+    (payload.data as Payment).customer.customer_id,
+    true,
+    proStartDate,
+    proEndDate
+  );
 }
