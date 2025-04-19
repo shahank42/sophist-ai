@@ -39,8 +39,7 @@ export const ArticleSection = ({
         selectedSection === index
           ? "border-accent shadow-md"
           : "border-transparent bg-transparent shadow-none",
-        selectedSection === index &&
-          "relative before:absolute before:left-0 before:top-0 before:h-full before:w-1 before:bg-accent before:rounded-l-lg"
+        selectedSection === index && "relative "
       )}
       onMouseEnter={() => setSelectedSection(index)}
       onMouseLeave={() => setSelectedSection(null)}
@@ -51,12 +50,12 @@ export const ArticleSection = ({
         <CardTitle
           className={cn(
             section.headingLevel === "h2"
-              ? "text-3xl"
+              ? "text-3xl font-semibold"
               : section.headingLevel === "h3"
-                ? "text-2xl"
+                ? "text-xl"
                 : section.headingLevel === "h4"
-                  ? "text-xl"
-                  : "text-lg"
+                  ? "text-lg"
+                  : "text-md"
           )}
         >
           {section.heading}

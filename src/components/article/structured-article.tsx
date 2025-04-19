@@ -1,5 +1,7 @@
 import { useStructuredArticle } from "@/hooks/use-article-content";
 import { useState } from "react";
+import { Card, CardContent } from "../ui/card";
+import { MarkdownContent } from "../ui/markdown-content";
 import { ArticleSection } from "./article-section";
 
 interface StructuredArticleProps {
@@ -16,12 +18,19 @@ export function StructuredArticle({ content }: StructuredArticleProps) {
 
   return (
     <article className="prose prose-slate dark:prose-invert prose-headings:font-semibold max-w-none">
-      <h1 className="text-2xl md:text-3xl px-3 font-extrabold tracking-tight text-foreground mb-6 scroll-m-20">
+      <h1 className="text-4xl px-3 font-extrabold font-atkinson-hyperlegible tracking-tight text-foreground mb-6 scroll-m-20">
         {structuredArticle.title}
       </h1>
-      <p className="leading-7 text-muted-foreground mb-6 text-base">
-        {structuredArticle.intro}
-      </p>
+      <Card className="my-4 transition-all duration-300 border flex flex-col border-transparent bg-transparent shadow-none py-0">
+        <CardContent className="pb-0 px-4 self-center max-w-fit text-lg">
+          <p className="leading-7 mb-6 text-base font-atkinson-hyperlegible">
+            <MarkdownContent
+              id="markdown-content-intro"
+              content={structuredArticle.intro ?? ""}
+            />
+          </p>
+        </CardContent>
+      </Card>
 
       {structuredArticle.sections.map((section, index) => (
         <ArticleSection

@@ -22,25 +22,29 @@ export function parseMarkdownArticle(markdown: string): Article {
 
   let currentSection: ContentSegment | null = null;
   let currentContent: string[] = [];
-  let isFirstParagraph = true;
+  let introFound = false;
   let isTitleFound = false;
 
   for (let i = 0; i < lines.length; i++) {
-    const line = lines[i].trim();
+    const line = lines[i]; // Don't trim lines to preserve indentation for lists
+    const trimmedLine = line.trim();
 
     // Handle title (first ## or ### heading)
-    if (!isTitleFound && (line.startsWith("## ") || line.startsWith("### "))) {
-      article.title = line.replace(/^#+ /, "").trim();
+    if (
+      !isTitleFound &&
+      (trimmedLine.startsWith("## ") || trimmedLine.startsWith("### "))
+    ) {
+      article.title = trimmedLine.replace(/^#+ /, "").trim();
       isTitleFound = true;
       continue;
     }
 
     // Handle section headings (## to ######)
-    const headingMatch = line.match(/^(#{2,6}) /);
+    const headingMatch = trimmedLine.match(/^(#{2,6}) /);
     if (headingMatch) {
       // Save previous section if exists
       if (currentSection && currentContent.length > 0) {
-        currentSection.content = currentContent.join("\n").trim();
+        currentSection.content = currentContent.join("\n"); // Don't trim to preserve formatting
         article.sections.push(currentSection);
         currentContent = [];
       }
@@ -55,7 +59,7 @@ export function parseMarkdownArticle(markdown: string): Article {
 
       // Start new section
       currentSection = {
-        heading: line.slice(headingMatch[1].length + 1).trim(),
+        heading: trimmedLine.slice(headingMatch[1].length + 1).trim(),
         content: "",
         headingLevel,
       };
@@ -63,20 +67,32 @@ export function parseMarkdownArticle(markdown: string): Article {
     }
 
     // Handle content
-    if (line && currentSection) {
+    if (currentSection) {
+      // Add to current section - preserve all lines including empty ones
+      // This is important for tables and lists formatting
       currentContent.push(line);
-    } else if (line && isFirstParagraph && !isTitleFound) {
-      // Handle intro (first paragraph before any section)
-      article.intro = line;
-      isFirstParagraph = false;
+    } else if (
+      !introFound &&
+      trimmedLine !== "" &&
+      !trimmedLine.startsWith("#")
+    ) {
+      // First paragraph (not a heading) before any section becomes the intro
+      article.intro = trimmedLine;
+      introFound = true;
     }
   }
 
   // Save the last section
   if (currentSection && currentContent.length > 0) {
-    currentSection.content = currentContent.join("\n").trim();
+    currentSection.content = currentContent.join("\n"); // Don't trim content to preserve formatting
     article.sections.push(currentSection);
   }
+
+  // Clean up extra whitespace in each section while preserving table and list formatting
+  article.sections.forEach((section) => {
+    // Trim only leading and trailing whitespace from the whole content, not individual lines
+    section.content = section.content.replace(/^\s+|\s+$/g, "");
+  });
 
   return article;
 }

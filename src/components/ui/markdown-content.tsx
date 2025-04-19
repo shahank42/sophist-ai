@@ -1,11 +1,3 @@
-import { cn } from "@/lib/utils";
-import { marked } from "marked";
-import type * as React from "react";
-import { Suspense, isValidElement, memo, useMemo } from "react";
-import ReactMarkdown, { type Components } from "react-markdown";
-import rehypeKatex from "rehype-katex";
-import remarkGfm from "remark-gfm";
-import remarkMath from "remark-math";
 import {
   Table,
   TableBody,
@@ -14,6 +6,14 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import { cn } from "@/lib/utils";
+import { marked } from "marked";
+import type * as React from "react";
+import { Suspense, isValidElement, memo, useMemo } from "react";
+import ReactMarkdown, { type Components } from "react-markdown";
+import rehypeKatex from "rehype-katex";
+import remarkGfm from "remark-gfm";
+import remarkMath from "remark-math";
 
 const DEFAULT_PRE_BLOCK_CLASS =
   "my-4 overflow-x-scroll w-full rounded-xl bg-zinc-950 text-zinc-50 dark:bg-zinc-900 border border-border p-4";
@@ -197,12 +197,12 @@ const components: Partial<Components> = {
     </a>
   ),
   ol: ({ children, ...props }: React.HTMLAttributes<HTMLOListElement>) => (
-    <ol className="my-4 ml-0 md:ml-4 list-decimal" {...props}>
+    <ol className="my-4 ml-4 list-decimal" {...props}>
       {children}
     </ol>
   ),
   ul: ({ children, ...props }: React.HTMLAttributes<HTMLUListElement>) => (
-    <ul className="my-4 ml-0 md:ml-4 list-disc" {...props}>
+    <ul className="my-4 ml-4 list-disc" {...props}>
       {children}
     </ul>
   ),
