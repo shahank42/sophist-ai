@@ -1,4 +1,12 @@
 import { Input } from "@/components/ui/input";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { Country, ICountry, IState, State } from "country-state-city";
 
 export type BillingAddress = {
   street: string;
@@ -17,6 +25,14 @@ export function BillingAddressForm({
   billing,
   onChange,
 }: BillingAddressFormProps) {
+  // Get all countries
+  const countries = Country.getAllCountries();
+
+  // Get states for selected country
+  const states = billing.country
+    ? State.getStatesOfCountry(billing.country)
+    : [];
+
   return (
     <div className="grid gap-4 py-4">
       <div className="grid gap-4">
@@ -27,7 +43,7 @@ export function BillingAddressForm({
           placeholder="Street Address"
         />
       </div>
-      <div className="grid sm:grid-cols-2 gap-4">
+      <div className="grid grid-cols-2 gap-4">
         <Input
           id="city"
           value={billing.city}
@@ -41,19 +57,40 @@ export function BillingAddressForm({
           placeholder="Postal Code"
         />
       </div>
-      <div className="grid sm:grid-cols-2 gap-4">
-        <Input
-          id="state"
-          value={billing.state}
-          onChange={(e) => onChange({ ...billing, state: e.target.value })}
-          placeholder="State"
-        />
-        <Input
-          id="country"
+      <div className="grid grid-cols-2 gap-4">
+        <Select
           value={billing.country}
-          onChange={(e) => onChange({ ...billing, country: e.target.value })}
-          placeholder="Country"
-        />
+          onValueChange={(value) =>
+            onChange({ ...billing, country: value, state: "" })
+          }
+        >
+          <SelectTrigger className="w-full">
+            <SelectValue placeholder="Select Country" />
+          </SelectTrigger>
+          <SelectContent>
+            {countries.map((country: ICountry) => (
+              <SelectItem key={country.isoCode} value={country.isoCode}>
+                {country.name}
+              </SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
+        <Select
+          value={billing.state}
+          onValueChange={(value) => onChange({ ...billing, state: value })}
+          disabled={!billing.country || states.length === 0}
+        >
+          <SelectTrigger className="w-full">
+            <SelectValue placeholder="Select State" />
+          </SelectTrigger>
+          <SelectContent>
+            {states.map((state: IState) => (
+              <SelectItem key={state.isoCode} value={state.isoCode}>
+                {state.name}
+              </SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
       </div>
     </div>
   );

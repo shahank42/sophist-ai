@@ -47,6 +47,8 @@ function RouteComponent() {
       return;
     }
 
+    console.log("billing", billing);
+
     const payment = await checkoutMonth({
       data: {
         userId: user.id,
@@ -65,7 +67,7 @@ function RouteComponent() {
     <>
       <HeroHeader />
 
-      <section className="py-16 md:py-32 w-full">
+      <section className="py-16 md:py-32 pt-32 w-full">
         <div className="mx-auto max-w-5xl px-6">
           <div className="mx-auto max-w-2xl space-y-6 text-center">
             <h1 className="text-center text-4xl font-semibold lg:text-5xl">

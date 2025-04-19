@@ -1,8 +1,23 @@
 import { dodopayments } from "@/lib/dodopayments";
 import { createServerFn } from "@tanstack/react-start";
+import { Country, State } from "country-state-city";
 import { CountryCode } from "dodopayments/resources/misc.mjs";
 import { z } from "zod";
 import { setUserCustomerId } from "../queries/users";
+
+const billingSchema = z.object({
+  city: z.string().min(1, "City is required"),
+  country: z
+    .string()
+    .refine(
+      (countryCode) =>
+        Country.getAllCountries().some((c) => c.isoCode === countryCode),
+      "Invalid country code"
+    ),
+  state: z.string(),
+  street: z.string().min(1, "Street address is required"),
+  zipcode: z.string().min(1, "Postal code is required"),
+});
 
 export const checkoutMonthFn = createServerFn({ method: "POST" })
   .validator((data: unknown) =>
@@ -11,12 +26,18 @@ export const checkoutMonthFn = createServerFn({ method: "POST" })
         userId: z.string(),
         name: z.string(),
         email: z.string().email(),
-        billing: z.object({
-          city: z.string(),
-          country: z.string(),
-          state: z.string(),
-          street: z.string(),
-          zipcode: z.string(),
+        billing: billingSchema.superRefine((data, ctx) => {
+          const states = State.getStatesOfCountry(data.country);
+          if (
+            states.length > 0 &&
+            !states.some((s) => s.isoCode === data.state)
+          ) {
+            ctx.addIssue({
+              code: z.ZodIssueCode.custom,
+              message: `Invalid state for selected country ${data.country}`,
+              path: ["state"],
+            });
+          }
         }),
       })
       .parse(data)
