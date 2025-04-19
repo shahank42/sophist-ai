@@ -20,10 +20,6 @@ export const auth = betterAuth({
         type: "boolean",
         default: false,
       },
-      razorpayCustomerId: {
-        type: "string",
-        required: false,
-      },
     },
   },
 
