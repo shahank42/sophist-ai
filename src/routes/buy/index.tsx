@@ -1,6 +1,6 @@
 import { HeroHeader } from "@/components/layout/landing/hero6-header";
 import { Button } from "@/components/ui/button";
-import { createFileRoute, Link } from "@tanstack/react-router";
+import { createFileRoute, getRouteApi, Link } from "@tanstack/react-router";
 import { Check } from "lucide-react";
 
 export const Route = createFileRoute("/buy/")({
@@ -8,6 +8,8 @@ export const Route = createFileRoute("/buy/")({
 });
 
 function RouteComponent() {
+  const { user } = getRouteApi("__root__").useRouteContext();
+
   return (
     <>
       <HeroHeader />
@@ -16,12 +18,11 @@ function RouteComponent() {
         <div className="mx-auto max-w-5xl px-6">
           <div className="mx-auto max-w-2xl space-y-6 text-center">
             <h1 className="text-center text-4xl font-semibold lg:text-5xl">
-              Pricing that Scales with You
+              Prices as Per Your Needs
             </h1>
             <p>
-              Gemini is evolving to be more than just the models. It supports an
-              entire to the APIs and platforms helping developers and businesses
-              innovate.
+              Screw subscriptions, only pay when you need it. Buy and use
+              SophistAI during exam season. Made for students, by students.
             </p>
           </div>
 
@@ -29,9 +30,9 @@ function RouteComponent() {
             <div className="rounded-(--radius) flex flex-col justify-between space-y-8 border p-6 md:col-span-2 md:my-2 md:rounded-r-none md:border-r-0 lg:p-10">
               <div className="space-y-4">
                 <div>
-                  <h2 className="font-medium">Free</h2>
+                  <h2 className="font-medium">Buy For a Week</h2>
                   <span className="my-3 block text-2xl font-semibold">
-                    $0 / mo
+                    ₹200
                   </span>
                   <p className="text-muted-foreground text-sm">Per editor</p>
                 </div>
@@ -61,15 +62,25 @@ function RouteComponent() {
               <div className="grid gap-6 sm:grid-cols-2">
                 <div className="space-y-4">
                   <div>
-                    <h2 className="font-medium">Pro</h2>
+                    <h2 className="font-medium">Buy for a Month</h2>
                     <span className="my-3 block text-2xl font-semibold">
-                      $19 / mo
+                      ₹500
                     </span>
                     <p className="text-muted-foreground text-sm">Per editor</p>
                   </div>
 
+                  {/* <Button
+                    onClick={() => checkoutMonthHandler()}
+                    className="w-full"
+                  >
+                    Get Started
+                  </Button> */}
                   <Button asChild className="w-full">
-                    <Link to="/">Get Started</Link>
+                    <a
+                      href={`https://test.checkout.dodopayments.com/buy/${"pdt_dIAbS43JcxN2JH8VG730t"}?quantity=1&redirect_url=${"localhost:3000"}%2Fstudy`}
+                    >
+                      Get Started
+                    </a>
                   </Button>
                 </div>
 

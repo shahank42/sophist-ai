@@ -20,6 +20,12 @@ export const auth = betterAuth({
         type: "boolean",
         default: false,
       },
+      proStartDate: {
+        type: "date",
+      },
+      proEndDate: {
+        type: "date",
+      },
     },
   },
 

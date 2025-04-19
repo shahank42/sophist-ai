@@ -3,10 +3,10 @@ import {
   boolean,
   index,
   integer,
+  pgEnum,
   pgTable,
   text,
   timestamp,
-  varchar,
 } from "drizzle-orm/pg-core";
 import { user } from "./auth-schema";
 
@@ -83,27 +83,38 @@ export const articles = pgTable(
   }
 );
 
-export const subscriptions = pgTable("subscriptions", {
-  id: text("id")
-    .$defaultFn(() => generateRandomString(10))
-    .primaryKey(),
-  userId: text("user_id")
-    .notNull()
-    .references(() => user.id),
-  status: varchar("status", { length: 50 }).notNull(),
-  currentPeriodStart: timestamp("current_period_start", {
-    withTimezone: true,
-  }),
-  currentPeriodEnd: timestamp("current_period_end", {
-    withTimezone: true,
-  }),
-  lastPaymentDate: timestamp("last_payment_date", { withTimezone: true }),
-  createdAt: timestamp("created_at", { withTimezone: true })
-    .defaultNow()
-    .notNull(),
-  updatedAt: timestamp("updated_at", { withTimezone: true })
-    .defaultNow()
-    .notNull(),
-});
+export const paymentTypeEnum = pgEnum("payment_type", [
+  "one_time",
+  "subscription",
+]);
+
+export const payments = pgTable(
+  "payments",
+  {
+    id: text("id")
+      .$defaultFn(() => generateRandomString(10))
+      .primaryKey(),
+    userId: text("user_id")
+      .notNull()
+      .references(() => user.id, { onDelete: "cascade" }),
+    amount: integer("amount").notNull(),
+    currency: text("currency").notNull(),
+    status: text("status").notNull(), // succeeded, failed, pending
+    paymentId: text("payment_id").notNull(),
+    paymentType: paymentTypeEnum("payment_type").notNull().default("one_time"),
+    paymentLink: text("payment_link"),
+    paymentMethod: text("payment_method"), // debit, credit, upi_collect
+    customerId: text("customer_id").notNull(),
+    createdAt: timestamp("created_at").notNull().defaultNow(),
+    updatedAt: timestamp("updated_at").defaultNow(),
+  },
+  (table) => {
+    return {
+      userIdIndex: index("payments_user_id_idx").on(table.userId),
+      paymentIdIndex: index("payments_payment_id_idx").on(table.paymentId),
+      customerIdIndex: index("payments_customer_id_idx").on(table.customerId),
+    };
+  }
+);
 
 export * from "./auth-schema";
