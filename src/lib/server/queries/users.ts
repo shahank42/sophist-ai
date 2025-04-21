@@ -10,7 +10,7 @@ export async function setUserProStatus(
 ) {
   await db
     .update(user)
-    .set({ isPro, proStartDate, proEndDate })
+    .set({ proStartDate, proEndDate })
     .where(eq(user.customerId, customerId));
 }
 
@@ -23,10 +23,17 @@ export async function getUserProStatus(userId: string) {
     throw new Error("User not found");
   }
 
+  const now = new Date();
+  const isPro =
+    userData.proStartDate != null &&
+    userData.proEndDate != null &&
+    now >= userData.proStartDate &&
+    now <= userData.proEndDate;
+
   return {
-    isPro: userData.isPro,
     proStartDate: userData.proStartDate,
     proEndDate: userData.proEndDate,
+    isPro,
   };
 }
 
