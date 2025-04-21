@@ -3,10 +3,26 @@ import { MainSection } from "@/components/layout/main-section";
 import { ThemeToggle } from "@/components/theme-toggle";
 import { SidebarInset, SidebarTrigger } from "@/components/ui/sidebar";
 import { queryUserSubjectsOptions } from "@/lib/server/rpc/subjects";
-import { createFileRoute, getRouteApi, redirect } from "@tanstack/react-router";
+import { getUser } from "@/lib/server/rpc/users";
+import { createFileRoute, redirect } from "@tanstack/react-router";
+import { z } from "zod";
+
+const studySearchSchema = z.object({
+  payment_id: z.string().optional().catch(""),
+  status: z.string().optional().catch(""),
+});
+
+type StudySearch = z.infer<typeof studySearchSchema>;
 
 export const Route = createFileRoute("/study/")({
   staleTime: 1000 * 60 * 5,
+
+  validateSearch: (search) => studySearchSchema.parse(search),
+  // loaderDeps: ({ search: { payment_id, status } }) => ({ payment_id, status }),
+  // loaderDeps: () => ({
+  //   // This value will be different every time the page loads
+  //   refreshKey: window.performance.now(),
+  // }),
 
   beforeLoad: async ({ context: { user } }) => {
     if (!user) {
@@ -17,24 +33,35 @@ export const Route = createFileRoute("/study/")({
   },
 
   loader: async ({ context }) => {
-    if (context.user) {
-      // const userSubjects = await queryUserSubjectsFn({
-      //   data: { userId: context.user.id },
-      // });
-      const userSubjects = await context.queryClient.prefetchQuery(
-        queryUserSubjectsOptions(context.user.id)
-      );
-
-      return { user: context.user, userSubjects };
+    // if (context.user) {
+    // const userSubjects = await queryUserSubjectsFn({
+    //   data: { userId: context.user.id },
+    // });
+    const user = await getUser();
+    if (!user) {
+      throw redirect({
+        to: "/",
+      });
     }
+    const userSubjects = await context.queryClient.prefetchQuery(
+      queryUserSubjectsOptions(user.id)
+    );
+
+    console.log("user server", user);
+
+    return { user, userSubjects };
+    // }
   },
   component: RouteComponent,
 });
 
 function RouteComponent() {
-  const { user } = getRouteApi("__root__").useRouteContext();
-  // const data = Route.useLoaderData();
-  // const user = data?.user!;
+  // const { user } = getRouteApi("__root__").useRouteContext();
+  const data = Route.useLoaderData();
+  const user = data?.user;
+  if (!user) {
+    return <div>Error: User data is unavailable.</div>;
+  }
 
   return (
     <>

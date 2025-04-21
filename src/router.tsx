@@ -1,6 +1,6 @@
 // app/router.tsx
-import { createRouter as createTanStackRouter } from "@tanstack/react-router";
 import { QueryClient } from "@tanstack/react-query";
+import { createRouter as createTanStackRouter } from "@tanstack/react-router";
 import { routerWithQueryClient } from "@tanstack/react-router-with-query";
 import { routeTree } from "./routeTree.gen";
 
@@ -12,7 +12,7 @@ export function createRouter() {
       routeTree,
       context: { queryClient },
       defaultPreload: "intent",
-      // defaultPreloadStaleTime: 0,
+      defaultPreloadStaleTime: 0,
       scrollRestoration: true,
     }),
     queryClient

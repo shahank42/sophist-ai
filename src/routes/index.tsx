@@ -1,11 +1,9 @@
 import { LandingSection } from "@/components/layout/landing/landing-section";
-import {
-  queryUserSubjectsOptions,
-} from "@/lib/server/rpc/subjects";
+import { queryUserSubjectsOptions } from "@/lib/server/rpc/subjects";
 import { createFileRoute } from "@tanstack/react-router";
 
 export const Route = createFileRoute("/")({
-  staleTime: 1000 * 60 * 5,
+  // staleTime: 1000 * 60 * 5,
 
   loader: async ({ context }) => {
     if (context.user) {

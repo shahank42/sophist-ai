@@ -19,7 +19,8 @@ import {
   useSidebar,
 } from "@/components/ui/sidebar";
 import { authClient } from "@/lib/utils/auth-client";
-import { getRouteApi, Link, useRouter } from "@tanstack/react-router";
+import { Route } from "@/routes/study";
+import { Link, useRouter } from "@tanstack/react-router";
 import Premium from "./icons/premium";
 
 function UserAvatar({ username }: { username: string }) {
@@ -36,13 +37,17 @@ function UserAvatar({ username }: { username: string }) {
 
 export function UserDetailsSelect() {
   const { isMobile } = useSidebar();
-  const { user } = getRouteApi("__root__").useRouteContext();
   const router = useRouter();
+  // const { user } = getRouteApi("__root__").useRouteContext();
+  const data = Route.useLoaderData();
+  const user = data?.user;
 
   // Now perform the conditional return after all hooks
   if (!user) {
     return null;
   }
+
+  console.log(user);
 
   return (
     <SidebarMenu>

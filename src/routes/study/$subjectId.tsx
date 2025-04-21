@@ -1,5 +1,5 @@
-import { AppSidebar } from "@/components/layout/app-sidebar";
 import ContentPanel from "@/components/content-panel";
+import { AppSidebar } from "@/components/layout/app-sidebar";
 import MindmapWithProvider from "@/components/mind-map/mind-map";
 import { HeadingNode } from "@/components/mind-map/utils";
 import { ThemeToggle } from "@/components/theme-toggle";
@@ -8,17 +8,14 @@ import {
   ResizablePanel,
   ResizablePanelGroup,
 } from "@/components/ui/resizable";
-import { SidebarInset, SidebarTrigger } from "@/components/ui/sidebar";
-import {
-  createFileRoute,
-  redirect,
-} from "@tanstack/react-router";
-import { useState } from "react";
 import { Separator } from "@/components/ui/separator";
-import { querySubjectFn } from "@/lib/server/rpc/subjects";
-import { getSubjectTreeFn } from "@/lib/server/rpc/nodes";
-import { Node } from "@xyflow/react";
+import { SidebarInset, SidebarTrigger } from "@/components/ui/sidebar";
 import { useIsMobile } from "@/hooks/use-mobile";
+import { getSubjectTreeFn } from "@/lib/server/rpc/nodes";
+import { querySubjectFn } from "@/lib/server/rpc/subjects";
+import { createFileRoute, redirect } from "@tanstack/react-router";
+import { Node } from "@xyflow/react";
+import { useState } from "react";
 
 async function loadSubjectTreeFn(subjectId: string) {
   const subject = await querySubjectFn({ data: { id: subjectId } });
@@ -35,7 +32,7 @@ async function loadSubjectTreeFn(subjectId: string) {
 }
 
 export const Route = createFileRoute("/study/$subjectId")({
-  staleTime: 1000 * 60 * 5,
+  // staleTime: 1000 * 60 * 5,
   beforeLoad: async ({ params: { subjectId }, context: { user } }) => {
     if (!user) {
       throw redirect({
