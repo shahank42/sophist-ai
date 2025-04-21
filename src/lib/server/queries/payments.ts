@@ -55,3 +55,29 @@ export async function addSubscription(
     currentPeriodEnd: proEndDate,
   });
 }
+
+export async function getSubscription(userId: string) {
+  const subscription = await db.query.subscriptions.findFirst({
+    where: (subscription) => eq(subscription.userId, userId),
+  });
+
+  if (!subscription) {
+    console.log("User does not have a subscription");
+    return {
+      subscription: null,
+      isPro: false,
+    };
+  }
+
+  const now = new Date();
+  const isPro =
+    subscription.currentPeriodStart != null &&
+    subscription.currentPeriodEnd != null &&
+    now >= subscription.currentPeriodStart &&
+    now <= subscription.currentPeriodEnd;
+
+  return {
+    subscription,
+    isPro,
+  };
+}

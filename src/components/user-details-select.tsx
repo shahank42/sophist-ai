@@ -18,7 +18,7 @@ import {
   SidebarMenuItem,
   useSidebar,
 } from "@/components/ui/sidebar";
-import { getUserProStatusFn } from "@/lib/server/rpc/users";
+import { getUserSubscriptionFn } from "@/lib/server/rpc/payments";
 import { authClient } from "@/lib/utils/auth-client";
 import { useSuspenseQuery } from "@tanstack/react-query";
 import { getRouteApi, Link, useRouter } from "@tanstack/react-router";
@@ -42,12 +42,11 @@ export function UserDetailsSelect() {
   const router = useRouter();
   const { user } = getRouteApi("__root__").useRouteContext();
 
-  const getUserProStatus = useServerFn(getUserProStatusFn);
-  const { data: userProStatus, isPending: userProStatusIsPending } =
-    useSuspenseQuery({
-      queryKey: ["userProStatus", user?.id],
-      queryFn: () => getUserProStatus({ data: { userId: user?.id } }),
-    });
+  const getUserSubscription = useServerFn(getUserSubscriptionFn);
+  const { data: userSubscription } = useSuspenseQuery({
+    queryKey: ["userProStatus", user?.id],
+    queryFn: () => getUserSubscription({ data: { userId: user?.id } }),
+  });
 
   if (!user) {
     return null;
@@ -94,7 +93,7 @@ export function UserDetailsSelect() {
             </DropdownMenuLabel>
             <DropdownMenuSeparator />
             <DropdownMenuGroup>
-              {userProStatus.isPro ? (
+              {userSubscription.isPro ? (
                 <DropdownMenuLabel className="flex items-center gap-2">
                   <Premium className="text-blue-500 size-4" />
                   <span>SophistAI Pro</span>

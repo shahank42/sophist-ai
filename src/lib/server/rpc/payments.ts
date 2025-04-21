@@ -3,6 +3,7 @@ import { createServerFn } from "@tanstack/react-start";
 import { Country, State } from "country-state-city";
 import { CountryCode } from "dodopayments/resources/misc.mjs";
 import { z } from "zod";
+import { getSubscription } from "../queries/payments";
 import { setUserCustomerId } from "../queries/users";
 
 const billingSchema = z.object({
@@ -60,4 +61,19 @@ export const checkoutMonthFn = createServerFn({ method: "POST" })
     await setUserCustomerId(userId, payment.customer.customer_id);
 
     return payment;
+  });
+
+export const getUserSubscriptionFn = createServerFn({ method: "GET" })
+  .validator((data: unknown) =>
+    z
+      .object({
+        userId: z.string(),
+      })
+      .parse(data)
+  )
+  .handler(async ({ data: { userId } }) => {
+    const subscription = await getSubscription(userId);
+    return {
+      ...subscription,
+    };
   });
