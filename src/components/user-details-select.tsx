@@ -18,9 +18,11 @@ import {
   SidebarMenuItem,
   useSidebar,
 } from "@/components/ui/sidebar";
+import { getUserProStatusFn } from "@/lib/server/rpc/users";
 import { authClient } from "@/lib/utils/auth-client";
-import { Route } from "@/routes/study";
-import { Link, useRouter } from "@tanstack/react-router";
+import { useSuspenseQuery } from "@tanstack/react-query";
+import { getRouteApi, Link, useRouter } from "@tanstack/react-router";
+import { useServerFn } from "@tanstack/react-start";
 import Premium from "./icons/premium";
 
 function UserAvatar({ username }: { username: string }) {
@@ -38,9 +40,18 @@ function UserAvatar({ username }: { username: string }) {
 export function UserDetailsSelect() {
   const { isMobile } = useSidebar();
   const router = useRouter();
-  // const { user } = getRouteApi("__root__").useRouteContext();
-  const data = Route.useLoaderData();
-  const user = data?.user;
+  const { user } = getRouteApi("__root__").useRouteContext();
+
+  const getUserProStatus = useServerFn(getUserProStatusFn);
+  const { data: userProStatus, isPending: userProStatusIsPending } =
+    useSuspenseQuery({
+      queryKey: ["userProStatus", user?.id],
+      queryFn: () => getUserProStatus({ data: { userId: user?.id } }),
+    });
+
+  if (!user) {
+    return null;
+  }
 
   // Now perform the conditional return after all hooks
   if (!user) {
@@ -83,7 +94,7 @@ export function UserDetailsSelect() {
             </DropdownMenuLabel>
             <DropdownMenuSeparator />
             <DropdownMenuGroup>
-              {user.isPro ? (
+              {userProStatus.isPro ? (
                 <DropdownMenuLabel className="flex items-center gap-2">
                   <Premium className="text-blue-500 size-4" />
                   <span>SophistAI Pro</span>
