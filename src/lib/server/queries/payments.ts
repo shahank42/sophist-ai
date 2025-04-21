@@ -1,5 +1,5 @@
 import { Payment, WebhookPayload } from "@/lib/types/api-types";
-import { eq } from "drizzle-orm";
+import { desc, eq } from "drizzle-orm";
 import { db } from "../db";
 import { payments, subscriptions } from "../db/schema";
 import { setUserProStatus } from "./users";
@@ -59,6 +59,7 @@ export async function addSubscription(
 export async function getSubscription(userId: string) {
   const subscription = await db.query.subscriptions.findFirst({
     where: (subscription) => eq(subscription.userId, userId),
+    orderBy: (subscription) => [desc(subscription.createdAt)],
   });
 
   if (!subscription) {
