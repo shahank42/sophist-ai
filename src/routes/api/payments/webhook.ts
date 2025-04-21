@@ -1,4 +1,7 @@
-import { handleOneTimePayment } from "@/lib/server/queries/payments";
+import {
+  addSubscription,
+  handleOneTimePayment,
+} from "@/lib/server/queries/payments";
 import { WebhookPayload } from "@/lib/types/api-types";
 import { createAPIFileRoute } from "@tanstack/react-start/api";
 
@@ -32,7 +35,15 @@ export const APIRoute = createAPIFileRoute("/api/payments/webhook")({
         payload.type === "payment.succeeded" &&
         !payload.data.subscription_id
       ) {
-        await handleOneTimePayment(payload);
+        const handledPayment = await handleOneTimePayment(payload);
+        await addSubscription(
+          handledPayment.payment[0].customerId,
+          handledPayment.payment[0].amount === 200
+            ? "single.weekly"
+            : "single.monthly", // TODO: Use a better way to determine the plan type
+          handledPayment.proStartDate,
+          handledPayment.proEndDate
+        );
         console.log("One-time payment succeeded for email:", email);
       }
 

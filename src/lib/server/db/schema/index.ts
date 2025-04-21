@@ -116,4 +116,52 @@ export const payments = pgTable(
   }
 );
 
+export const planTypeEnum = pgEnum("plan_type", [
+  "single.weekly",
+  "single.monthly",
+]);
+
+export const subscriptions = pgTable(
+  "subscriptions",
+  {
+    id: text("id")
+      .$defaultFn(() => generateRandomString(10))
+      .primaryKey(),
+    userId: text("user_id")
+      .notNull()
+      .references(() => user.id),
+    plan: planTypeEnum("plan"),
+    status: text("status").notNull(),
+
+    currentPeriodStart: timestamp("current_period_start", {
+      withTimezone: true,
+    }).notNull(),
+    currentPeriodEnd: timestamp("current_period_end", {
+      withTimezone: true,
+    }).notNull(),
+
+    // trialStart: timestamp("trial_start", { withTimezone: true }),
+    // trialEnd: timestamp("trial_end", { withTimezone: true }),
+
+    // cancelAtPeriodEnd: boolean("cancel_at_period_end").notNull().default(false),
+    // canceledAt: timestamp("canceled_at", { withTimezone: true }),
+    // endedAt: timestamp("ended_at", { withTimezone: true }),
+
+    // gatewaySubscriptionId: text("gateway_subscription_id"),
+
+    // metadata: jsonb("metadata")
+    //   .notNull()
+    //   .default(sql`{}`),
+
+    createdAt: timestamp("created_at").notNull().defaultNow(),
+    updatedAt: timestamp("updated_at").defaultNow(),
+  }
+  // (table) => ({
+  //   // GIST index on the period range for fast range queries
+  //   periodGistIndex: index("subscriptions_period_gist_idx")
+  //     .using("gist", )
+  //     .on(sql`tsrange(${table.currentPeriodStart}, ${table.currentPeriodEnd})`),
+  // })
+);
+
 export * from "./auth-schema";

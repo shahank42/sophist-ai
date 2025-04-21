@@ -1,4 +1,5 @@
 CREATE TYPE "public"."payment_type" AS ENUM('one_time', 'subscription');--> statement-breakpoint
+CREATE TYPE "public"."plan_type" AS ENUM('single.weekly', 'singe.monthly');--> statement-breakpoint
 CREATE TABLE "articles" (
 	"id" text PRIMARY KEY NOT NULL,
 	"node_id" text NOT NULL,
@@ -19,7 +20,7 @@ CREATE TABLE "nodes" (
 --> statement-breakpoint
 CREATE TABLE "payments" (
 	"id" text PRIMARY KEY NOT NULL,
-	"user_id" text NOT NULL,
+	"customer_id" text NOT NULL,
 	"amount" integer NOT NULL,
 	"currency" text NOT NULL,
 	"status" text NOT NULL,
@@ -27,7 +28,6 @@ CREATE TABLE "payments" (
 	"payment_type" "payment_type" DEFAULT 'one_time' NOT NULL,
 	"payment_link" text,
 	"payment_method" text,
-	"customer_id" text NOT NULL,
 	"created_at" timestamp DEFAULT now() NOT NULL,
 	"updated_at" timestamp DEFAULT now()
 );
@@ -38,6 +38,18 @@ CREATE TABLE "subjects" (
 	"raw_syllabus" text,
 	"created_at" timestamp DEFAULT now() NOT NULL,
 	"created_by" text NOT NULL
+);
+--> statement-breakpoint
+CREATE TABLE "subscriptions" (
+	"id" text PRIMARY KEY NOT NULL,
+	"user_id" text NOT NULL,
+	"plan" "plan_type",
+	"status" text NOT NULL,
+	"current_period_start" timestamp with time zone NOT NULL,
+	"current_period_end" timestamp with time zone NOT NULL,
+	"created_at" timestamp DEFAULT now() NOT NULL,
+	"updated_at" timestamp DEFAULT now(),
+	CONSTRAINT "subscriptions_user_id_unique" UNIQUE("user_id")
 );
 --> statement-breakpoint
 CREATE TABLE "account" (
@@ -77,6 +89,7 @@ CREATE TABLE "user" (
 	"created_at" timestamp NOT NULL,
 	"updated_at" timestamp NOT NULL,
 	"is_pro" boolean,
+	"customer_id" text,
 	"pro_start_date" timestamp,
 	"pro_end_date" timestamp,
 	CONSTRAINT "user_email_unique" UNIQUE("email")
@@ -94,13 +107,12 @@ CREATE TABLE "verification" (
 ALTER TABLE "articles" ADD CONSTRAINT "articles_node_id_nodes_id_fk" FOREIGN KEY ("node_id") REFERENCES "public"."nodes"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE "nodes" ADD CONSTRAINT "nodes_subject_id_subjects_id_fk" FOREIGN KEY ("subject_id") REFERENCES "public"."subjects"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE "nodes" ADD CONSTRAINT "nodes_parent_id_nodes_id_fk" FOREIGN KEY ("parent_id") REFERENCES "public"."nodes"("id") ON DELETE no action ON UPDATE no action;--> statement-breakpoint
-ALTER TABLE "payments" ADD CONSTRAINT "payments_user_id_user_id_fk" FOREIGN KEY ("user_id") REFERENCES "public"."user"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE "subjects" ADD CONSTRAINT "subjects_created_by_user_id_fk" FOREIGN KEY ("created_by") REFERENCES "public"."user"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
+ALTER TABLE "subscriptions" ADD CONSTRAINT "subscriptions_user_id_user_id_fk" FOREIGN KEY ("user_id") REFERENCES "public"."user"("id") ON DELETE no action ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE "account" ADD CONSTRAINT "account_user_id_user_id_fk" FOREIGN KEY ("user_id") REFERENCES "public"."user"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE "session" ADD CONSTRAINT "session_user_id_user_id_fk" FOREIGN KEY ("user_id") REFERENCES "public"."user"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
 CREATE INDEX "articles_node_id_idx" ON "articles" USING btree ("node_id");--> statement-breakpoint
 CREATE INDEX "nodes_subject_id_idx" ON "nodes" USING btree ("subject_id");--> statement-breakpoint
-CREATE INDEX "payments_user_id_idx" ON "payments" USING btree ("user_id");--> statement-breakpoint
 CREATE INDEX "payments_payment_id_idx" ON "payments" USING btree ("payment_id");--> statement-breakpoint
 CREATE INDEX "payments_customer_id_idx" ON "payments" USING btree ("customer_id");--> statement-breakpoint
 CREATE INDEX "subjects_created_by_idx" ON "subjects" USING btree ("created_by");
