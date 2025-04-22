@@ -1,9 +1,7 @@
 // import { useQuery } from "@tanstack/react-query";
-import { z } from "zod";
+import { GROQ_API_KEY } from "@/lib/langchain";
 import { ChatGroq } from "@langchain/groq";
-import {
-  GROQ_API_KEY,
-} from "@/lib/langchain";
+import { z } from "zod";
 
 export const initialStructureSchema = z.object({
   id: z.string().describe("The unique identifier for the node."),
@@ -19,7 +17,7 @@ export async function fetchInitialStructure(
 ): Promise<InitialStructure> {
   const model = new ChatGroq({
     apiKey: GROQ_API_KEY,
-    model: "llama-3.3-70b-versatile",
+    model: "meta-llama/llama-4-scout-17b-16e-instruct",
   });
 
   // const model = new CloudflareWorkersAI({
@@ -31,22 +29,42 @@ export async function fetchInitialStructure(
   const structuredModel = model.withStructuredOutput(initialStructureSchema);
 
   const res = await structuredModel.invoke(`
-I'm giving you a syllabus for the subject: ${topic}
+I need you to analyze this ${topic} syllabus and construct a comprehensive, hierarchical study structure. Employ deep reasoning to identify:
 
-i want you to parse this syllabus and give me a detailed study plan of all the topics i need to study to completely and thoroughly cover the syllabus.
+1) Core topics and their logical relationships
+2) Supporting subtopics that build conceptual understanding
+3) Natural learning progressions and dependencies between topics
 
-Output Format:
-Provide the study plain structure in JSON format, adhering to the following schema:
+Apply pedagogical principles to structure the knowledge optimally:
+- Group related concepts that build upon each other
+- Identify foundational topics that should be mastered early
+- Recognize advanced topics that require prerequisite knowledge
+- Maintain proper scope (neither too granular nor too broad)
 
-interface HeadingNode {
-  id: string;
-  title: string;
-  children: HeadingNode[]; 
-}
+As you reason through the syllabus, note:
+- Explicit topics mentioned directly
+- Implicit topics necessary for understanding but not explicitly stated
+- The appropriate depth for each branch of knowledge
 
 <syllabus-begin>
 ${syllabus}
 </syllabus-end>
+
+Output the study plan as a JSON tree structure following this schema:
+interface HeadingNode {
+  id: string;           // Unique identifier for each node
+  title: string;        // Clear, concise topic title
+  description: string;  // Brief explanation of topic's importance and scope
+  children: HeadingNode[]; // Subtopics (empty array if none)
+  estimatedStudyHours?: number; // Optional time estimate for this topic
+  dependsOn?: string[];  // Optional array of prerequisite node IDs
+}
+
+Before finalizing your response, verify that:
+- Your structure covers ALL material in the syllabus
+- Topics follow a logical learning progression
+- The hierarchy has appropriate depth (typically 3-5 levels)
+- Node relationships accurately reflect knowledge dependencies
     `);
 
   console.log(res);
