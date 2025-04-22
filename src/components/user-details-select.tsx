@@ -18,11 +18,10 @@ import {
   SidebarMenuItem,
   useSidebar,
 } from "@/components/ui/sidebar";
-import { getUserSubscriptionFn } from "@/lib/server/rpc/payments";
+import { queryUserSubscriptionOptions } from "@/lib/server/rpc/payments";
 import { authClient } from "@/lib/utils/auth-client";
 import { useSuspenseQuery } from "@tanstack/react-query";
 import { getRouteApi, Link, useRouter } from "@tanstack/react-router";
-import { useServerFn } from "@tanstack/react-start";
 import Premium from "./icons/premium";
 
 function UserAvatar({ username }: { username: string }) {
@@ -42,11 +41,9 @@ export function UserDetailsSelect() {
   const router = useRouter();
   const { user } = getRouteApi("__root__").useRouteContext();
 
-  const getUserSubscription = useServerFn(getUserSubscriptionFn);
-  const { data: userSubscription } = useSuspenseQuery({
-    queryKey: ["userProStatus", user?.id],
-    queryFn: () => getUserSubscription({ data: { userId: user?.id } }),
-  });
+  const { data: userSubscription } = useSuspenseQuery(
+    queryUserSubscriptionOptions(user!.id) // TODO: ts
+  );
 
   if (!user) {
     return null;

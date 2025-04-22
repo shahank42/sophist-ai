@@ -4,10 +4,11 @@ import { Textarea } from "@/components/ui/textarea";
 import { fetchInitialStructure } from "@/lib/server/prompts/generateInitialTopics";
 import { insertSubject } from "@/lib/server/queries/subjects";
 import { storeTreeFn } from "@/lib/server/rpc/nodes";
+import { queryUserSubscriptionOptions } from "@/lib/server/rpc/payments";
 import { queryUserSubjectsOptions } from "@/lib/server/rpc/subjects";
 import { transformInitialStructure } from "@/lib/utils";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useSuspenseQuery } from "@tanstack/react-query";
 import { getRouteApi, useNavigate } from "@tanstack/react-router";
 import { createServerFn } from "@tanstack/react-start";
 import { ArrowRight } from "lucide-react";
@@ -59,7 +60,11 @@ const FREE_TIER_MAX_SUBJECTS = 2;
 
 export default function ExploreSyllabusForm() {
   const rootContext = getRouteApi("__root__").useRouteContext();
-  const user = rootContext.user!;
+  const user = rootContext.user!; // TODO: ts
+  const { data: userSubscription } = useSuspenseQuery(
+    queryUserSubscriptionOptions(user.id)
+  );
+  const { data: userSubjects } = useQuery(queryUserSubjectsOptions(user.id));
 
   const {
     register,
@@ -71,14 +76,12 @@ export default function ExploreSyllabusForm() {
   const [isPending, setIsPending] = useState(false);
   const navigate = useNavigate();
 
-  const { data: userSubjects } = useQuery(queryUserSubjectsOptions(user.id));
-
   const validateSubjectCreation = (): boolean => {
     const subjectCount = userSubjects?.length || 0;
 
-    if (!user.isPro && subjectCount >= FREE_TIER_MAX_SUBJECTS) {
+    if (!userSubscription.isPro && subjectCount >= FREE_TIER_MAX_SUBJECTS) {
       toast.info(
-        `Free users can create up to ${FREE_TIER_MAX_SUBJECTS} subjects. Upgrade to Pro for unlimited subjects!`
+        `Free users can create up to ${FREE_TIER_MAX_SUBJECTS} subjects. Upgrade to SophistAI Pro for unlimited subjects!`
       );
       return false;
     }

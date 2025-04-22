@@ -1,4 +1,5 @@
 import { dodopayments } from "@/lib/dodopayments";
+import { queryOptions } from "@tanstack/react-query";
 import { createServerFn } from "@tanstack/react-start";
 import { Country, State } from "country-state-city";
 import { CountryCode } from "dodopayments/resources/misc.mjs";
@@ -76,4 +77,10 @@ export const getUserSubscriptionFn = createServerFn({ method: "GET" })
     return {
       ...subscription,
     };
+  });
+
+export const queryUserSubscriptionOptions = (userId: string) =>
+  queryOptions({
+    queryKey: ["userProStatus", userId],
+    queryFn: () => getUserSubscriptionFn({ data: { userId } }),
   });
