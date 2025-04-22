@@ -54,10 +54,7 @@ Output the study plan as a JSON tree structure following this schema:
 interface HeadingNode {
   id: string;           // Unique identifier for each node
   title: string;        // Clear, concise topic title
-  description: string;  // Brief explanation of topic's importance and scope
   children: HeadingNode[]; // Subtopics (empty array if none)
-  estimatedStudyHours?: number; // Optional time estimate for this topic
-  dependsOn?: string[];  // Optional array of prerequisite node IDs
 }
 
 Before finalizing your response, verify that:
