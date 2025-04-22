@@ -53,6 +53,10 @@ export const Route = createRootRouteWithContext<{
     links: [
       { rel: "stylesheet", href: appCss },
       {
+        rel: "stylesheet",
+        href: "https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css",
+      },
+      {
         rel: "icon",
         type: "image/png",
         sizes: "96x96",
