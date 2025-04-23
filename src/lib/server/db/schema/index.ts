@@ -116,6 +116,37 @@ export const payments = pgTable(
   }
 );
 
+export const creditBundles = pgTable("credit_bundles", {
+  id: text("id").primaryKey(),
+  name: text("name").notNull(),
+  credits: integer("credits").notNull(),
+  price: integer("price").notNull(),
+  isPrimary: boolean("is_primary").default(false).notNull(),
+  buttonText: text("button_text").notNull().default("Buy Now"),
+  features: text("features").array().notNull(),
+});
+
+export const creditTransactionTypeEnum = pgEnum("credit_transaction_type", [
+  "purchase",
+  "spend",
+]);
+
+export const creditTransactions = pgTable("credit_transactions", {
+  id: text("id")
+    .$defaultFn(() => generateRandomString(10))
+    .primaryKey(),
+  userId: text("user_id")
+    .notNull()
+    .references(() => user.id),
+  // bundleId: text("bundle_id")
+  //   .notNull()
+  //   .references(() => creditBundles.id),
+  transactionType: creditTransactionTypeEnum("transaction_type").notNull(),
+  amount: integer("amount").notNull(),
+  relatedId: text("related_id").references(() => payments.id),
+  createdAt: timestamp("created_at").notNull().defaultNow(),
+});
+
 export const planTypeEnum = pgEnum("plan_type", [
   "single.weekly",
   "single.monthly",

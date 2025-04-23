@@ -22,6 +22,90 @@
       "when": 1745270064993,
       "tag": "0002_special_darkstar",
       "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "7",
+      "when": 1745390824730,
+      "tag": "0003_dapper_the_renegades",
+      "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "7",
+      "when": 1745393975387,
+      "tag": "0004_conscious_baron_strucker",
+      "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "7",
+      "when": 1745394034767,
+      "tag": "0005_chunky_thing",
+      "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "7",
+      "when": 1745394074294,
+      "tag": "0006_uneven_molly_hayes",
+      "breakpoints": true
+    },
+    {
+      "idx": 7,
+      "version": "7",
+      "when": 1745394233909,
+      "tag": "0007_chief_exiles",
+      "breakpoints": true
+    },
+    {
+      "idx": 8,
+      "version": "7",
+      "when": 1745394322078,
+      "tag": "0008_awesome_spirit",
+      "breakpoints": true
+    },
+    {
+      "idx": 9,
+      "version": "7",
+      "when": 1745394941806,
+      "tag": "0009_mixed_daredevil",
+      "breakpoints": true
+    },
+    {
+      "idx": 10,
+      "version": "7",
+      "when": 1745395112537,
+      "tag": "0010_slim_romulus",
+      "breakpoints": true
+    },
+    {
+      "idx": 11,
+      "version": "7",
+      "when": 1745395185598,
+      "tag": "0011_first_jazinda",
+      "breakpoints": true
+    },
+    {
+      "idx": 12,
+      "version": "7",
+      "when": 1745395235273,
+      "tag": "0012_uneven_revanche",
+      "breakpoints": true
+    },
+    {
+      "idx": 13,
+      "version": "7",
+      "when": 1745395878610,
+      "tag": "0013_messy_vance_astro",
+      "breakpoints": true
+    },
+    {
+      "idx": 14,
+      "version": "7",
+      "when": 1745400618277,
+      "tag": "0014_stormy_carnage",
+      "breakpoints": true
     }
   ]
 }

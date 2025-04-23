@@ -1,0 +1,1 @@
+ALTER TABLE "credit_bundles" ALTER COLUMN "features" SET DEFAULT ARRAY[]::text[];

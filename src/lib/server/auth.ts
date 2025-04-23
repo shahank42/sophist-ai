@@ -29,6 +29,11 @@ export const auth = betterAuth({
       proEndDate: {
         type: "date",
       },
+      credits: {
+        type: "number",
+        nullable: false,
+        default: 0,
+      },
     },
   },
 

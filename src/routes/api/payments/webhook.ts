@@ -1,3 +1,4 @@
+import { addCreditBundle } from "@/lib/server/queries/credits";
 import {
   addSubscription,
   handleOneTimePayment,
@@ -36,6 +37,11 @@ export const APIRoute = createAPIFileRoute("/api/payments/webhook")({
         !payload.data.subscription_id
       ) {
         const handledPayment = await handleOneTimePayment(payload);
+        await addCreditBundle({
+          customerId: handledPayment.payment[0].customerId,
+          bundleId: handledPayment.productId,
+          paymentId: handledPayment.payment[0].paymentId,
+        });
         await addSubscription(
           handledPayment.payment[0].customerId,
           handledPayment.payment[0].amount === 200

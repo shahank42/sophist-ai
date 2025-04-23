@@ -5,17 +5,21 @@ import { payments, subscriptions } from "../db/schema";
 import { setUserProStatus } from "./users";
 
 export async function handleOneTimePayment(payload: WebhookPayload) {
+  const payloadData = payload.data as Payment;
+
+  const productId = payloadData.product_cart![0].product_id;
+
   const payment = await db
     .insert(payments)
     .values({
-      amount: (payload.data as Payment).total_amount,
-      currency: (payload.data as Payment).currency,
+      amount: payloadData.total_amount,
+      currency: payloadData.currency,
       status: payload.type,
-      paymentId: (payload.data as Payment).payment_id,
+      paymentId: payloadData.payment_id,
       paymentType: "one_time",
-      paymentLink: (payload.data as Payment).payment_link,
-      paymentMethod: (payload.data as Payment).payment_method,
-      customerId: (payload.data as Payment).customer.customer_id,
+      paymentLink: payloadData.payment_link,
+      paymentMethod: payloadData.payment_method,
+      customerId: payloadData.customer.customer_id,
     })
     .returning();
 
@@ -24,13 +28,13 @@ export async function handleOneTimePayment(payload: WebhookPayload) {
   proEndDate.setMonth(proStartDate.getMonth() + 1);
 
   await setUserProStatus(
-    (payload.data as Payment).customer.customer_id,
+    payloadData.customer.customer_id,
     true,
     proStartDate,
     proEndDate
   );
 
-  return { payment, proStartDate, proEndDate };
+  return { payment, productId, proStartDate, proEndDate };
 }
 
 export async function addSubscription(

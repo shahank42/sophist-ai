@@ -1,0 +1,2 @@
+ALTER TABLE "credit_bundles" ALTER COLUMN "features" SET DATA TYPE text[] USING features::text[];--> statement-breakpoint
+ALTER TABLE "credit_bundles" ALTER COLUMN "features" SET DEFAULT ARRAY[]::text[];
