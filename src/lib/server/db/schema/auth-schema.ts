@@ -18,7 +18,7 @@ export const user = pgTable("user", {
   customerId: text("customer_id"),
   proStartDate: timestamp("pro_start_date"),
   proEndDate: timestamp("pro_end_date"),
-  credits: integer("credits").notNull().default(0),
+  credits: integer("credits").notNull().default(500),
 });
 
 export const session = pgTable("session", {
