@@ -143,7 +143,7 @@ export const creditTransactions = pgTable("credit_transactions", {
   //   .references(() => creditBundles.id),
   transactionType: creditTransactionTypeEnum("transaction_type").notNull(),
   amount: integer("amount").notNull(),
-  relatedId: text("related_id").references(() => payments.id),
+  relatedId: text("related_id"),
   createdAt: timestamp("created_at").notNull().defaultNow(),
 });
 
