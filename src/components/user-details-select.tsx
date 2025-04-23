@@ -1,6 +1,6 @@
 "use client";
 
-import { ChevronsUpDown, LogOut, Sparkles } from "lucide-react";
+import { ChevronsUpDown, CoinsIcon, LogOut } from "lucide-react";
 
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import {
@@ -18,11 +18,9 @@ import {
   SidebarMenuItem,
   useSidebar,
 } from "@/components/ui/sidebar";
-import { queryUserSubscriptionOptions } from "@/lib/server/rpc/payments";
 import { authClient } from "@/lib/utils/auth-client";
-import { useSuspenseQuery } from "@tanstack/react-query";
 import { getRouteApi, Link, useRouter } from "@tanstack/react-router";
-import Premium from "./icons/premium";
+import { Badge } from "./ui/badge";
 
 function UserAvatar({ username }: { username: string }) {
   return (
@@ -41,20 +39,9 @@ export function UserDetailsSelect() {
   const router = useRouter();
   const { user } = getRouteApi("__root__").useRouteContext();
 
-  const { data: userSubscription } = useSuspenseQuery(
-    queryUserSubscriptionOptions(user!.id) // TODO: ts
-  );
-
   if (!user) {
     return null;
   }
-
-  // Now perform the conditional return after all hooks
-  if (!user) {
-    return null;
-  }
-
-  console.log(user);
 
   return (
     <SidebarMenu>
@@ -90,19 +77,30 @@ export function UserDetailsSelect() {
             </DropdownMenuLabel>
             <DropdownMenuSeparator />
             <DropdownMenuGroup>
-              {userSubscription.isPro ? (
-                <DropdownMenuLabel className="flex items-center gap-2">
-                  <Premium className="text-blue-500 size-4" />
-                  <span>SophistAI Pro</span>
-                </DropdownMenuLabel>
-              ) : (
-                <DropdownMenuItem asChild>
-                  <Link to="/buy">
-                    <Sparkles className="size-4 mr-2" />
-                    Upgrade to Pro
-                  </Link>
-                </DropdownMenuItem>
-              )}
+              {/* {userSubscription.isPro ? ( */}
+              {/* <DropdownMenuLabel className="flex items-center gap-2">
+                <Premium className="text-blue-500 size-4" />
+                <span>Credits: {user.credits}</span>
+              </DropdownMenuLabel> */}
+              {/* ) : ( */}
+              <DropdownMenuItem asChild>
+                <Link
+                  to="/buy"
+                  className="flex items-center justify-between w-full"
+                >
+                  <div className="flex items-center gap-2">
+                    <CoinsIcon className="text-primary size-4" />
+                    <span className="font-medium text-sm">Credits</span>
+                  </div>
+                  <Badge
+                    variant="outline"
+                    className="font-semibold text-primary"
+                  >
+                    {user.credits}
+                  </Badge>
+                </Link>
+              </DropdownMenuItem>
+              {/* )} */}
             </DropdownMenuGroup>
             <DropdownMenuSeparator />
             <DropdownMenuItem
