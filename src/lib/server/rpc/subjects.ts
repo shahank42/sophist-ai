@@ -1,5 +1,6 @@
-import { createServerFn } from "@tanstack/react-start";
+import { queryOptions } from "@tanstack/react-query";
 import { notFound } from "@tanstack/react-router";
+import { createServerFn } from "@tanstack/react-start";
 import { z } from "zod";
 import {
   deleteSubject,
@@ -7,7 +8,7 @@ import {
   getSubjectsByUser,
   insertSubject,
 } from "../queries/subjects";
-import { queryOptions } from "@tanstack/react-query";
+import { loadSubjectTreeFn } from "./nodes";
 
 export const registerSubjectFn = createServerFn({ method: "POST" })
   .validator((data: unknown) =>
@@ -74,4 +75,10 @@ export const deleteSubjectFn = createServerFn({ method: "POST" }) // TODO: chang
     const data = await deleteSubject(id);
     if (!data) throw notFound();
     return data;
+  });
+
+export const loadSubjectTreeQueryOptions = (subjectId: string) =>
+  queryOptions({
+    queryKey: ["subjectTree", subjectId],
+    queryFn: () => loadSubjectTreeFn(subjectId),
   });

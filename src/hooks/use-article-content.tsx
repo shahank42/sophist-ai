@@ -1,6 +1,7 @@
 import { getArticleContentFn } from "@/lib/server/rpc/articles";
+import { loadSubjectTreeQueryOptions } from "@/lib/server/rpc/subjects";
 import { Article, parseMarkdownArticle } from "@/lib/utils/article-parser";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useSuspenseQuery } from "@tanstack/react-query";
 import { getRouteApi } from "@tanstack/react-router";
 import { Node } from "@xyflow/react";
 import { useEffect, useState } from "react";
@@ -13,7 +14,12 @@ export const useArticleContent = (
   // topic: string,
   // syllabus?: string
 ) => {
-  const { subject } = getRouteApi("/study/$subjectId").useLoaderData();
+  const { subjectId } = getRouteApi("/study/$subjectId").useParams();
+  const { data: subjectTree } = useSuspenseQuery(
+    loadSubjectTreeQueryOptions(subjectId)
+  );
+
+  const { subject } = subjectTree;
   // TODO: Get parent path from node
   // const { getNode } = useReactFlow();
   // const parentPath = getNodeParentPath(node.id, getNode, edges).map(

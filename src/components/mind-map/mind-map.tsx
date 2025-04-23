@@ -5,8 +5,9 @@ import {
   generateNodeChildrenFn,
   setNodeAndParentsCompletedFn,
 } from "@/lib/server/rpc/nodes";
+import { loadSubjectTreeQueryOptions } from "@/lib/server/rpc/subjects";
 import { getUserCreditsQueryOptions } from "@/lib/server/rpc/users";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useSuspenseQuery } from "@tanstack/react-query";
 import { getRouteApi } from "@tanstack/react-router";
 import {
   addEdge,
@@ -51,12 +52,23 @@ const Mindmap: React.FC<MindmapProps> = ({
   setSelectedNode,
   centeringOffset = DEFAULT_OFFSET,
 }) => {
-  const {
-    subject: { name: topic, rawSyllabus: syllabus },
-  } = getRouteApi("/study/$subjectId").useLoaderData();
+  // const {
+  //   subject: { name: topic, rawSyllabus: syllabus },
+  // } = getRouteApi("/study/$subjectId").useLoaderData();
 
   const rootContext = getRouteApi("__root__").useRouteContext();
   const user = rootContext.user!; // TODO: ts
+
+  const { subjectId } = getRouteApi("/study/$subjectId").useParams();
+  const { data: subjectTree } = useSuspenseQuery(
+    loadSubjectTreeQueryOptions(subjectId)
+  );
+
+  const {
+    subject: { name: topic, rawSyllabus: syllabus },
+  } = subjectTree;
+
+  console.log(subjectTree);
 
   const { data: userCredits } = useQuery(getUserCreditsQueryOptions(user!.id));
 

@@ -1,6 +1,6 @@
 import { asc, eq, sql } from "drizzle-orm";
 import { db } from "../db";
-import { creditTransactions, user } from "../db/schema";
+import { creditBundles, creditTransactions, user } from "../db/schema";
 
 export async function getCreditPlans() {
   const creditPlans = await db.query.creditBundles.findMany({
@@ -9,6 +9,8 @@ export async function getCreditPlans() {
 
   return creditPlans;
 }
+
+export type CreditPlan = typeof creditBundles.$inferSelect;
 
 export async function addCreditBundle({
   customerId,

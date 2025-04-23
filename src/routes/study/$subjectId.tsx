@@ -11,25 +11,12 @@ import {
 import { Separator } from "@/components/ui/separator";
 import { SidebarInset, SidebarTrigger } from "@/components/ui/sidebar";
 import { useIsMobile } from "@/hooks/use-mobile";
-import { getSubjectTreeFn } from "@/lib/server/rpc/nodes";
-import { querySubjectFn } from "@/lib/server/rpc/subjects";
+import { loadSubjectTreeFn } from "@/lib/server/rpc/nodes";
+import { loadSubjectTreeQueryOptions } from "@/lib/server/rpc/subjects";
+import { useSuspenseQuery } from "@tanstack/react-query";
 import { createFileRoute, redirect } from "@tanstack/react-router";
 import { Node } from "@xyflow/react";
 import { useState } from "react";
-
-async function loadSubjectTreeFn(subjectId: string) {
-  const subject = await querySubjectFn({ data: { id: subjectId } });
-  const tree = await getSubjectTreeFn({
-    data: { subjectId },
-  });
-  if (!tree) {
-    // TODO: handle no tree found in db
-    throw redirect({
-      to: "/",
-    });
-  }
-  return { subject, tree };
-}
 
 export const Route = createFileRoute("/study/$subjectId")({
   // staleTime: 1000 * 60 * 5,
@@ -40,8 +27,9 @@ export const Route = createFileRoute("/study/$subjectId")({
       });
     }
   },
-  loader: async ({ params: { subjectId } }) => {
-    return loadSubjectTreeFn(subjectId);
+  loader: async ({ params: { subjectId }, context: { queryClient } }) => {
+    await queryClient.ensureQueryData(loadSubjectTreeQueryOptions(subjectId));
+    return { subjectId, subjectTreePromise: loadSubjectTreeFn(subjectId) };
   },
   component: RouteComponent,
 });
@@ -84,14 +72,76 @@ function LayoutWrapper({
 }
 
 function RouteComponent() {
-  const { tree } = Route.useLoaderData();
+  const { subjectId } = Route.useParams();
+  const { data, isError } = useSuspenseQuery(
+    loadSubjectTreeQueryOptions(subjectId)
+  );
+  // const { data, isPending, isError } = useQuery(
+  //   loadSubjectTreeQueryOptions(subjectId)
+  // );
+
+  if (isError) {
+    return <>Failed to load tree</>;
+  }
+
+  return <RoutePage tree={data.tree} />;
+
+  // return (
+  //   <>
+  //     {isPending ? (
+  //       <>
+  //         <AppSidebar
+  //           data={{} as HeadingNode}
+  //           selectedNodeId={"a"}
+  //           isPending={isPending}
+  //         />
+
+  //         <SidebarInset>
+  //           <header className="flex h-14 shrink-0 items-center gap-2 border-b">
+  //             <div className="flex items-center justify-between w-full gap-2 px-4">
+  //               <div className="flex gap-2 items-center text-sm">
+  //                 <SidebarTrigger className="-ml-1" />
+  //                 <Separator orientation="vertical" className="mr-2 h-4" />
+  //                 Loading title...
+  //               </div>
+  //               <ThemeToggle />
+  //             </div>
+  //           </header>
+
+  //           <LayoutWrapper selectedNode={null}>
+  //             {/* {nodeData && (
+  //               <MindmapWithProvider
+  //                 data={nodeData}
+  //                 setData={setNodeData}
+  //                 selectedNode={selectedNode}
+  //                 setSelectedNode={setSelectedNode}
+  //               />
+  //             )} */}
+  //             Loading mindmap
+  //           </LayoutWrapper>
+  //         </SidebarInset>
+  //       </>
+  //     ) : (
+  //       <>
+  //         <RoutePage tree={data.tree} />
+  //       </>
+  //     )}
+  //   </>
+  // );
+}
+
+function RoutePage({ tree }: { tree: HeadingNode }) {
   const [nodeData, setNodeData] = useState<HeadingNode>(tree);
   const [selectedNode, setSelectedNode] = useState<Node | null>(null);
 
   return (
     <>
       {nodeData && (
-        <AppSidebar data={nodeData} selectedNodeId={selectedNode?.id ?? null} />
+        <AppSidebar
+          data={nodeData}
+          selectedNodeId={selectedNode?.id ?? null}
+          isPending={false}
+        />
       )}
       <SidebarInset>
         <header className="flex h-14 shrink-0 items-center gap-2 border-b">

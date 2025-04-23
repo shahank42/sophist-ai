@@ -14,6 +14,7 @@ import {
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
+  SidebarMenuSkeleton,
   SidebarMenuSub,
   useSidebar,
 } from "@/components/ui/sidebar";
@@ -122,11 +123,13 @@ function Tree({ node, selectedNodeId, depth = 0 }: TreeProps) {
 type AppSidebarProps = React.ComponentProps<typeof Sidebar> & {
   data: HeadingNode;
   selectedNodeId: string | null;
+  isPending: boolean;
 };
 
 export function AppSidebar({
   data,
   selectedNodeId,
+  isPending,
   ...props
 }: AppSidebarProps) {
   const { setOpenMobile } = useSidebar();
@@ -156,7 +159,15 @@ export function AppSidebar({
           <SidebarGroup>
             <SidebarGroupContent>
               <SidebarMenu>
-                <Tree node={data} selectedNodeId={selectedNodeId} />
+                {isPending ? (
+                  Array.from({ length: 10 }).map((_, index) => (
+                    <SidebarMenuItem key={index}>
+                      <SidebarMenuSkeleton className="" />
+                    </SidebarMenuItem>
+                  ))
+                ) : (
+                  <Tree node={data} selectedNodeId={selectedNodeId} />
+                )}
               </SidebarMenu>
             </SidebarGroupContent>
           </SidebarGroup>

@@ -31,8 +31,12 @@ const TanStackRouterDevtools =
 export const Route = createRootRouteWithContext<{
   queryClient: QueryClient;
 }>()({
-  beforeLoad: async () => {
-    const user = await getUser();
+  beforeLoad: async ({ context }) => {
+    // const user = await getUser();
+    const user = await context.queryClient.fetchQuery({
+      queryKey: ["user"],
+      queryFn: ({ signal }) => getUser({ signal }),
+    });
     return { user };
   },
 

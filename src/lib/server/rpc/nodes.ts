@@ -3,6 +3,7 @@ import {
   transformChildrenStructure,
   transformInitialStructure,
 } from "@/lib/utils";
+import { redirect } from "@tanstack/react-router";
 import { createServerFn } from "@tanstack/react-start";
 import { z } from "zod";
 import { generateChildren } from "../prompts/generateChildren";
@@ -14,6 +15,7 @@ import {
   queryNodesForSubject,
   setNodesCompleted,
 } from "../queries/nodes";
+import { querySubjectFn } from "./subjects";
 import { spendUserCreditsFn } from "./users";
 
 export const storeTreeFn = createServerFn({ method: "POST" })
@@ -226,3 +228,17 @@ export const setNodeAndParentsCompletedFn = createServerFn({ method: "POST" })
 
     await Promise.all(updatePromises);
   });
+
+export async function loadSubjectTreeFn(subjectId: string) {
+  const subject = await querySubjectFn({ data: { id: subjectId } });
+  const tree = await getSubjectTreeFn({
+    data: { subjectId },
+  });
+  if (!tree) {
+    // TODO: handle no tree found in db
+    throw redirect({
+      to: "/",
+    });
+  }
+  return { subject, tree };
+}

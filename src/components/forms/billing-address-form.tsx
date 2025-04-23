@@ -64,7 +64,7 @@ export function BillingAddressForm({
             onChange({ ...billing, country: value, state: "" })
           }
         >
-          <SelectTrigger className="w-full">
+          <SelectTrigger className="w-full cursor-pointer">
             <SelectValue placeholder="Select Country" />
           </SelectTrigger>
           <SelectContent>
@@ -80,7 +80,7 @@ export function BillingAddressForm({
           onValueChange={(value) => onChange({ ...billing, state: value })}
           disabled={!billing.country || states.length === 0}
         >
-          <SelectTrigger className="w-full">
+          <SelectTrigger className="w-full cursor-pointer">
             <SelectValue placeholder="Select State" />
           </SelectTrigger>
           <SelectContent>

@@ -20,7 +20,7 @@ import {
   queryUserSubjectsOptions,
 } from "@/lib/server/rpc/subjects";
 import { Session } from "@/lib/utils/auth-client";
-import { useMutation, useSuspenseQuery } from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import { Link } from "@tanstack/react-router";
 import { toast } from "sonner";
 import {
@@ -58,7 +58,7 @@ export function HomeSidebar({
     isPending,
     isError,
     refetch,
-  } = useSuspenseQuery(queryUserSubjectsOptions(user.id));
+  } = useQuery(queryUserSubjectsOptions(user.id));
   // const router = useRouter();
   const { setOpenMobile } = useSidebar();
 
