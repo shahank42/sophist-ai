@@ -59,3 +59,15 @@ export async function addCreditBundle({
 
   return creditRecord[0];
 }
+
+export async function getUserCredits(userId: string) {
+  const user = await db.query.user.findFirst({
+    where: (user) => eq(user.id, userId),
+  });
+
+  if (!user) {
+    throw new Error("User not found");
+  }
+
+  return user.credits;
+}

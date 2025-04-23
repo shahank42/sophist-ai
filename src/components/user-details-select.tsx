@@ -18,7 +18,9 @@ import {
   SidebarMenuItem,
   useSidebar,
 } from "@/components/ui/sidebar";
+import { getUserCreditsQueryOptions } from "@/lib/server/rpc/users";
 import { authClient } from "@/lib/utils/auth-client";
+import { useQuery } from "@tanstack/react-query";
 import { getRouteApi, Link, useRouter } from "@tanstack/react-router";
 import { Badge } from "./ui/badge";
 
@@ -38,6 +40,8 @@ export function UserDetailsSelect() {
   const { isMobile } = useSidebar();
   const router = useRouter();
   const { user } = getRouteApi("__root__").useRouteContext();
+
+  const { data: userCredits } = useQuery(getUserCreditsQueryOptions(user!.id));
 
   if (!user) {
     return null;
@@ -96,7 +100,7 @@ export function UserDetailsSelect() {
                     variant="outline"
                     className="font-semibold text-primary"
                   >
-                    {user.credits}
+                    {userCredits?.credits}
                   </Badge>
                 </Link>
               </DropdownMenuItem>
