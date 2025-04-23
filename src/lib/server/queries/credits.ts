@@ -71,3 +71,29 @@ export async function getUserCredits(userId: string) {
 
   return user.credits;
 }
+
+export async function spendUserCredits(
+  userId: string,
+  credits: number,
+  relatedId: string
+) {
+  const creditRecord = await db
+    .insert(creditTransactions)
+    .values({
+      userId: userId,
+      amount: -credits,
+      transactionType: "spend",
+      relatedId,
+    })
+    .returning();
+
+  await db
+    .update(user)
+    .set({
+      credits: sql`${user.credits} + ${creditRecord[0].amount}`,
+    })
+    .where(eq(user.id, userId))
+    .returning();
+
+  return creditRecord;
+}

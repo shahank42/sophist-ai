@@ -3,7 +3,7 @@ import { createServerFn } from "@tanstack/react-start";
 import { getWebRequest } from "@tanstack/react-start/server";
 import { z } from "zod";
 import { auth } from "../auth";
-import { getUserCredits } from "../queries/credits";
+import { getUserCredits, spendUserCredits } from "../queries/credits";
 import { getUserProStatus } from "../queries/users";
 
 export const getUser = createServerFn({ method: "GET" }).handler(async () => {
@@ -35,6 +35,24 @@ export const getUserCreditsQueryOptions = (userId: string) =>
   queryOptions({
     queryKey: ["user-credits", userId],
     queryFn: () => getUserCreditsFn({ data: { userId } }),
+  });
+
+export const spendUserCreditsFn = createServerFn({ method: "GET" })
+  .validator((data: unknown) =>
+    z
+      .object({
+        userId: z.string(),
+        credits: z.number(),
+        purpose: z.string(),
+      })
+      .parse(data)
+  )
+  .handler(async ({ data: { userId, credits, purpose } }) => {
+    const creditRecord = await spendUserCredits(userId, credits, purpose);
+
+    return {
+      creditRecord,
+    };
   });
 
 export const getUserProStatusFn = createServerFn({ method: "GET" })

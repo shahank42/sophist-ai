@@ -52,6 +52,9 @@ const Mindmap: React.FC<MindmapProps> = ({
     subject: { name: topic, rawSyllabus: syllabus },
   } = getRouteApi("/study/$subjectId").useLoaderData();
 
+  const rootContext = getRouteApi("__root__").useRouteContext();
+  const user = rootContext.user!; // TODO: ts
+
   const { data: currentArticle } = useArticleContent(selectedNode);
 
   const [expandedByLevel, setExpandedByLevel] = useState(
@@ -254,7 +257,7 @@ const Mindmap: React.FC<MindmapProps> = ({
           });
 
           const insertedNodes = await appendNodesFn({
-            data: { parentId: nodeId, children: childNodes },
+            data: { parentId: nodeId, children: childNodes, userId: user.id },
           });
 
           const transformedNodes = insertedNodes.map((node) => ({

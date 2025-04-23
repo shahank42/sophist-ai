@@ -3,7 +3,14 @@ import { setNodeCompletedFn } from "@/lib/server/rpc/nodes";
 import { cn } from "@/lib/utils";
 import { getRouteApi } from "@tanstack/react-router";
 import { Handle, Position, useReactFlow } from "@xyflow/react";
-import { Check, ChevronDown, ChevronRight, Loader2, Plus } from "lucide-react";
+import {
+  Check,
+  ChevronDown,
+  ChevronRight,
+  CoinsIcon,
+  Loader2,
+  Plus,
+} from "lucide-react";
 import { memo } from "react";
 import { toast } from "sonner";
 import ContentPanel from "../content-panel";
@@ -81,13 +88,13 @@ const NodeCard = ({
         <Button
           variant="ghost"
           size="icon"
-          className="h-6 w-6 ml-2"
+          className="h-6 w-6 ml-2 cursor-pointer"
           onClick={handleExpand}
         >
           {data.expanded ? (
-            <ChevronDown className="size-5" />
+            <ChevronDown className="size-4" />
           ) : (
-            <ChevronRight className="size-5" />
+            <ChevronRight className="size-4" />
           )}
         </Button>
       ) : data.completed ? (
@@ -96,14 +103,20 @@ const NodeCard = ({
         <Button
           variant="ghost"
           size="icon"
-          className="h-6 w-6 ml-2"
+          className="h-6 w-6 ml-2 cursor-pointer"
           onClick={handleGenerateChildren}
           disabled={data.isGenerating}
         >
           {data.isGenerating ? (
             <Loader2 className="size-4 animate-spin" />
           ) : (
-            <Plus className="size-4" />
+            <div className="relative group w-full h-full flex items-center justify-center">
+              <Plus className="size-4" />
+              <div className="hidden group-hover:flex group-active:flex items-center absolute right-full top-1/2 -translate-y-1/2 mr-2">
+                <CoinsIcon className="size-4" />
+                <span className="text-sm">10</span>
+              </div>
+            </div>
           )}
         </Button>
       )}

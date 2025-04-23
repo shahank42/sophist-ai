@@ -1,19 +1,20 @@
 import { buildTree, HeadingNode } from "@/components/mind-map/utils";
-import { createServerFn } from "@tanstack/react-start";
-import { z } from "zod";
 import {
   transformChildrenStructure,
   transformInitialStructure,
 } from "@/lib/utils";
+import { createServerFn } from "@tanstack/react-start";
+import { z } from "zod";
+import { generateChildren } from "../prompts/generateChildren";
+import { fetchInitialStructure } from "../prompts/generateInitialTopics";
 import {
-  insertNodes,
-  queryNodesForSubject,
-  queryNodeById,
   getAllDescendantIds,
+  insertNodes,
+  queryNodeById,
+  queryNodesForSubject,
   setNodesCompleted,
 } from "../queries/nodes";
-import { fetchInitialStructure } from "../prompts/generateInitialTopics";
-import { generateChildren } from "../prompts/generateChildren";
+import { spendUserCreditsFn } from "./users";
 
 export const storeTreeFn = createServerFn({ method: "POST" })
   .validator((data: { subjectId: string; rootNode: HeadingNode }) => data)
@@ -113,10 +114,11 @@ export const appendNodesFn = createServerFn({ method: "POST" })
             children: z.array(z.any()).optional(), // TODO: fix this any
           })
         ),
+        userId: z.string(), // for spending credits
       })
       .parse(data)
   )
-  .handler(async ({ data: { parentId, children } }) => {
+  .handler(async ({ data: { parentId, children, userId } }) => {
     const parentNode = await queryNodeById(parentId);
     if (!parentNode) throw new Error("Parent node not found");
 
@@ -135,6 +137,14 @@ export const appendNodesFn = createServerFn({ method: "POST" })
     console.log(
       `inserted nodes with ids ${children.map((n) => n.id).join(", ")} as ${insertedNodes.map((n) => n.id).join(", ")}`
     );
+
+    await spendUserCreditsFn({
+      data: {
+        userId,
+        credits: 10,
+        purpose: "generate-node-children",
+      },
+    });
 
     return insertedNodes;
   });
