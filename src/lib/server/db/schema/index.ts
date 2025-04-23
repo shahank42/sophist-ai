@@ -137,7 +137,7 @@ export const creditTransactions = pgTable("credit_transactions", {
     .primaryKey(),
   userId: text("user_id")
     .notNull()
-    .references(() => user.id),
+    .references(() => user.id, { onDelete: "cascade" }),
   // bundleId: text("bundle_id")
   //   .notNull()
   //   .references(() => creditBundles.id),
@@ -160,7 +160,7 @@ export const subscriptions = pgTable(
       .primaryKey(),
     userId: text("user_id")
       .notNull()
-      .references(() => user.id),
+      .references(() => user.id, { onDelete: "cascade" }),
     plan: planTypeEnum("plan"),
     status: text("status").notNull(),
 

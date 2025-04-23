@@ -14,11 +14,11 @@ export const user = pgTable("user", {
   image: text("image"),
   createdAt: timestamp("created_at").notNull(),
   updatedAt: timestamp("updated_at").notNull(),
-  isPro: boolean("is_pro"),
+  isPro: boolean("is_pro").notNull().default(false),
   customerId: text("customer_id"),
   proStartDate: timestamp("pro_start_date"),
   proEndDate: timestamp("pro_end_date"),
-  credits: integer("credits"),
+  credits: integer("credits").notNull().default(0),
 });
 
 export const session = pgTable("session", {

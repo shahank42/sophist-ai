@@ -45,9 +45,17 @@ export async function addCreditBundle({
     })
     .returning();
 
-  await db.update(user).set({
-    credits: sql`${user.credits} + ${creditRecord[0].amount}`,
-  });
+  console.log("credit record", creditRecord);
+
+  const newUser = await db
+    .update(user)
+    .set({
+      credits: sql`${user.credits} + ${creditRecord[0].amount}`,
+    })
+    .where(eq(user.id, userToAdd.id))
+    .returning();
+
+  console.log("new user", newUser);
 
   return creditRecord[0];
 }
