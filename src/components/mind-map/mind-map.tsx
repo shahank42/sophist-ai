@@ -5,6 +5,8 @@ import {
   generateNodeChildrenFn,
   setNodeAndParentsCompletedFn,
 } from "@/lib/server/rpc/nodes";
+import { getUserCreditsQueryOptions } from "@/lib/server/rpc/users";
+import { useQuery } from "@tanstack/react-query";
 import { getRouteApi } from "@tanstack/react-router";
 import {
   addEdge,
@@ -18,6 +20,7 @@ import {
 } from "@xyflow/react";
 import "@xyflow/react/dist/style.css";
 import React, { useCallback, useEffect, useMemo, useState } from "react";
+import { toast } from "sonner";
 import MindmapNode from "./mind-map-node";
 import {
   convertToReactFlowElements,
@@ -54,6 +57,8 @@ const Mindmap: React.FC<MindmapProps> = ({
 
   const rootContext = getRouteApi("__root__").useRouteContext();
   const user = rootContext.user!; // TODO: ts
+
+  const { data: userCredits } = useQuery(getUserCreditsQueryOptions(user!.id));
 
   const { data: currentArticle } = useArticleContent(selectedNode);
 
@@ -243,6 +248,11 @@ const Mindmap: React.FC<MindmapProps> = ({
         const nodeId = e.detail.id;
         const node = getNode(nodeId);
         if (!node || generatingNodes[nodeId]) return;
+
+        if (userCredits && userCredits.credits < 10) {
+          toast.info("You don't have enough credits to generate children!");
+          return;
+        }
 
         try {
           setGeneratingNodes((prev) => ({ ...prev, [nodeId]: true }));

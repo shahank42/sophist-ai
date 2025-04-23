@@ -6,7 +6,10 @@ import { insertSubject } from "@/lib/server/queries/subjects";
 import { storeTreeFn } from "@/lib/server/rpc/nodes";
 import { queryUserSubscriptionOptions } from "@/lib/server/rpc/payments";
 import { queryUserSubjectsOptions } from "@/lib/server/rpc/subjects";
-import { spendUserCreditsFn } from "@/lib/server/rpc/users";
+import {
+  getUserCreditsQueryOptions,
+  spendUserCreditsFn,
+} from "@/lib/server/rpc/users";
 import { transformInitialStructure } from "@/lib/utils";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useQuery, useSuspenseQuery } from "@tanstack/react-query";
@@ -74,6 +77,7 @@ export default function ExploreSyllabusForm() {
     queryUserSubscriptionOptions(user.id)
   );
   const { data: userSubjects } = useQuery(queryUserSubjectsOptions(user.id));
+  const { data: userCredits } = useQuery(getUserCreditsQueryOptions(user!.id));
 
   const {
     register,
@@ -88,10 +92,8 @@ export default function ExploreSyllabusForm() {
   const validateSubjectCreation = (): boolean => {
     const subjectCount = userSubjects?.length || 0;
 
-    if (!userSubscription.isPro && subjectCount >= FREE_TIER_MAX_SUBJECTS) {
-      toast.info(
-        `Free users can create up to ${FREE_TIER_MAX_SUBJECTS} subjects. Upgrade to SophistAI Pro for unlimited subjects!`
-      );
+    if (userCredits && userCredits.credits < 50) {
+      toast.info("You don't have enough credits to generate courses!");
       return false;
     }
 
@@ -196,7 +198,7 @@ export default function ExploreSyllabusForm() {
               </span>
             ) : (
               <>
-                <span className="relative z-10">Start Studying</span>
+                <span className="relative z-10">Generate Course</span>
                 <div className="relative z-10 flex items-center gap-2 border-l pl-3 border-primary-foreground/20">
                   <CoinsIcon className="h-4 w-4" />
                   <span className="text-sm font-semibold">50 credits</span>
