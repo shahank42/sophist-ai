@@ -344,6 +344,7 @@ const Mindmap: React.FC<MindmapProps> = ({
         fitView
         panOnScroll
         zoomOnPinch
+        proOptions={{ hideAttribution: true }}
       >
         <Background />
       </ReactFlow>
