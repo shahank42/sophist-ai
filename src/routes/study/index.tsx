@@ -69,7 +69,7 @@ function RouteComponent() {
       <SidebarInset>
         {user ? (
           <div className="py-3 px-3 flex w-full justify-between">
-            <SidebarTrigger className="z-20" />
+            <SidebarTrigger className="z-20 cursor-pointer" />
             <ThemeToggle />
           </div>
         ) : (

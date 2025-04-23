@@ -29,7 +29,7 @@ export function ThemeToggle() {
       <Tooltip delayDuration={100}>
         <TooltipTrigger asChild>
           <Button
-            className="mr-2 h-8 w-8 rounded-full bg-background z-20"
+            className="mr-2 h-8 w-8 rounded-full bg-background z-20 cursor-pointer"
             variant="outline"
             size="icon"
             onClick={toggleTheme}

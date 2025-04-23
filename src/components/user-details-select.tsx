@@ -54,7 +54,7 @@ export function UserDetailsSelect() {
           <DropdownMenuTrigger asChild>
             <SidebarMenuButton
               size="lg"
-              className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground"
+              className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground cursor-pointer"
             >
               <UserAvatar username={user.name} />
               <div className="grid flex-1 text-left text-sm leading-tight">
@@ -90,7 +90,7 @@ export function UserDetailsSelect() {
               <DropdownMenuItem asChild>
                 <Link
                   to="/buy"
-                  className="flex items-center justify-between w-full"
+                  className="flex items-center justify-between w-full cursor-pointer"
                 >
                   <div className="flex items-center gap-2">
                     <CoinsIcon className="text-primary size-4" />
@@ -98,7 +98,7 @@ export function UserDetailsSelect() {
                   </div>
                   <Badge
                     variant="outline"
-                    className="font-semibold text-primary"
+                    className="font-semibold text-primary text-md"
                   >
                     {userCredits?.credits}
                   </Badge>
@@ -108,6 +108,7 @@ export function UserDetailsSelect() {
             </DropdownMenuGroup>
             <DropdownMenuSeparator />
             <DropdownMenuItem
+              className="cursor-pointer"
               onClick={async () => {
                 await authClient.signOut();
                 router.invalidate();

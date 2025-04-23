@@ -1,4 +1,4 @@
-import { MoreHorizontal, RefreshCcw, Trash2 } from "lucide-react";
+import { MoreHorizontal, Trash2 } from "lucide-react";
 import * as React from "react";
 
 import {
@@ -27,7 +27,6 @@ import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
-  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "../ui/dropdown-menu";
 import { UserDetailsSelect } from "../user-details-select";
@@ -135,7 +134,10 @@ export function HomeSidebar({
                   </SidebarMenuButton>
                   <DropdownMenu>
                     <DropdownMenuTrigger asChild>
-                      <SidebarMenuAction showOnHover>
+                      <SidebarMenuAction
+                        className="cursor-pointer mr-1"
+                        showOnHover
+                      >
                         <MoreHorizontal />
                         <span className="sr-only">More</span>
                       </SidebarMenuAction>
@@ -145,17 +147,18 @@ export function HomeSidebar({
                       side={isMobile ? "bottom" : "right"}
                       align={isMobile ? "end" : "start"}
                     >
-                      <DropdownMenuItem>
+                      {/* <DropdownMenuItem>
                         <RefreshCcw className="text-muted-foreground" />
                         <span>Regenerate Subject</span>
-                      </DropdownMenuItem>
+                      </DropdownMenuItem> */}
                       {/* <DropdownMenuItem>
                       <Share className="text-muted-foreground" />
                       <span>Share Project</span>
                     </DropdownMenuItem> */}
-                      <DropdownMenuSeparator />
+                      {/* <DropdownMenuSeparator /> */}
                       <DropdownMenuItem
                         onClick={() => deleteSubject({ id: subject.id })}
+                        className="cursor-pointer"
                         disabled={
                           deleteStatus === "pending" &&
                           deletingVars?.id === subject.id

@@ -141,7 +141,7 @@ export default function ExploreSyllabusForm() {
               id="subject"
               placeholder="Enter subject name"
               {...register("subject")}
-              className="w-full text-base md:text-md lg:text-lg border-input focus:border-ring focus:ring-ring rounded-lg bg-background text-foreground placeholder-muted-foreground "
+              className="w-full text-base md:text-md border-input focus:border-ring focus:ring-ring rounded-lg bg-background text-foreground placeholder-muted-foreground "
             />
             {errors.subject && (
               <p className="mt-1 text-sm text-destructive">
@@ -155,7 +155,7 @@ export default function ExploreSyllabusForm() {
               id="syllabus"
               placeholder="Paste your syllabus here (formatting doesn't matter)..."
               {...register("syllabus")}
-              className="w-full h-52 text-base md:text-md lg:text-lg border-input focus:border-ring focus:ring-ring rounded-lg bg-background text-foreground placeholder-muted-foreground "
+              className="w-full h-52 text-base md:text-md border-input focus:border-ring focus:ring-ring rounded-lg bg-background text-foreground placeholder-muted-foreground "
             />
             {errors.syllabus && (
               <p className="mt-1 text-sm text-destructive">
