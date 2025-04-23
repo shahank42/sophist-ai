@@ -12,7 +12,6 @@ import {
   Plus,
 } from "lucide-react";
 import { memo } from "react";
-import { toast } from "sonner";
 import ContentPanel from "../content-panel";
 import { Button } from "../ui/button";
 import { Card, CardContent, CardHeader } from "../ui/card";
@@ -178,10 +177,10 @@ const MindmapNode = memo<MindmapNodeProps>(({ data, id }) => {
   const handleCompletion = async (e: React.MouseEvent) => {
     e.stopPropagation();
 
-    if (!user.isPro) {
-      toast.info("You need to be a Pro user to mark nodes as completed!");
-      return;
-    }
+    // if (!user.isPro) {
+    //   toast.info("You need to be a Pro user to mark nodes as completed!");
+    //   return;
+    // }
 
     const newCompleted = !data.completed;
 
