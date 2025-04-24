@@ -169,6 +169,17 @@ export function PricingCard({
               minimumFractionDigits: 0,
               maximumFractionDigits: 0,
             }).format(creditBundles[index].price / 100)}
+            <div className="pricing-plan">
+              <div
+                className="price-container"
+                data-pd-thousands-separator=","
+                data-pd-decimal-places="2"
+                data-pd-decimal-separator="."
+                data-pd-original-price="99"
+              >
+                <span data-pd-price-formatted></span>
+              </div>
+            </div>
           </span>
           <span
             className={cn("ml-1 text-sm", {
