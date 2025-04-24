@@ -120,7 +120,7 @@ function RootDocument({ children }: Readonly<{ children: ReactNode }>) {
         <Suspense>
           <ReactQueryDevtools
             initialIsOpen={false}
-            position="bottom"
+            position="top"
             buttonPosition="bottom-right"
           />
           <TanStackRouterDevtools position="bottom-right" />

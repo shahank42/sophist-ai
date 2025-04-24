@@ -3,9 +3,20 @@ import { db } from "../db";
 import { creditBundles, creditTransactions, user } from "../db/schema";
 
 export async function getCreditPlans() {
-  const creditPlans = await db.query.creditBundles.findMany({
-    orderBy: (creditPlan) => [asc(creditPlan.price)],
-  });
+  // const creditPlans = await db.query.creditBundles.findMany({
+  //   orderBy: (creditPlan) => [asc(creditPlan.price)],
+  // });
+
+  const creditPlans = await db
+    .select({
+      id: creditBundles.id,
+      name: creditBundles.name,
+      credits: creditBundles.credits,
+      price: creditBundles.price,
+      isPrimary: creditBundles.isPrimary,
+    })
+    .from(creditBundles)
+    .orderBy(asc(creditBundles.price));
 
   return creditPlans;
 }
