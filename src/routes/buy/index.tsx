@@ -1,15 +1,17 @@
 import { BillingAddress } from "@/components/forms/billing-address-form";
 import { HeroHeader } from "@/components/layout/landing/hero6-header";
 import { PricingSection } from "@/components/pricing/pricing-section";
-import { checkoutCreditPlanFn } from "@/lib/server/rpc/payments";
+import {
+  checkoutCreditPlanFn,
+  getIpFromServerFn,
+} from "@/lib/server/rpc/payments";
 import { GeoApiResponse } from "@/lib/types/geo-types";
 import {
   createFileRoute,
   getRouteApi,
   useNavigate,
 } from "@tanstack/react-router";
-import { createServerFn, useServerFn } from "@tanstack/react-start";
-import { getWebRequest } from "@tanstack/react-start/server";
+import { useServerFn } from "@tanstack/react-start";
 import React from "react";
 
 export const fetchGeoData = async (): Promise<GeoApiResponse> => {
@@ -25,14 +27,14 @@ export const fetchGeoData = async (): Promise<GeoApiResponse> => {
   return data;
 };
 
-const getIpFromServerFn = createServerFn({ method: "GET" }).handler(
-  async () => {
-    const request = getWebRequest();
-    console.log("WEBREQ", request);
-    const xForwardedForHeader = request?.headers.get("X-Forwarded-For");
-    return xForwardedForHeader ?? "";
-  }
-);
+// const getIpFromServerFn = createServerFn({ method: "GET" }).handler(
+//   async () => {
+//     const request = getWebRequest();
+//     console.log("WEBREQ", request);
+//     const xForwardedForHeader = request?.headers.get("X-Forwarded-For");
+//     return xForwardedForHeader ?? "";
+//   }
+// );
 
 // export function getCountryCode(ip: string): string | null {
 //   const lookup = geoip.lookup(ip);

@@ -1,6 +1,7 @@
 import { dodopayments } from "@/lib/dodopayments";
 import { queryOptions } from "@tanstack/react-query";
 import { createServerFn } from "@tanstack/react-start";
+import { getRequestIP } from "@tanstack/react-start/server";
 import { Country, State } from "country-state-city";
 import { CountryCode } from "dodopayments/resources/misc.mjs";
 import { z } from "zod";
@@ -136,3 +137,13 @@ export const queryUserSubscriptionOptions = (userId: string) =>
     queryKey: ["userProStatus", userId],
     queryFn: () => getUserSubscriptionFn({ data: { userId } }),
   });
+
+export const getIpFromServerFn = createServerFn({ method: "GET" }).handler(
+  async () => {
+    // const request = getWebRequest();
+    const clientIp = getRequestIP();
+    console.log("clientIp", clientIp);
+    // const xForwardedForHeader = request?.headers.get("X-Forwarded-For");
+    return clientIp ?? "";
+  }
+);
