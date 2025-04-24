@@ -1,21 +1,18 @@
 // components/landing/LandingPage.tsx
 import HeroSection from "@/components/layout/landing/hero-section-2";
 import CallToAction from "./cta";
+import FAQsThree from "./faqs-3";
 import Features from "./features";
-import AppDemo from "./features-12";
 import Footer from "./footer";
-import TestimonialsSection from "./testimonials-section";
 
 export function LandingSection() {
   return (
-    <div className="relative">
-      {/* <Navbar /> */}
+    <div className="relative w-full">
       <HeroSection />
-      {/* <FeaturesSection /> */}
       <Features />
-      {/* <AppDemoSection /> */}
-      <AppDemo />
-      <TestimonialsSection />
+      {/* <AppDemo /> */}
+      {/* <TestimonialsSection /> */}
+      <FAQsThree />
       <CallToAction />
       <Footer />
     </div>

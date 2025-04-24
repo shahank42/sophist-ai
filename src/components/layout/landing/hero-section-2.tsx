@@ -1,11 +1,9 @@
 import { HeroHeader } from "@/components/layout/landing/hero6-header";
 import { AnimatedGroup } from "@/components/motion-primitives/animated-group";
 import { TextEffect } from "@/components/motion-primitives/text-effect";
-import { Button, buttonVariants } from "@/components/ui/button";
-import { cn } from "@/lib/utils";
-import { authClient } from "@/lib/utils/auth-client";
 import { getRouteApi, Link } from "@tanstack/react-router";
 import { ArrowRight } from "lucide-react";
+import { CTAButtons } from "./cta-buttons";
 
 const transitionVariants = {
   item: {
@@ -36,7 +34,7 @@ export default function HeroSection() {
       <main className="overflow-hidden">
         <div
           aria-hidden
-          className="absolute inset-0 isolate hidden opacity-65 contain-strict lg:block"
+          className="absolute h-[100dvh] inset-0 isolate hidden opacity-65 contain-strict lg:block"
         >
           <div className="w-140 h-320 -translate-y-87.5 absolute left-0 top-0 -rotate-45 rounded-full bg-[radial-gradient(68.54%_68.72%_at_55.02%_31.46%,hsla(0,0%,85%,.08)_0,hsla(0,0%,55%,.02)_50%,hsla(0,0%,45%,0)_80%)]" />
           <div className="h-320 absolute left-0 top-0 w-60 -rotate-45 rounded-full bg-[radial-gradient(50%_50%_at_50%_50%,hsla(0,0%,85%,.06)_0,hsla(0,0%,45%,.02)_80%,transparent_100%)] [translate:5%_-50%]" />
@@ -88,7 +86,7 @@ export default function HeroSection() {
                     className="hover:bg-background dark:hover:border-t-border bg-muted group mx-auto flex w-fit items-center gap-4 rounded-full border p-1 pl-4 shadow-md shadow-zinc-950/5 transition-colors duration-300 dark:border-t-white/5 dark:shadow-zinc-950"
                   >
                     <span className="text-foreground text-sm">
-                      Winners of Diversion 2k25!
+                      We won Diversion 2k25!
                     </span>
                     <span className="dark:border-background block h-4 w-0.5 border-l bg-white dark:bg-zinc-700"></span>
 
@@ -137,59 +135,9 @@ export default function HeroSection() {
                     },
                     ...transitionVariants,
                   }}
-                  className="mt-12 flex flex-col items-center justify-center gap-2 md:flex-row"
+                  className="mt-12 flex flex-col flex-wrap items-center justify-center gap-2 md:flex-row"
                 >
-                  {!user ? (
-                    <div
-                      key={1}
-                      className="bg-foreground/10 rounded-[calc(var(--radius-xl)+0.125rem)] border p-0.5"
-                    >
-                      <a
-                        // asChild
-                        // size="lg"
-                        className={cn(
-                          buttonVariants({ variant: "default", size: "lg" }),
-                          "rounded-xl px-5 text-base cursor-pointer"
-                        )}
-                        onClick={async () => {
-                          await authClient.signIn.social({
-                            provider: "google",
-                            callbackURL: "/study",
-                          });
-                        }}
-                      >
-                        {/* <Link to="/study"> */}
-                        <span className="text-nowrap">Log in with Google</span>
-                        {/* </Link> */}
-                      </a>
-                    </div>
-                  ) : (
-                    <div
-                      key={1}
-                      className="bg-foreground/10 rounded-[calc(var(--radius-xl)+0.125rem)] border p-0.5"
-                    >
-                      <Button
-                        asChild
-                        size="lg"
-                        className={"rounded-xl px-5 text-base"}
-                      >
-                        <Link to="/study">
-                          <span className="text-nowrap">Study Now</span>
-                        </Link>
-                      </Button>
-                    </div>
-                  )}
-                  <Button
-                    key={2}
-                    asChild
-                    size="lg"
-                    variant="ghost"
-                    className="h-10.5 rounded-xl px-5"
-                  >
-                    <Link to="/">
-                      <span className="text-nowrap">Learn More</span>
-                    </Link>
-                  </Button>
+                  <CTAButtons />
                 </AnimatedGroup>
               </div>
             </div>
