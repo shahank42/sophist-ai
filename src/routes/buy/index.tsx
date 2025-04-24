@@ -1,8 +1,8 @@
 import { BillingAddress } from "@/components/forms/billing-address-form";
 import { HeroHeader } from "@/components/layout/landing/hero6-header";
 import { PricingSection } from "@/components/pricing/pricing-section";
-import { fetchGeoData } from "@/hooks/use-country-code";
 import { checkoutCreditPlanFn } from "@/lib/server/rpc/payments";
+import { GeoApiResponse } from "@/lib/types/geo-types";
 import {
   createFileRoute,
   getRouteApi,
@@ -11,16 +11,24 @@ import {
 import { useServerFn } from "@tanstack/react-start";
 import React from "react";
 
+export const fetchGeoData = async (): Promise<GeoApiResponse> => {
+  const response = await fetch(
+    `${import.meta.env.VITE_NETLIFY_EDGE_FUNCTION_URL}/geo`
+  );
+
+  if (!response.ok) {
+    throw new Error(`Network response was not ok: ${response.statusText}`);
+  }
+
+  const data: GeoApiResponse = await response.json();
+  return data;
+};
+
 export const Route = createFileRoute("/buy/")({
   loader: async () => {
     const geoData = await fetchGeoData();
-
     return { userCountryCode: geoData.geo.country.code };
   },
-
-  // loader: async ({}) => {
-
-  // }
 
   component: RouteComponent,
 });
