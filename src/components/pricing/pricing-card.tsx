@@ -48,9 +48,10 @@ export function PricingCard({
   onCheckout,
 }: PricingCardProps) {
   // const { countryCode, isLoading, isError, error } = useCountryCode();
-  const { userCountryCode } = getRouteApi("/buy/").useLoaderData();
-  // const userCountryCodes = "IN";
-  console.log("user country code", userCountryCode);
+  const { ipAds } = getRouteApi("/buy/").useLoaderData();
+  // const { userCountryCode } = getRouteApi("/buy/").useLoaderData();
+  const userCountryCode = "IN";
+  console.log("ips", ipAds);
 
   const {
     data: creditBundles,

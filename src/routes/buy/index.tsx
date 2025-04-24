@@ -44,9 +44,10 @@ export const Route = createFileRoute("/buy/")({
   },
 
   loader: async ({ context: { ipAds } }) => {
-    if (!ipAds) return { userCountryCode: "" };
-    const userCountryCode = getCountryCode(ipAds.split(", ")[0]);
-    return { userCountryCode: userCountryCode ?? "" };
+    // if (!ipAds) return { userCountryCode: "" };
+    // const userCountryCode = getCountryCode(ipAds.split(", ")[0]);
+    // return { userCountryCode: userCountryCode ?? "" };
+    return { ipAds };
   },
 
   component: RouteComponent,
