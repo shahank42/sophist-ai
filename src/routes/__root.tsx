@@ -13,8 +13,13 @@ import {
   Scripts,
   ScrollRestoration,
 } from "@tanstack/react-router";
+import { dirname } from "path";
 import React, { ReactNode, Suspense } from "react";
+import { fileURLToPath } from "url";
 import appCss from "../styles/app.css?url";
+
+export const __filename = fileURLToPath(import.meta.url);
+export const __dirname = dirname(__filename);
 
 const TanStackRouterDevtools =
   process.env.NODE_ENV === "production"
@@ -109,15 +114,11 @@ function RootDocument({ children }: Readonly<{ children: ReactNode }>) {
       </head>
 
       <body className="font-nunito">
-        <ScriptOnce>
-          {`function resolvePdSDKFunction(e,...t){return new Promise((n,i)=>{!function r(){window.ParityDealsSDK&&"function"==typeof window.ParityDealsSDK[e]?window.ParityDealsSDK[e](...t).then(n).catch(i):setTimeout(r,100)}()})}!function(e,t,n,i,r,a,c){e[i]=e[i]||function(){(e[i].q=e[i].q||[]).push(Array.prototype.slice.call(arguments))},a=t.createElement(n),c=t.getElementsByTagName(n)[0],a.id="parity-deals-sdk",a.async=1,a.src=r,c.parentNode.insertBefore(a,c)}(window,document,"script","ParityDealsSDK","https://cdn.paritydeals.com/paritydeals-sdk/0.0.3/paritydeals-sdk.min.js"),window.ParityDeals={init:function(e){ParityDealsSDK("init",e)},getUpdatedPrice:function(e,t){return resolvePdSDKFunction("getUpdatedPrice",e,t)},updatePriceElement:function(e,t){return resolvePdSDKFunction("updatePriceElement",e,t)},updatePrice:function(e){return resolvePdSDKFunction("updatePrice",e)}};
+        {/* <ScriptOnce>
+          {`
 
-// Initialize ParityDeals SDK
-ParityDeals.init({
-  convertToLocal: true, // Convert prices to local currency
-  // Pass options as needed
-});`}
-        </ScriptOnce>
+          `}
+        </ScriptOnce> */}
 
         <ScriptOnce>
           {`document.documentElement.classList.toggle(

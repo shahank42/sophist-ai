@@ -12,7 +12,11 @@ import {
   useNavigate,
 } from "@tanstack/react-router";
 import { useServerFn } from "@tanstack/react-start";
+import geoip from "geoip-lite";
+import path from "path";
 import React from "react";
+
+export const __dirname = path.resolve();
 
 export const fetchGeoData = async (): Promise<GeoApiResponse> => {
   const response = await fetch(
@@ -43,19 +47,14 @@ export const fetchGeoData = async (): Promise<GeoApiResponse> => {
 export const Route = createFileRoute("/buy/")({
   beforeLoad: async () => {
     const ipAdds = await getIpFromServerFn();
-    return { ipAdds };
-    // console.log("HEADSS", getHeaders());
-    // const ipAds = getHeader("X-Forwarded-For");
-    // return { ipAds: ipAds === undefined ? null : ipAds };
+
+    return { ipAdds, country: geoip.lookup(ipAdds)?.country ?? "" };
   },
 
   // loader: ({ request }) => {},
 
-  loader: async ({ context: { ipAdds } }) => {
-    //   // if (!ipAds) return { userCountryCode: "" };
-    //   // const userCountryCode = getCountryCode(ipAds.split(", ")[0]);
-    //   // return { userCountryCode: userCountryCode ?? "" };
-    return { ipAdds };
+  loader: async ({ context: { ipAdds, country } }) => {
+    return { ipAdds, country };
   },
 
   component: RouteComponent,

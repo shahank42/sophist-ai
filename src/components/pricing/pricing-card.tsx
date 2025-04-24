@@ -48,10 +48,10 @@ export function PricingCard({
   onCheckout,
 }: PricingCardProps) {
   // const { countryCode, isLoading, isError, error } = useCountryCode();
-  const { ipAdds } = getRouteApi("/buy/").useLoaderData();
-  console.log("ips", ipAdds);
+  const { ipAdds, country } = getRouteApi("/buy/").useLoaderData();
+  console.log("ipss", ipAdds);
+  console.log("country", country);
   // const { userCountryCode } = getRouteApi("/buy/").useLoaderData();
-  const userCountryCode = "not IN";
 
   const {
     data: creditBundles,
@@ -227,7 +227,7 @@ export function PricingCard({
               </DialogDescription>
             </DialogHeader>
             <BillingAddressForm billing={billing} onChange={onBillingChange} />
-            {
+            {country === "IN" && (
               <div className="flex items-center p-3 mt-2 bg-primary/5 border border-primary/20 rounded-lg">
                 <div className="flex-1 gap-1">
                   <p className="text-sm font-medium">
@@ -242,13 +242,16 @@ export function PricingCard({
                   India
                 </Badge> */}
               </div>
-            }
+            )}
             <DialogFooter>
               <Button
                 type="submit"
                 className="w-full cursor-pointer"
                 onClick={() => {
-                  onCheckout(creditBundles[index].id, "NODISC");
+                  onCheckout(
+                    creditBundles[index].id,
+                    country === "IN" ? "INDIA4LIFE" : "NODISC"
+                  );
                 }}
               >
                 Proceed to Checkout
