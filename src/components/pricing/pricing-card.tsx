@@ -19,6 +19,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { getCreditPlansQueryOptions } from "@/lib/server/rpc/credits";
 import { cn } from "@/lib/utils";
 import { useQuery } from "@tanstack/react-query";
+import { getRouteApi } from "@tanstack/react-router";
 import { CoinsIcon } from "lucide-react";
 import {
   BillingAddress,
@@ -33,7 +34,7 @@ interface PricingCardProps {
   className?: string;
   billing: BillingAddress;
   onBillingChange: (billing: BillingAddress) => void;
-  onCheckout: (bundleId: string) => void;
+  onCheckout: (bundleId: string, discountCode: string) => void;
 }
 
 export function PricingCard({
@@ -46,6 +47,9 @@ export function PricingCard({
   onBillingChange,
   onCheckout,
 }: PricingCardProps) {
+  // const { countryCode, isLoading, isError, error } = useCountryCode();
+  const { userCountryCode } = getRouteApi("/buy/").useLoaderData();
+
   const {
     data: creditBundles,
     isPending,
@@ -209,12 +213,31 @@ export function PricingCard({
               </DialogDescription>
             </DialogHeader>
             <BillingAddressForm billing={billing} onChange={onBillingChange} />
+            {userCountryCode === "IN" && (
+              <div className="flex items-center p-3 mt-2 bg-primary/5 border border-primary/20 rounded-lg">
+                <div className="flex-1 gap-1">
+                  <p className="text-sm font-medium">
+                    Regional Discount Applied!
+                  </p>
+                  <p className="text-xs text-muted-foreground">
+                    A local pricing discount for India has been automatically
+                    applied to your purchase.
+                  </p>
+                </div>
+                {/* <Badge variant="outline" className="bg-primary/10 text-primary">
+                  India
+                </Badge> */}
+              </div>
+            )}
             <DialogFooter>
               <Button
                 type="submit"
                 className="w-full cursor-pointer"
                 onClick={() => {
-                  onCheckout(creditBundles[index].id);
+                  onCheckout(
+                    creditBundles[index].id,
+                    userCountryCode === "IN" ? "INDIA4LIFE" : "NODISC"
+                  );
                 }}
               >
                 Proceed to Checkout

@@ -29,6 +29,7 @@ export const checkoutCreditPlanFn = createServerFn({ method: "POST" })
         name: z.string(),
         email: z.string().email(),
         creditPlanId: z.string(),
+        discountCode: z.string(),
         billing: billingSchema.superRefine((data, ctx) => {
           const states = State.getStatesOfCountry(data.country);
           if (
@@ -45,25 +46,32 @@ export const checkoutCreditPlanFn = createServerFn({ method: "POST" })
       })
       .parse(data)
   )
-  .handler(async ({ data: { userId, name, email, creditPlanId, billing } }) => {
-    const payment = await dodopayments.payments.create({
-      billing: {
-        city: billing.city,
-        country: billing.country as CountryCode,
-        state: billing.state,
-        street: billing.street,
-        zipcode: billing.zipcode,
-      },
-      customer: { create_new_customer: true, email, name },
-      product_cart: [{ product_id: creditPlanId, quantity: 1 }],
-      payment_link: true,
-      return_url: `${process.env.BETTER_AUTH_URL}/study`,
-    });
+  .handler(
+    async ({
+      data: { userId, name, email, creditPlanId, billing, discountCode },
+    }) => {
+      console.log("DISCOUNT: ", discountCode);
 
-    await setUserCustomerId(userId, payment.customer.customer_id);
+      const payment = await dodopayments.payments.create({
+        billing: {
+          city: billing.city,
+          country: billing.country as CountryCode,
+          state: billing.state,
+          street: billing.street,
+          zipcode: billing.zipcode,
+        },
+        customer: { create_new_customer: true, email, name },
+        product_cart: [{ product_id: creditPlanId, quantity: 1 }],
+        payment_link: true,
+        return_url: `${process.env.BETTER_AUTH_URL}/study`,
+        discount_code: discountCode || "",
+      });
 
-    return payment;
-  });
+      await setUserCustomerId(userId, payment.customer.customer_id);
+
+      return payment;
+    }
+  );
 
 export const checkoutMonthFn = createServerFn({ method: "POST" })
   .validator((data: unknown) =>

@@ -6,7 +6,7 @@ import { PricingCard } from "./pricing-card";
 interface PricingSectionProps {
   billing: BillingAddress;
   onBillingChange: (billing: BillingAddress) => void;
-  onCheckout: (bundleId: string) => void;
+  onCheckout: (bundleId: string, discountCode: string) => void;
 }
 
 export function PricingSection({

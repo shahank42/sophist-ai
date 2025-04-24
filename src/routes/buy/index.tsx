@@ -1,6 +1,7 @@
 import { BillingAddress } from "@/components/forms/billing-address-form";
 import { HeroHeader } from "@/components/layout/landing/hero6-header";
 import { PricingSection } from "@/components/pricing/pricing-section";
+import { fetchGeoData } from "@/hooks/use-country-code";
 import { checkoutCreditPlanFn } from "@/lib/server/rpc/payments";
 import {
   createFileRoute,
@@ -11,6 +12,16 @@ import { useServerFn } from "@tanstack/react-start";
 import React from "react";
 
 export const Route = createFileRoute("/buy/")({
+  loader: async () => {
+    const geoData = await fetchGeoData();
+
+    return { userCountryCode: geoData.geo.country.code };
+  },
+
+  // loader: async ({}) => {
+
+  // }
+
   component: RouteComponent,
 });
 
@@ -27,7 +38,10 @@ function RouteComponent() {
     zipcode: "",
   });
 
-  const checkoutCreditBundleHandler = async (bundleId: string) => {
+  const checkoutCreditBundleHandler = async (
+    bundleId: string,
+    discountCode: string
+  ) => {
     if (!user) {
       console.error("User not logged in");
       return;
@@ -40,6 +54,7 @@ function RouteComponent() {
         email: user.email,
         creditPlanId: bundleId,
         billing,
+        discountCode,
       },
     });
 
