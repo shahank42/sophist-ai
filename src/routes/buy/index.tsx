@@ -8,7 +8,8 @@ import {
   getRouteApi,
   useNavigate,
 } from "@tanstack/react-router";
-import { useServerFn } from "@tanstack/react-start";
+import { createServerFn, useServerFn } from "@tanstack/react-start";
+import { getWebRequest } from "@tanstack/react-start/server";
 import React from "react";
 
 export const fetchGeoData = async (): Promise<GeoApiResponse> => {
@@ -24,11 +25,14 @@ export const fetchGeoData = async (): Promise<GeoApiResponse> => {
   return data;
 };
 
-// const getIpFromServerFn = createServerFn().handler(async () => {
-//   const xForwardedForHeader = getHeader("X-Forwarded-For");
-//   if (xForwardedForHeader)
-//   return ipAddresses;
-// });
+const getIpFromServerFn = createServerFn({ method: "GET" }).handler(
+  async () => {
+    const request = getWebRequest();
+    console.log("WEBREQ", request);
+    const xForwardedForHeader = request?.headers.get("X-Forwarded-For");
+    return xForwardedForHeader ?? "";
+  }
+);
 
 // export function getCountryCode(ip: string): string | null {
 //   const lookup = geoip.lookup(ip);
@@ -36,17 +40,21 @@ export const fetchGeoData = async (): Promise<GeoApiResponse> => {
 // }
 export const Route = createFileRoute("/buy/")({
   beforeLoad: async () => {
+    const ipAdds = await getIpFromServerFn();
+    return { ipAdds };
     // console.log("HEADSS", getHeaders());
     // const ipAds = getHeader("X-Forwarded-For");
     // return { ipAds: ipAds === undefined ? null : ipAds };
   },
 
-  // loader: async ({ context: { ipAds } }) => {
-  //   // if (!ipAds) return { userCountryCode: "" };
-  //   // const userCountryCode = getCountryCode(ipAds.split(", ")[0]);
-  //   // return { userCountryCode: userCountryCode ?? "" };
-  //   return { ipAds };
-  // },
+  // loader: ({ request }) => {},
+
+  loader: async ({ context: { ipAdds } }) => {
+    //   // if (!ipAds) return { userCountryCode: "" };
+    //   // const userCountryCode = getCountryCode(ipAds.split(", ")[0]);
+    //   // return { userCountryCode: userCountryCode ?? "" };
+    return { ipAdds };
+  },
 
   component: RouteComponent,
 });

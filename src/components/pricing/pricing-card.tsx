@@ -19,6 +19,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { getCreditPlansQueryOptions } from "@/lib/server/rpc/credits";
 import { cn } from "@/lib/utils";
 import { useQuery } from "@tanstack/react-query";
+import { getRouteApi } from "@tanstack/react-router";
 import { CoinsIcon } from "lucide-react";
 import {
   BillingAddress,
@@ -47,8 +48,8 @@ export function PricingCard({
   onCheckout,
 }: PricingCardProps) {
   // const { countryCode, isLoading, isError, error } = useCountryCode();
-  // const { ipAds } = getRouteApi("/buy/").useLoaderData();
-  // console.log("ips", ipAds);
+  const { ipAdds } = getRouteApi("/buy/").useLoaderData();
+  console.log("ips", ipAdds);
   // const { userCountryCode } = getRouteApi("/buy/").useLoaderData();
   const userCountryCode = "not IN";
 
