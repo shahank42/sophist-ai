@@ -1,9 +1,10 @@
 import { dodopayments } from "@/lib/dodopayments";
 import { queryOptions } from "@tanstack/react-query";
 import { createServerFn } from "@tanstack/react-start";
-import { getRequestIP } from "@tanstack/react-start/server";
+import { getWebRequest } from "@tanstack/react-start/server";
 import { Country, State } from "country-state-city";
 import { CountryCode } from "dodopayments/resources/misc.mjs";
+import requestIp from "request-ip";
 import { z } from "zod";
 import { getSubscription } from "../queries/payments";
 import { setUserCustomerId } from "../queries/users";
@@ -140,10 +141,15 @@ export const queryUserSubscriptionOptions = (userId: string) =>
 
 export const getIpFromServerFn = createServerFn({ method: "GET" }).handler(
   async () => {
-    // const request = getWebRequest();
-    const clientIp = getRequestIP();
-    console.log("clientIp", clientIp);
+    const request = getWebRequest();
+    if (request === undefined) return "none";
+    const clientIp = requestIp.getClientIp({
+      headers: Object.fromEntries(request.headers.entries()),
+      connection: { remoteAddress: "" },
+      socket: { remoteAddress: "" },
+    });
+    console.log("CLIENTIP", clientIp);
     // const xForwardedForHeader = request?.headers.get("X-Forwarded-For");
-    return clientIp ?? "";
+    return clientIp ?? "none";
   }
 );
