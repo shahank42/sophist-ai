@@ -13,13 +13,11 @@ import {
   Scripts,
   ScrollRestoration,
 } from "@tanstack/react-router";
-import { dirname } from "path";
 import React, { ReactNode, Suspense } from "react";
-import { fileURLToPath } from "url";
 import appCss from "../styles/app.css?url";
 
-export const __filename = fileURLToPath(import.meta.url);
-export const __dirname = dirname(__filename);
+// export const __filename = fileURLToPath(import.meta.url);
+// export const __dirname = dirname(__filename);
 
 const TanStackRouterDevtools =
   process.env.NODE_ENV === "production"
