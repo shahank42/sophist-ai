@@ -16,7 +16,7 @@ export const seo = ({
     { property: "twitter:title", content: title },
     { property: "twitter:description", content: description },
     { property: "twitter:creator", content: "@shahankk42" },
-    { property: "twitter:site", content: "@shahankk42" },
+    { property: "twitter:site", content: "@sophist_ai" },
     { property: "og:type", content: "website" },
     { property: "og:title", content: title },
     { property: "og:description", content: description },
