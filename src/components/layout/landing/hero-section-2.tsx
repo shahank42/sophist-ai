@@ -1,8 +1,8 @@
 import { HeroHeader } from "@/components/layout/landing/hero6-header";
+import { ConfettiButton } from "@/components/magicui/confetti";
 import { AnimatedGroup } from "@/components/motion-primitives/animated-group";
 import { TextEffect } from "@/components/motion-primitives/text-effect";
-import { Link } from "@tanstack/react-router";
-import { ArrowRight } from "lucide-react";
+import { PartyPopper } from "lucide-react";
 import { CTAButtons } from "./cta-buttons";
 
 const transitionVariants = {
@@ -100,9 +100,12 @@ export default function HeroSection() {
             <div className="mx-auto max-w-7xl px-6">
               <div className="text-center sm:mx-auto lg:mr-auto lg:mt-0">
                 <AnimatedGroup variants={transitionVariants}>
-                  <Link
-                    to="/"
-                    className="hover:bg-background dark:hover:border-t-border bg-muted group mx-auto flex w-fit items-center gap-4 rounded-full border p-1 pl-4 shadow-md shadow-zinc-950/5 transition-colors duration-300 dark:border-t-white/5 dark:shadow-zinc-950"
+                  <ConfettiButton
+                    options={{
+                      get angle() {
+                        return Math.random() * 360;
+                      },
+                    }}
                   >
                     <span className="text-foreground text-sm">
                       We won Diversion 2k25!
@@ -112,14 +115,14 @@ export default function HeroSection() {
                     <div className="bg-background group-hover:bg-muted size-6 overflow-hidden rounded-full duration-500">
                       <div className="flex w-12 -translate-x-1/2 duration-500 ease-in-out group-hover:translate-x-0">
                         <span className="flex size-6">
-                          <ArrowRight className="m-auto size-3" />
+                          <PartyPopper className="m-auto size-3 text-foreground" />
                         </span>
                         <span className="flex size-6">
-                          <ArrowRight className="m-auto size-3" />
+                          <PartyPopper className="m-auto size-3 text-foreground" />
                         </span>
                       </div>
                     </div>
-                  </Link>
+                  </ConfettiButton>
                 </AnimatedGroup>
 
                 <TextEffect
