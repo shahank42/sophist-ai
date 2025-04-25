@@ -59,7 +59,7 @@ export default function Features() {
               duration={1500}
               startOnView={true}
             >
-              Transform Your Exam Preparation Experience
+              Transform Your Study Experience
             </HyperText>
           </h2>
           <p>
