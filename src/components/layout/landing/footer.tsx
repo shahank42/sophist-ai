@@ -1,6 +1,6 @@
 import { Separator } from "@/components/ui/separator";
 import { Link } from "@tanstack/react-router";
-import { YoutubeIcon } from "lucide-react";
+import { CircleHelpIcon, YoutubeIcon } from "lucide-react";
 
 export default function Footer() {
   return (
@@ -132,6 +132,15 @@ export default function Footer() {
               className="text-muted-foreground hover:text-primary block"
             >
               <YoutubeIcon className="size-6" />
+            </a>
+            <a
+              href="https://www.youtube.com/watch?v=dQw4w9WgXcQ"
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="YouTube"
+              className="text-muted-foreground hover:text-primary block"
+            >
+              <CircleHelpIcon className="size-6" />
             </a>
           </div>
           <span className="text-muted-foreground block text-center text-sm">
