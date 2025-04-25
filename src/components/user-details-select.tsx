@@ -22,15 +22,20 @@ import { getUserCreditsQueryOptions } from "@/lib/server/rpc/users";
 import { authClient } from "@/lib/utils/auth-client";
 import { useQuery } from "@tanstack/react-query";
 import { getRouteApi, Link, useRouter } from "@tanstack/react-router";
+import { User } from "better-auth";
 import { Badge } from "./ui/badge";
 
-function UserAvatar({ username }: { username: string }) {
+function UserAvatar({ user }: { user: User }) {
   return (
-    <Avatar className="rounded-none h-8 w-8">
-      <AvatarImage
-        src={`https://api.dicebear.com/9.x/identicon/svg?seed=${username}`}
-        alt={username}
-      />
+    <Avatar className="rounded-full h-8 w-8">
+      {user.image ? (
+        <AvatarImage src={user.image} alt={user.name} />
+      ) : (
+        <AvatarImage
+          src={`https://api.dicebear.com/9.x/identicon/svg?seed=${user.name}`}
+          alt={user.name}
+        />
+      )}
       <AvatarFallback className="rounded-lg">CN</AvatarFallback>
     </Avatar>
   );
@@ -56,7 +61,7 @@ export function UserDetailsSelect() {
               size="lg"
               className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground cursor-pointer"
             >
-              <UserAvatar username={user.name} />
+              <UserAvatar user={user} />
               <div className="grid flex-1 text-left text-sm leading-tight">
                 <span className="truncate font-semibold">{user.name}</span>
                 <span className="truncate text-xs">{user.email}</span>
@@ -72,7 +77,7 @@ export function UserDetailsSelect() {
           >
             <DropdownMenuLabel className="p-0 font-normal">
               <div className="flex items-center gap-2 px-1 py-1.5 text-left text-sm">
-                <UserAvatar username={user.name} />
+                <UserAvatar user={user} />
                 <div className="grid flex-1 text-left text-sm leading-tight">
                   <span className="truncate font-semibold">{user.name}</span>
                   <span className="truncate text-xs">{user.email}</span>
