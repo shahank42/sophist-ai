@@ -19,6 +19,10 @@ export const seo = ({
     { property: "twitter:site", content: "@sophist_ai" },
     { property: "og:type", content: "website" },
     { property: "og:title", content: title },
+    { property: "og:locale", content: "en-IN" },
+    { property: "og:url", content: "https://sophistai.app" },
+    { property: "og:logo", content: "https://sophistai.app/logo.png" },
+
     { property: "og:description", content: description },
     ...(image !== undefined
       ? [
