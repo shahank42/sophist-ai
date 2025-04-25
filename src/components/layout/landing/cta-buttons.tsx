@@ -1,3 +1,4 @@
+import { GoogleIcon } from "@/components/icons/google";
 import { Button, buttonVariants } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { authClient } from "@/lib/utils/auth-client";
@@ -18,7 +19,7 @@ export const CTAButtons = () => {
             // size="lg"
             className={cn(
               buttonVariants({ variant: "default", size: "lg" }),
-              "rounded-xl px-5 text-base cursor-pointer"
+              "rounded-xl px-5 text-base cursor-pointer select-none"
             )}
             onClick={async () => {
               await authClient.signIn.social({
@@ -28,7 +29,9 @@ export const CTAButtons = () => {
             }}
           >
             {/* <Link to="/study"> */}
-            <span className="text-nowrap">Log in with Google</span>
+            <span className="flex items-center gap-2">
+              <GoogleIcon className="size-6" /> Sign In
+            </span>
             {/* </Link> */}
           </a>
         </div>
@@ -51,8 +54,8 @@ export const CTAButtons = () => {
         variant="ghost"
         className="h-10.5 rounded-xl px-5"
       >
-        <Link to="/">
-          <span className="text-nowrap">Learn More</span>
+        <Link to="/buy">
+          <span className="text-nowrap">View Pricing</span>
         </Link>
       </Button>
     </div>
