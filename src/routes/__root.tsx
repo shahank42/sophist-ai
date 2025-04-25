@@ -57,11 +57,13 @@ export const Route = createRootRouteWithContext<{
         description: `SophistAI is your intelligent study companion that turns any course syllabus into an interactive knowledge map. Just upload your syllabus, and watch as our advanced AI transforms it into a beautiful, navigable universe of connected concepts. No more chaos, just clarity.`,
       }),
     ],
-    // scripts: [
-    //   {
-    //     src: "https://cdn.paritydeals.com/banner.js",
-    //   },
-    // ],
+    scripts: [
+      {
+        defer: true,
+        src: "https://sophistai-analytics.vercel.app/script.js",
+        "data-website-id": "48fb1526-8d79-4b62-b52c-b402775b37fa",
+      },
+    ],
     links: [
       { rel: "stylesheet", href: appCss },
       {
