@@ -66,6 +66,11 @@ export const Route = createRootRouteWithContext<{
         src: "https://sophistai-analytics.vercel.app/script.js",
         "data-website-id": "48fb1526-8d79-4b62-b52c-b402775b37fa",
       },
+      {
+        src: "https://analytics.ahrefs.com/analytics.js",
+        "data-key": "TGCXIlJ08CgTgavhRPRnQg",
+        async: true,
+      },
     ],
     links: [
       { rel: "stylesheet", href: appCss },
