@@ -11,20 +11,20 @@ export const seo = ({
 }) => {
   const tags = [
     { title },
-    { name: "description", content: description },
-    { name: "keywords", content: keywords },
-    { name: "twitter:title", content: title },
-    { name: "twitter:description", content: description },
-    { name: "twitter:creator", content: "@shahankk42" },
-    { name: "twitter:site", content: "@shahankk42" },
-    { name: "og:type", content: "website" },
-    { name: "og:title", content: title },
-    { name: "og:description", content: description },
+    { property: "description", content: description },
+    { property: "keywords", content: keywords },
+    { property: "twitter:title", content: title },
+    { property: "twitter:description", content: description },
+    { property: "twitter:creator", content: "@shahankk42" },
+    { property: "twitter:site", content: "@shahankk42" },
+    { property: "og:type", content: "website" },
+    { property: "og:title", content: title },
+    { property: "og:description", content: description },
     ...(image !== undefined
       ? [
-          { name: "twitter:image", content: image },
-          { name: "twitter:card", content: "summary_large_image" },
-          { name: "og:image", content: image },
+          { property: "twitter:image", content: image },
+          { property: "twitter:card", content: "summary_large_image" },
+          { property: "og:image", content: image },
         ]
       : []),
   ];
