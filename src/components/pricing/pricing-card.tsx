@@ -10,6 +10,7 @@ import {
 import { Skeleton } from "@/components/ui/skeleton";
 import { getCreditPlansQueryOptions } from "@/lib/server/rpc/credits";
 import { cn } from "@/lib/utils";
+import { authClient } from "@/lib/utils/auth-client";
 import { useQuery } from "@tanstack/react-query";
 import { getRouteApi } from "@tanstack/react-router";
 import { CoinsIcon } from "lucide-react";
@@ -48,6 +49,7 @@ export function PricingCard({
   onBillingChange,
   onCheckout,
 }: PricingCardProps) {
+  const { user } = getRouteApi("__root__").useRouteContext();
   const { country } = getRouteApi("/buy/").useLoaderData();
 
   const {
@@ -227,28 +229,48 @@ export function PricingCard({
         >
           Buy Now
         </a> */}
-        <Dialog>
-          <DialogTrigger asChild>
-            <Button
-              variant={isPopular ? "default" : "outline"}
-              className="w-full rounded-full text-sm cursor-pointer"
-              size="default"
-              disabled={isError}
-            >
-              Buy Now
-            </Button>
-          </DialogTrigger>
-          <DialogContent className="rounded-xl sm:max-w-[425px]">
-            <DialogHeader>
-              <DialogTitle>Address Information</DialogTitle>
-              <DialogDescription>
-                Please provide your billing address details to proceed with
-                checkout. We require this in order to verify the identities of
-                each paying customer.
-              </DialogDescription>
-            </DialogHeader>
-            <BillingAddressForm billing={billing} onChange={onBillingChange} />
-            {/* {country === "IN" && (
+
+        {!user ? (
+          <Button
+            variant={isPopular ? "default" : "outline"}
+            className="w-full rounded-full text-sm cursor-pointer"
+            size="default"
+            disabled={isError}
+            onClick={async () => {
+              await authClient.signIn.social({
+                provider: "google",
+                callbackURL: "/buy",
+              });
+            }}
+          >
+            Buy Now
+          </Button>
+        ) : (
+          <Dialog>
+            <DialogTrigger asChild>
+              <Button
+                variant={isPopular ? "default" : "outline"}
+                className="w-full rounded-full text-sm cursor-pointer"
+                size="default"
+                disabled={isError}
+              >
+                Buy Now
+              </Button>
+            </DialogTrigger>
+            <DialogContent className="rounded-xl sm:max-w-[425px]">
+              <DialogHeader>
+                <DialogTitle>Address Information</DialogTitle>
+                <DialogDescription>
+                  Please provide your billing address details to proceed with
+                  checkout. We require this in order to verify the identities of
+                  each paying customer.
+                </DialogDescription>
+              </DialogHeader>
+              <BillingAddressForm
+                billing={billing}
+                onChange={onBillingChange}
+              />
+              {/* {country === "IN" && (
               <div className="flex items-center p-3 mt-2 bg-primary/5 border border-primary/20 rounded-lg">
                 <div className="flex-1 gap-1">
                   <p className="text-sm font-medium">
@@ -261,24 +283,25 @@ export function PricingCard({
                 </div>
               </div>
             )} */}
-            <DialogFooter>
-              <Button
-                type="submit"
-                className="w-full cursor-pointer"
-                onClick={() => {
-                  onCheckout(
-                    country === "IN"
-                      ? creditBundles.creditPlansIndia[index].id.split(",")[0]
-                      : creditBundles.creditPlansUS[index].id.split(",")[0],
-                    country === "IN" ? "INDIA4LIFE" : "NODISC"
-                  );
-                }}
-              >
-                Proceed to Checkout
-              </Button>
-            </DialogFooter>
-          </DialogContent>
-        </Dialog>
+              <DialogFooter>
+                <Button
+                  type="submit"
+                  className="w-full cursor-pointer"
+                  onClick={() => {
+                    onCheckout(
+                      country === "IN"
+                        ? creditBundles.creditPlansIndia[index].id.split(",")[0]
+                        : creditBundles.creditPlansUS[index].id.split(",")[0],
+                      country === "IN" ? "INDIA4LIFE" : "NODISC"
+                    );
+                  }}
+                >
+                  Proceed to Checkout
+                </Button>
+              </DialogFooter>
+            </DialogContent>
+          </Dialog>
+        )}
       </CardFooter>
     </Card>
   );

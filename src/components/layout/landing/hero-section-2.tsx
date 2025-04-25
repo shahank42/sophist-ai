@@ -1,7 +1,7 @@
 import { HeroHeader } from "@/components/layout/landing/hero6-header";
 import { AnimatedGroup } from "@/components/motion-primitives/animated-group";
 import { TextEffect } from "@/components/motion-primitives/text-effect";
-import { getRouteApi, Link } from "@tanstack/react-router";
+import { Link } from "@tanstack/react-router";
 import { ArrowRight } from "lucide-react";
 import { CTAButtons } from "./cta-buttons";
 
@@ -26,8 +26,6 @@ const transitionVariants = {
 };
 
 export default function HeroSection() {
-  const { user } = getRouteApi("__root__").useRouteContext();
-
   return (
     <>
       <HeroHeader />
