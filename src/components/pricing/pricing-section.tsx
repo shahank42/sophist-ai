@@ -29,16 +29,18 @@ export function PricingSection({
             when you have the money and use them up during exam season.
           </p>
 
-          {/* India Pricing Badge */}
+          {/* India Pricing Badge - Mobile Responsive */}
           {country === "IN" && (
             <div className="flex justify-center">
               <Badge
                 variant="outline"
-                className="text-sm py-1 px-3 bg-primary/5 hover:bg-primary/5 border-primary/30 text-primary flex items-center gap-2"
+                className="text-xs sm:text-sm py-1 px-2 sm:px-3 bg-primary/5 hover:bg-primary/5 border-primary/30 text-primary flex items-center gap-1 sm:gap-2 max-w-full flex-wrap justify-center"
               >
-                <MapPin className="h-3 w-3" />
-                <span>
-                  Prices shown in ₹ (INR) are adjusted for Indian customers
+                <MapPin className="h-3 w-3 flex-shrink-0" />
+                <span className="text-center">
+                  <span className="inline">
+                    Prices shown in ₹ (INR) are adjusted for Indian customers
+                  </span>
                 </span>
               </Badge>
             </div>
@@ -51,18 +53,22 @@ export function PricingSection({
             >
               <CreditCard className="h-4 w-4" /> Card
             </Badge>
-            <Badge
-              variant="secondary"
-              className="flex items-center gap-1 rounded-full"
-            >
-              <QrCode className="h-4 w-4" /> UPI QR
-            </Badge>
-            <Badge
-              variant="secondary"
-              className="flex items-center gap-1 rounded-full"
-            >
-              <AtSign className="h-4 w-4" /> UPI ID
-            </Badge>
+            {country === "IN" && (
+              <>
+                <Badge
+                  variant="secondary"
+                  className="flex items-center gap-1 rounded-full"
+                >
+                  <QrCode className="h-4 w-4" /> UPI QR
+                </Badge>
+                <Badge
+                  variant="secondary"
+                  className="flex items-center gap-1 rounded-full"
+                >
+                  <AtSign className="h-4 w-4" /> UPI ID
+                </Badge>
+              </>
+            )}
           </div>
         </div>
         <div className="mt-8 md:mt-16 relative">
