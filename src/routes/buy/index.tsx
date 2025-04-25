@@ -44,7 +44,7 @@ export const Route = createFileRoute("/buy/")({
   beforeLoad: async () => {
     const ipAdds = await getIpFromServerFn();
     const req = await fetch(
-      `https://api.ipinfo.io/lite/${ipAdds}token=${import.meta.env.VITE_IPINFO_TOKEN}`
+      `https://api.ipinfo.io/lite/${ipAdds}?token=${import.meta.env.VITE_IPINFO_TOKEN}`
     );
     const res = await req.json();
     // const country = geoip.lookup(ipAdds)?.country ?? "";
