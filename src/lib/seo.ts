@@ -20,7 +20,7 @@ export const seo = ({
     { name: "og:type", content: "website" },
     { name: "og:title", content: title },
     { name: "og:description", content: description },
-    ...(image
+    ...(image !== undefined
       ? [
           { name: "twitter:image", content: image },
           { name: "twitter:card", content: "summary_large_image" },
