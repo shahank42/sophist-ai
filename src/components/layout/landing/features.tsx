@@ -1,4 +1,3 @@
-import { HyperText } from "@/components/magicui/hyper-text";
 import {
   BookOpen,
   Brain,
@@ -52,7 +51,7 @@ export default function Features() {
       <div className="mx-auto max-w-5xl space-y-8 px-6 md:space-y-16">
         <div className="relative z-10 mx-auto max-w-4xl space-y-6 text-center md:space-y-12">
           <h2 className="text-balance text-3xl font-medium lg:text-5xl">
-            <HyperText
+            {/* <HyperText
               characterSet={"abcdefghijklmnopqrstuvwxyzAbcdefghijklmnopqrstuvwxyz".split(
                 ""
               )}
@@ -60,7 +59,8 @@ export default function Features() {
               startOnView={true}
             >
               Transform Your Study Experience
-            </HyperText>
+            </HyperText> //TODO: fix the line glitch on mobile */}
+            Transform Your Study Experience
           </h2>
           <p>
             SophistAI turns chaotic study materials into structured, interactive
