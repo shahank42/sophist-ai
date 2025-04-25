@@ -83,6 +83,20 @@ export default function HeroSection() {
                 width="627"
                 height="972"
               />
+              <img
+                src="/landing/herobg_light.webp"
+                alt="background"
+                className="dark:hidden hidden sm:block absolute inset-x-0 -z-20 lg:top-32"
+                width="3276"
+                height="4095"
+              />
+              <img
+                src="/landing/herobg_light_mobile.webp"
+                alt="background"
+                className="dark:hidden sm:hidden block absolute inset-x-0 -z-20 top-56 lg:top-32"
+                width="627"
+                height="972"
+              />
             </AnimatedGroup>
             <div className="absolute inset-0 -z-10 size-full [background:radial-gradient(125%_125%_at_50%_100%,transparent_0%,var(--color-background)_75%)]"></div>
             <div className="mx-auto max-w-7xl px-6">
