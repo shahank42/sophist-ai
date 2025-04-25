@@ -117,8 +117,8 @@ export function PricingSection({
             <span className="text-sm">
               Need more credits? Contact us for custom bundles at
             </span>
-            <a href="mailto:team.sophistai@gmail.com" className="font-medium">
-              team.sophistai@gmail.com
+            <a href="mailto:sophistai.team@gmail.com" className="font-medium">
+              sophistai.team@gmail.com
             </a>
           </div>
         </div>

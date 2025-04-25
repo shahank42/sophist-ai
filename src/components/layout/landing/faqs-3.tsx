@@ -62,7 +62,7 @@ export default function FAQsThree() {
       icon: "help-circle",
       question: "I still need more help, what now?",
       answer:
-        "Reach out to us at team.sophistai@gmail.com, or find us on X as @sophist_ai",
+        "Reach out to us at sophistai.team@gmail.com, or find us on X as @sophist_ai",
     },
   ];
 
