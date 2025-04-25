@@ -43,9 +43,13 @@ export const fetchGeoData = async (): Promise<GeoApiResponse> => {
 export const Route = createFileRoute("/buy/")({
   beforeLoad: async () => {
     const ipAdds = await getIpFromServerFn();
+    const req = await fetch(
+      `https://api.ipinfo.io/lite/${ipAdds}token=${import.meta.env.VITE_IPINFO_TOKEN}`
+    );
+    const res = await req.json();
     // const country = geoip.lookup(ipAdds)?.country ?? "";
 
-    return { ipAdds, country: "IN" };
+    return { ipAdds, country: (res.country_code as string) ?? "" };
   },
 
   // loader: ({ request }) => {},
