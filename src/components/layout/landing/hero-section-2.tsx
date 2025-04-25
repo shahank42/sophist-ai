@@ -79,7 +79,7 @@ export default function HeroSection() {
               <img
                 src="/landing/herobg_mobile.webp"
                 alt="background"
-                className="sm:dark:hidden absolute inset-x-0 -z-20 top-56 lg:top-32"
+                className="sm:dark:hidden hidden dark:block absolute inset-x-0 -z-20 top-56 lg:top-32"
                 width="627"
                 height="972"
               />
