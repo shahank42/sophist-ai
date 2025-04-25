@@ -55,7 +55,7 @@ export const Route = createRootRouteWithContext<{
       ...seo({
         title: "SophistAI - Your Personal Syllabus Navigator",
         description: `Transform your course syllabus into an interactive knowledge map with SophistAI. Boost your studying efficiency and ace your exams with our AI-powered study companion.`,
-        image: "/og-image.png",
+        image: "https://sophistai.app/og-image.png",
         keywords:
           "Syllabus Navigator, Interactive Knowledge Map, AI-powered Study Companion, Study Efficiency, Exam Preparation, Mind Map, Syllabus, Syllabus Map, Study Tool, AI Study Assistant, Curriculum Mapping, Personalized Learning, Academic Success, Study Planner, Adaptive Learning, Knowledge Graph, Sophist App",
       }),
@@ -77,6 +77,10 @@ export const Route = createRootRouteWithContext<{
       {
         rel: "stylesheet",
         href: "https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css",
+      },
+      {
+        rel: "icon",
+        href: "/favicon.ico",
       },
       {
         rel: "icon",
