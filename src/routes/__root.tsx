@@ -57,7 +57,7 @@ export const Route = createRootRouteWithContext<{
         description: `Transform your course syllabus into an interactive knowledge map with SophistAI. Boost your studying efficiency and ace your exams with our AI-powered study companion.`,
         image: "/og-image.png",
         keywords:
-          "Syllabus Navigator, Interactive Knowledge Map, AI-powered Study Companion, Study Efficiency, Exam Preparation, Mind Map, Syllabus, Syllabus Map, Study Tool, Sophist, SophistAI, Sophist App",
+          "Syllabus Navigator, Interactive Knowledge Map, AI-powered Study Companion, Study Efficiency, Exam Preparation, Mind Map, Syllabus, Syllabus Map, Study Tool, AI Study Assistant, Curriculum Mapping, Personalized Learning, Academic Success, Study Planner, Adaptive Learning, Knowledge Graph, Sophist App",
       }),
     ],
     scripts: [

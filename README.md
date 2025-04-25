@@ -1,23 +1,51 @@
-# SophistAI - Your Personal Syllabus Navigator
+# **SophistAI: Your Personal Syllabus Navigator**
 
-Ever stared at a 20-page syllabus the night before an exam, overwhelmed by dense blocks of text and scattered topics? You're not alone. While students spend hours organizing study materials and jumping between disconnected AI chat sessions, valuable study time slips away. We need a smarter way to learn.
+Feeling overwhelmed by a dense, multi-page syllabus the night before your exam? You’re not alone. Traditional study tools scatter your resources—leaving you flipping between PDFs, chatbots, and notes—wasting precious time and hurting your **study efficiency**. It’s time for an all-in-one **AI-powered study tool** designed around how students actually learn.
 
-Enter SophistAI – your intelligent study companion that turns any course syllabus into an interactive knowledge map. Just upload your syllabus, and watch as our advanced AI transforms it into a beautiful, navigable universe of connected concepts. No more chaos, just clarity.
+---
 
-## Features
+## 🔍 **Unlock Your Interactive Knowledge Map**
 
-- Interactive Mind Map: Your syllabus transforms into a navigable tree, laying out all topics and subtopics for easy access.
+With SophistAI’s **Interactive Mind Map** (aka your **Syllabus Map**), every topic and subtopic springs to life in a navigable **knowledge graph**.  
+📄 Upload your syllabus, and our advanced AI instantly builds a clear, clickable **mind map**—so you can zero in on what matters most.
 
-- Contextual Articles: Click any node, and get a detailed article tailored to that topic, perfectly aligned with your syllabus and current progress.
+---
 
-- Smart Progress Tracking: Mark topics as completed—finish a main topic, and its subtopics auto-complete; master all subtopics, and the parent topic lights up done. It’s seamless and motivating.
+## ⚙️ **AI-Powered Features to Supercharge Your Learning**
 
-- Deep Dive: Hit a button to generate subtopics instantly, exploring as far as you’d like while keeping the big picture in sight.
+### 📚 **Contextual Articles on Demand**  
+Click any node in your map and receive a tailored, **AI-generated article** perfectly synced to your current progress—ideal for deep dives or last-minute **exam review**.
 
-## Why use SophistAI?
+### ✅ **Smart Progress Tracking**  
+Mark topics complete to auto-check off subtopics; master all subtopics and watch the parent topic light up “done.”  
+It’s seamless motivation for **exam preparation** and **long-term knowledge retention**.
 
-SophistAI is a game-changer because it’s built for real studying needs—like cramming for exams or mastering a subject over time. Unlike chat-based LLMs that demand constant prompting, SophistAI always knows where you are in your syllabus, delivering relevant content without the hassle. It’s efficient, structured, and laser-focused on getting you results.
+### 🔎 **Instant Subtopic Generation (Deep Dive)**  
+Hit the “+” icon to branch out your map further, exploring related concepts without losing the big picture.
 
-With SophistAI, you’re not just studying—you’re navigating your knowledge with precision and power. You study, and at the same time are also aware of your progress in the domain of everything that you're studying, which is vital when it comes to knowledge retention.
+### 📆 **Personalized Learning Path & Study Planner**  
+Customize your **learning plan** around deadlines, exam dates, or personal goals—ensuring you **study smarter, not harder**.
 
-So people—it’s time to ace that exam, one topic at a time.
+---
+
+## 💡 **Why SophistAI Beats Generic LLMs**
+
+- **Built for Real Studying Needs**  
+  Unlike generic chat-based LLMs, SophistAI knows your exact place in the syllabus—no repeated prompting, no context-switching.
+
+- **Structured & Laser-Focused**  
+  Every article, concept, and study prompt aligns with your course outline—maximizing **academic success**.
+
+- **Adaptive & Efficient**  
+  From **high-school crammers** to **college scholars**, SophistAI adapts to your pace—boosting **retention** with personalized **AI-powered recommendations**.
+
+---
+
+## 🎯 **Ready to Ace Your Exams?**
+
+Transform chaos into clarity. Start using **SophistAI** today and navigate your syllabus like never before—**one topic at a time**!
+
+---
+
+### 🔑 **Keywords for SEO**  
+`Syllabus Navigator`, `Interactive Knowledge Map`, `AI-powered Study Companion`, `Study Efficiency`, `Exam Preparation`, `Mind Map`, `Syllabus Map`, `Study Tool`, `AI Study Assistant`, `Personalized Learning`, `Academic Success`, `Curriculum Mapping`, `Study Planner`, `Knowledge Graph`, `Adaptive Learning`
