@@ -105,6 +105,7 @@ export default function HeroSection() {
                       get angle() {
                         return Math.random() * 360;
                       },
+                      spread: 360,
                     }}
                   >
                     <span className="text-foreground text-sm">
