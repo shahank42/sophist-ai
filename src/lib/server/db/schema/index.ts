@@ -121,9 +121,8 @@ export const creditBundles = pgTable("credit_bundles", {
   name: text("name").notNull(),
   credits: integer("credits").notNull(),
   price: integer("price").notNull(),
+  country: text("country").notNull(),
   isPrimary: boolean("is_primary").default(false).notNull(),
-  buttonText: text("button_text").notNull().default("Buy Now"),
-  features: text("features").array().notNull(),
 });
 
 export const creditTransactionTypeEnum = pgEnum("credit_transaction_type", [

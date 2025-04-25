@@ -1,0 +1,1 @@
+ALTER TABLE "credit_bundles" RENAME COLUMN "india_price" TO "country";

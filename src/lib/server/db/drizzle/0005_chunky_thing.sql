@@ -1,1 +1,0 @@
-ALTER TABLE "credit_bundles" ALTER COLUMN "button_text" SET DEFAULT 'Buy Now';

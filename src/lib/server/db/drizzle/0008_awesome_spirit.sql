@@ -1,1 +1,0 @@
-ALTER TABLE "credit_bundles" DROP COLUMN "label";

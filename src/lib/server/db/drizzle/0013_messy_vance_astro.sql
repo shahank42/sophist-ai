@@ -1,1 +1,0 @@
-ALTER TABLE "credit_bundles" ALTER COLUMN "features" SET DATA TYPE text[] USING features::text[];

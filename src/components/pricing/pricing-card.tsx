@@ -6,15 +6,7 @@ import {
   CardFooter,
   CardHeader,
 } from "@/components/ui/card";
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog";
+
 import { Skeleton } from "@/components/ui/skeleton";
 import { getCreditPlansQueryOptions } from "@/lib/server/rpc/credits";
 import { cn } from "@/lib/utils";
@@ -25,6 +17,15 @@ import {
   BillingAddress,
   BillingAddressForm,
 } from "../forms/billing-address-form";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "../ui/dialog";
 
 interface PricingCardProps {
   index: number;
@@ -47,12 +48,7 @@ export function PricingCard({
   onBillingChange,
   onCheckout,
 }: PricingCardProps) {
-  // const { countryCode, isLoading, isError, error } = useCountryCode();
-  const { ipAdds, country: c } = getRouteApi("/buy/").useLoaderData();
-  console.log("ipss", ipAdds);
-  console.log("country", c);
-  const country = "INN";
-  // const { userCountryCode } = getRouteApi("/buy/").useLoaderData();
+  const { country } = getRouteApi("/buy/").useLoaderData();
 
   const {
     data: creditBundles,
@@ -161,16 +157,22 @@ export function PricingCard({
         })}
       >
         <h2 className="font-semibold text-lg text-center">
-          {creditBundles[index].name}
+          {country === "IN"
+            ? creditBundles.creditPlansIndia[index].name
+            : creditBundles.creditPlansUS[index].name}
         </h2>
         <div className="flex flex-col items-center mt-1">
           <span className="text-4xl font-bold">
             {new Intl.NumberFormat("en-US", {
               style: "currency",
-              currency: "USD",
+              currency: country === "IN" ? "INR" : "USD",
               minimumFractionDigits: 0,
               maximumFractionDigits: 0,
-            }).format(creditBundles[index].price / 100)}
+            }).format(
+              country === "IN"
+                ? creditBundles.creditPlansIndia[index].price
+                : creditBundles.creditPlansUS[index].price / 100
+            )}
             <div className="pricing-plan">
               <div
                 className="price-container"
@@ -201,12 +203,30 @@ export function PricingCard({
         <span className="flex gap-1 text-lg items-center">
           <CoinsIcon className="h-4 w-4" />
           <span className="text-primary font-bold">
-            {creditBundles[index].credits}
+            {country === "IN"
+              ? creditBundles.creditPlansIndia[index].credits
+              : creditBundles.creditPlansUS[index].credits}
           </span>
           Credits
         </span>
       </CardContent>
       <CardFooter className="">
+        {/* <a
+          href={`https://checkout.dodopayments.com/buy/${
+            country === "IN"
+              ? creditBundles.creditPlansIndia[index].id.split(",")[0]
+              : creditBundles.creditPlansUS[index].id.split(",")[0]
+          }?quantity=1&redirect_url=${import.meta.env.VITE_NETLIFY_EDGE_FUNCTION_URL}%2Fstudy${country === "IN" ? "&country=IN" : ""}&discount=INDIA4LIFE`}
+          className={cn(
+            buttonVariants({
+              variant: isPopular ? "default" : "outline",
+            }),
+            "w-full rounded-full text-sm cursor-pointer"
+          )}
+          // disabled={isError}
+        >
+          Buy Now
+        </a> */}
         <Dialog>
           <DialogTrigger asChild>
             <Button
@@ -228,7 +248,7 @@ export function PricingCard({
               </DialogDescription>
             </DialogHeader>
             <BillingAddressForm billing={billing} onChange={onBillingChange} />
-            {country === "IN" && (
+            {/* {country === "IN" && (
               <div className="flex items-center p-3 mt-2 bg-primary/5 border border-primary/20 rounded-lg">
                 <div className="flex-1 gap-1">
                   <p className="text-sm font-medium">
@@ -239,18 +259,17 @@ export function PricingCard({
                     applied to your purchase.
                   </p>
                 </div>
-                {/* <Badge variant="outline" className="bg-primary/10 text-primary">
-                  India
-                </Badge> */}
               </div>
-            )}
+            )} */}
             <DialogFooter>
               <Button
                 type="submit"
                 className="w-full cursor-pointer"
                 onClick={() => {
                   onCheckout(
-                    creditBundles[index].id,
+                    country === "IN"
+                      ? creditBundles.creditPlansIndia[index].id.split(",")[0]
+                      : creditBundles.creditPlansUS[index].id.split(",")[0],
                     country === "IN" ? "INDIA4LIFE" : "NODISC"
                   );
                 }}

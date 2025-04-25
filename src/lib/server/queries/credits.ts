@@ -4,21 +4,22 @@ import { creditBundles, creditTransactions, user } from "../db/schema";
 
 export async function getCreditPlans() {
   // const creditPlans = await db.query.creditBundles.findMany({
+  //   where: (creditPlan) => [eq(creditPlan.country, "IN")],
   //   orderBy: (creditPlan) => [asc(creditPlan.price)],
   // });
 
   const creditPlans = await db
-    .select({
-      id: creditBundles.id,
-      name: creditBundles.name,
-      credits: creditBundles.credits,
-      price: creditBundles.price,
-      isPrimary: creditBundles.isPrimary,
-    })
+    .select()
     .from(creditBundles)
     .orderBy(asc(creditBundles.price));
 
-  return creditPlans;
+  const creditPlansIndia = creditPlans.filter((p) => p.country === "IN");
+  const creditPlansUS = creditPlans.filter((p) => p.country === "US");
+
+  return {
+    creditPlansIndia,
+    creditPlansUS,
+  };
 }
 
 export type CreditPlan = typeof creditBundles.$inferSelect;
