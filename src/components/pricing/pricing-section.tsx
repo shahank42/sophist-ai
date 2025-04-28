@@ -1,5 +1,7 @@
+import { getSubscriptionPlansQueryOptions } from "@/lib/server/rpc/subscriptions";
+import { useQuery } from "@tanstack/react-query";
 import { getRouteApi } from "@tanstack/react-router";
-import { AtSign, CreditCard, MapPin, QrCode } from "lucide-react";
+import { CreditCard } from "lucide-react";
 import { BillingAddress } from "../forms/billing-address-form";
 import { Badge } from "../ui/badge";
 import { PricingCard } from "./pricing-card";
@@ -16,6 +18,17 @@ export function PricingSection({
   onCheckout,
 }: PricingSectionProps) {
   const { country } = getRouteApi("/buy/").useLoaderData();
+  const {
+    data: subscriptionPlans,
+    isPending: subscriptionPlansIsPending,
+    isError: subscriptionPlansIsError,
+  } = useQuery(getSubscriptionPlansQueryOptions);
+
+  console.log(
+    !subscriptionPlansIsPending &&
+      !subscriptionPlansIsError &&
+      subscriptionPlans
+  );
 
   return (
     <section className="py-16 md:py-32 pt-32 w-full bg-gradient-to-b from-background to-muted/20">
@@ -30,7 +43,7 @@ export function PricingSection({
           </p>
 
           {/* India Pricing Badge - Mobile Responsive */}
-          {country === "IN" && (
+          {/* {country === "IN" && (
             <div className="flex justify-center">
               <Badge
                 variant="outline"
@@ -44,7 +57,7 @@ export function PricingSection({
                 </span>
               </Badge>
             </div>
-          )}
+          )} */}
 
           <div className="flex flex-wrap items-center justify-center gap-2 pt-2">
             <Badge
@@ -53,7 +66,7 @@ export function PricingSection({
             >
               <CreditCard className="h-4 w-4" /> Card
             </Badge>
-            {country === "IN" && (
+            {/* {country === "IN" && (
               <>
                 <Badge
                   variant="secondary"
@@ -68,7 +81,7 @@ export function PricingSection({
                   <AtSign className="h-4 w-4" /> UPI ID
                 </Badge>
               </>
-            )}
+            )} */}
           </div>
         </div>
         <div className="mt-8 md:mt-16 relative">
@@ -78,9 +91,7 @@ export function PricingSection({
               <div key={num} className="relative w-[280px]">
                 <PricingCard
                   index={num}
-                  isPopular={num === 1}
-                  billing={billing}
-                  onBillingChange={onBillingChange}
+                  // plan={ subscriptionPlans && subscriptionPlans[num]}
                   onCheckout={onCheckout}
                 />
               </div>
@@ -96,15 +107,7 @@ export function PricingSection({
                 }`}
                 style={{ margin: num === 1 ? "-8px 0" : "0" }}
               >
-                <PricingCard
-                  index={num}
-                  isFirst={num === 0}
-                  isPopular={num === 1}
-                  isLast={num === 2}
-                  billing={billing}
-                  onBillingChange={onBillingChange}
-                  onCheckout={onCheckout}
-                />
+                <PricingCard index={num} onCheckout={onCheckout} />
               </div>
             ))}
           </div>

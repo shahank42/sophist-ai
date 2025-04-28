@@ -1,6 +1,6 @@
+import { Pricing } from "@/components/blocks/pricing";
 import { BillingAddress } from "@/components/forms/billing-address-form";
 import { HeroHeader } from "@/components/layout/landing/hero6-header";
-import { PricingSection } from "@/components/pricing/pricing-section";
 import {
   checkoutCreditPlanFn,
   getIpFromServerFn,
@@ -97,13 +97,65 @@ function RouteComponent() {
     navigate({ href: payment.payment_link ?? "/", reloadDocument: true });
   };
 
+  const demoPlans = [
+    {
+      name: "KILO",
+      price: "6.99",
+      yearlyPrice: "67.99",
+      period: "per month",
+      features: [
+        "Up to 10 syllabus uploads",
+        "10 topic expansions per syllabus",
+      ],
+      description: "Perfect for individuals and small projects",
+      buttonText: "Buy Now",
+      href: "https://test.checkout.dodopayments.com/buy/pdt_4tBCOyYd6sNfVFlqred1L?quantity=1",
+      isPopular: false,
+    },
+    {
+      name: "MEGA",
+      price: "9.99",
+      yearlyPrice: "95.99",
+      period: "per month",
+      features: [
+        "Up to 30 syllabus uploads",
+        "30 topic expansions per syllabus",
+        "Share mind maps",
+      ],
+      description: "Ideal for growing teams and businesses",
+      buttonText: "Buy Now",
+      href: "https://test.checkout.dodopayments.com/buy/pdt_ftbL6v20XXyArsERxbWd1?quantity=1",
+      isPopular: true,
+    },
+    {
+      name: "GIGA",
+      price: "15.99",
+      yearlyPrice: "153.99",
+      period: "per month",
+      features: [
+        "Unlimited syllabus uploads",
+        "Unlimited topic expansions",
+        "Share mind maps",
+      ],
+      description: "For large organizations with specific needs",
+      buttonText: "Buy Now",
+      href: "https://test.checkout.dodopayments.com/buy/pdt_mhDCvoLXp6UNcRQU4ycZ6?quantity=1",
+      isPopular: false,
+    },
+  ];
+
   return (
     <>
       <HeroHeader />
-      <PricingSection
+      {/* <PricingSection
         billing={billing}
         onBillingChange={setBilling}
         onCheckout={checkoutCreditBundleHandler}
+      /> */}
+      <Pricing
+        plans={demoPlans}
+        title="Simple, Transparent Pricing"
+        description="Choose the plan that works for you\nAll plans include access to our platform, lead generation tools, and dedicated support."
       />
     </>
   );
