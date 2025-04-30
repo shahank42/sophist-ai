@@ -6,16 +6,12 @@ import { insertSubject } from "@/lib/server/queries/subjects";
 import { storeTreeFn } from "@/lib/server/rpc/nodes";
 import { queryUserSubscriptionOptions } from "@/lib/server/rpc/payments";
 import { queryUserSubjectsOptions } from "@/lib/server/rpc/subjects";
-import {
-  getUserCreditsQueryOptions,
-  spendUserCreditsFn,
-} from "@/lib/server/rpc/users";
+import { getUserCreditsQueryOptions } from "@/lib/server/rpc/users";
 import { transformInitialStructure } from "@/lib/utils";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useQuery, useSuspenseQuery } from "@tanstack/react-query";
 import { getRouteApi, useNavigate } from "@tanstack/react-router";
 import { createServerFn } from "@tanstack/react-start";
-import { CoinsIcon } from "lucide-react";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
@@ -47,13 +43,13 @@ export const registerSubjectAndTreeFn = createServerFn({ method: "POST" })
       data: { subjectId: registeredSubject.id, rootNode },
     });
 
-    await spendUserCreditsFn({
-      data: {
-        userId,
-        credits: 50,
-        purpose: "generate-mindmap",
-      },
-    });
+    // await spendUserCreditsFn({
+    //   data: {
+    //     userId,
+    //     credits: 50,
+    //     purpose: "generate-mindmap",
+    //   },
+    // });
 
     return registeredSubject;
   });
@@ -92,10 +88,10 @@ export default function ExploreSyllabusForm() {
   const validateSubjectCreation = (): boolean => {
     const subjectCount = userSubjects?.length || 0;
 
-    if (userCredits && userCredits.credits < 50) {
-      toast.info("You don't have enough credits to generate courses!");
-      return false;
-    }
+    // if (userCredits && userCredits.credits < 50) {
+    //   toast.info("You don't have enough credits to generate courses!");
+    //   return false;
+    // }
 
     return true;
   };
@@ -199,10 +195,10 @@ export default function ExploreSyllabusForm() {
             ) : (
               <>
                 <span className="relative z-10">Generate Course</span>
-                <div className="relative z-10 flex items-center gap-2 border-l pl-3 border-primary-foreground/20">
+                {/* <div className="relative z-10 flex items-center gap-2 border-l pl-3 border-primary-foreground/20">
                   <CoinsIcon className="h-4 w-4" />
                   <span className="text-sm font-semibold">50 credits</span>
-                </div>
+                </div> */}
                 {/* <span className="absolute inset-0 bg-gradient-to-r from-transparent to-primary opacity-0 group-hover:opacity-100 transition-opacity duration-300"></span> */}
               </>
             )}

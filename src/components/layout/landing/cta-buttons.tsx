@@ -47,7 +47,7 @@ export const CTAButtons = () => {
           </Button>
         </div>
       )}
-      <Button
+      {/* <Button
         key={2}
         asChild
         size="lg"
@@ -57,7 +57,7 @@ export const CTAButtons = () => {
         <Link to="/buy">
           <span className="text-nowrap">View Pricing</span>
         </Link>
-      </Button>
+      </Button> */}
     </div>
   );
 };

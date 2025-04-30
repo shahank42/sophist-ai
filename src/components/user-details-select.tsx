@@ -1,6 +1,6 @@
 "use client";
 
-import { ChevronsUpDown, CoinsIcon, LogOut } from "lucide-react";
+import { ChevronsUpDown, LogOut } from "lucide-react";
 
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import {
@@ -21,9 +21,8 @@ import {
 import { getUserCreditsQueryOptions } from "@/lib/server/rpc/users";
 import { authClient } from "@/lib/utils/auth-client";
 import { useQuery } from "@tanstack/react-query";
-import { getRouteApi, Link, useRouter } from "@tanstack/react-router";
+import { getRouteApi, useRouter } from "@tanstack/react-router";
 import { User } from "better-auth";
-import { Badge } from "./ui/badge";
 
 function UserAvatar({ user }: { user: User }) {
   return (
@@ -92,7 +91,7 @@ export function UserDetailsSelect() {
                 <span>Credits: {user.credits}</span>
               </DropdownMenuLabel> */}
               {/* ) : ( */}
-              <DropdownMenuItem asChild>
+              {/* <DropdownMenuItem asChild>
                 <Link
                   to="/buy"
                   className="flex items-center justify-between w-full cursor-pointer"
@@ -108,10 +107,10 @@ export function UserDetailsSelect() {
                     {userCredits?.credits}
                   </Badge>
                 </Link>
-              </DropdownMenuItem>
+              </DropdownMenuItem> */}
               {/* )} */}
             </DropdownMenuGroup>
-            <DropdownMenuSeparator />
+            {/* <DropdownMenuSeparator /> */}
             <DropdownMenuItem
               className="cursor-pointer"
               onClick={async () => {
