@@ -27,7 +27,7 @@ export const seo = ({
     ...(image !== undefined
       ? [
           { property: "twitter:image", content: image },
-          { property: "twitter:card", content: "summary_large_image" },
+          { property: "twitter:card", content: image },
           { property: "og:image", content: image },
         ]
       : []),
