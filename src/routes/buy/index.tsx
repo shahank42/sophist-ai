@@ -1,10 +1,7 @@
 import { Pricing } from "@/components/blocks/pricing";
 import { BillingAddress } from "@/components/forms/billing-address-form";
 import { HeroHeader } from "@/components/layout/landing/hero6-header";
-import {
-  checkoutCreditPlanFn,
-  getIpFromServerFn,
-} from "@/lib/server/rpc/payments";
+import { checkoutCreditPlanFn } from "@/lib/server/rpc/payments";
 import { GeoApiResponse } from "@/lib/types/geo-types";
 import {
   createFileRoute,
@@ -41,22 +38,18 @@ export const fetchGeoData = async (): Promise<GeoApiResponse> => {
 //   return lookup?.country ?? null;
 // }
 export const Route = createFileRoute("/buy/")({
-  beforeLoad: async () => {
-    const ipAdds = await getIpFromServerFn();
-    const req = await fetch(
-      `https://api.ipinfo.io/lite/${ipAdds}?token=${import.meta.env.VITE_IPINFO_TOKEN}`
-    );
-    const res = await req.json();
-    // const country = geoip.lookup(ipAdds)?.country ?? "";
+  // beforeLoad: async () => {
+  //   const ipAdds = await getIpFromServerFn();
+  //   const req = await fetch(
+  //     `https://api.ipinfo.io/lite/${ipAdds}?token=${import.meta.env.VITE_IPINFO_TOKEN}`
+  //   );
+  //   const res = await req.json();
+  //   // const country = geoip.lookup(ipAdds)?.country ?? "";
 
-    return { ipAdds, country: (res.country_code as string) ?? "" };
-  },
+  //   return { ipAdds, country: (res.country_code as string) ?? "" };
+  // },
 
   // loader: ({ request }) => {},
-
-  loader: async ({ context: { ipAdds, country } }) => {
-    return { ipAdds, country };
-  },
 
   component: RouteComponent,
 });
@@ -100,8 +93,8 @@ function RouteComponent() {
   const demoPlans = [
     {
       name: "KILO",
-      price: "6.99",
-      yearlyPrice: "67.99",
+      price: "7.99",
+      yearlyPrice: "76.99",
       period: "per month",
       features: [
         "Up to 10 syllabus uploads",

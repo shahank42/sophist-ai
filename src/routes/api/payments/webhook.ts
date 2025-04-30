@@ -31,7 +31,23 @@ export const APIRoute = createAPIFileRoute("/api/payments/webhook")({
 
       const email = payload.data.customer.email;
 
-      if (
+      if (payload.data.payload_type === "Subscription") {
+        switch (payload.data.status) {
+          case "active":
+            console.log("handling subscription");
+
+            // await handleSubscription(email, payload);
+            break;
+
+          default:
+            console.log("updating db subscription");
+            // await updateSubscriptionInDatabase(
+            //   email,
+            //   payload.data.subscription_id!
+            // );
+            break;
+        }
+      } else if (
         payload.data.payload_type === "Payment" &&
         payload.type === "payment.succeeded" &&
         !payload.data.subscription_id

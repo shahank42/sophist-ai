@@ -88,6 +88,18 @@ export const paymentTypeEnum = pgEnum("payment_type", [
   "subscription",
 ]);
 
+export const userPurchases = pgTable("user_purchases", {
+  id: text("id")
+    .$defaultFn(() => generateRandomString(10))
+    .primaryKey(),
+  subscriptionId: text("subsription_id").notNull(),
+  productId: text("product_id").notNull(),
+  paymentMethod: text("payment_method"),
+  status: text("status").notNull(),
+  createdAt: timestamp("created_at").notNull().defaultNow(),
+  updatedAt: timestamp("updated_at").defaultNow(),
+});
+
 export const payments = pgTable(
   "payments",
   {
@@ -146,10 +158,10 @@ export const creditTransactions = pgTable("credit_transactions", {
   createdAt: timestamp("created_at").notNull().defaultNow(),
 });
 
-export const planTypeEnum = pgEnum("plan_type", [
-  "single.weekly",
-  "single.monthly",
-]);
+// export const planTypeEnum = pgEnum("plan_type", [
+//   "single.weekly",
+//   "single.monthly",
+// ]);
 
 export const subscriptions = pgTable(
   "subscriptions",
@@ -160,7 +172,7 @@ export const subscriptions = pgTable(
     userId: text("user_id")
       .notNull()
       .references(() => user.id, { onDelete: "cascade" }),
-    plan: planTypeEnum("plan"),
+    plan: text("plan").notNull(),
     status: text("status").notNull(),
 
     currentPeriodStart: timestamp("current_period_start", {
@@ -183,8 +195,14 @@ export const subscriptions = pgTable(
     //   .notNull()
     //   .default(sql`{}`),
 
-    createdAt: timestamp("created_at").notNull().defaultNow(),
-    updatedAt: timestamp("updated_at").defaultNow(),
+    createdAt: timestamp("created_at", {
+      withTimezone: true,
+    })
+      .notNull()
+      .defaultNow(),
+    updatedAt: timestamp("updated_at", {
+      withTimezone: true,
+    }).defaultNow(),
   }
   // (table) => ({
   //   // GIST index on the period range for fast range queries
