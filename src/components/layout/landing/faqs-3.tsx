@@ -43,20 +43,20 @@ export default function FAQsThree() {
       answer:
         "Mark individual topics or subtopics as complete—finishing all children marks the parent done, and completing the parent checks off its descendants. It’s a seamless way to see what’s left and stay motivated.",
     },
-    {
-      id: "item-5",
-      icon: "coins",
-      question: "What are credits?",
-      answer:
-        "Credits are what you use to perform actions in SophistAI. Currently, users require 50 credits to generate a syllabus and 10 credits to generate subtopics.",
-    },
-    {
-      id: "item-6",
-      icon: "credit-card",
-      question: "How do I obtain credits?",
-      answer:
-        "Every new account is given 500 credits by default. If you need more credits, you can buy our credit bundles.",
-    },
+    // {
+    //   id: "item-5",
+    //   icon: "coins",
+    //   question: "What are credits?",
+    //   answer:
+    //     "Credits are what you use to perform actions in SophistAI. Currently, users require 50 credits to generate a syllabus and 10 credits to generate subtopics.",
+    // },
+    // {
+    //   id: "item-6",
+    //   icon: "credit-card",
+    //   question: "How do I obtain credits?",
+    //   answer:
+    //     "Every new account is given 500 credits by default. If you need more credits, you can buy our credit bundles.",
+    // },
     {
       id: "item-8",
       icon: "help-circle",
