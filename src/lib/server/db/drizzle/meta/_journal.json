@@ -15,6 +15,20 @@
       "when": 1745553743063,
       "tag": "0001_cute_bushwacker",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1745913845813,
+      "tag": "0002_last_lady_mastermind",
+      "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "7",
+      "when": 1745922638685,
+      "tag": "0003_loving_nighthawk",
+      "breakpoints": true
     }
   ]
 }

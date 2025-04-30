@@ -1,6 +1,5 @@
 import { getSubscriptionPlansQueryOptions } from "@/lib/server/rpc/subscriptions";
 import { useQuery } from "@tanstack/react-query";
-import { getRouteApi } from "@tanstack/react-router";
 import { CreditCard } from "lucide-react";
 import { BillingAddress } from "../forms/billing-address-form";
 import { Badge } from "../ui/badge";
@@ -17,7 +16,7 @@ export function PricingSection({
   onBillingChange,
   onCheckout,
 }: PricingSectionProps) {
-  const { country } = getRouteApi("/buy/").useLoaderData();
+  // const { country } = getRouteApi("/buy/").useLoaderData();
   const {
     data: subscriptionPlans,
     isPending: subscriptionPlansIsPending,
