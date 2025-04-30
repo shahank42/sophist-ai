@@ -102,9 +102,9 @@ export function Pricing({
               whileInView={
                 isDesktop
                   ? {
-                      y: plan.isPopular ? -20 : 0,
+                      y: plan.isPopular ? 5 : 0,
                       opacity: 1,
-                      x: index === 2 ? -30 : index === 0 ? 30 : 0,
+                      x: index === 2 ? -10 : index === 0 ? 10 : 0,
                       scale: index === 0 || index === 2 ? 0.94 : 1.0,
                     }
                   : {}
@@ -119,7 +119,7 @@ export function Pricing({
                 opacity: { duration: 0.5 },
               }}
               className={cn(
-                `rounded-2xl border-[1px] p-6 bg-background text-center lg:flex lg:flex-col lg:justify-center relative`,
+                `rounded-2xl border-[1px] p-6 bg-background text-center lg:flex lg:flex-col lg:justify-center relative max-w-xs`,
                 plan.isPopular ? "border-primary border-2" : "border-border",
                 "flex flex-col",
                 !plan.isPopular && "mt-5",

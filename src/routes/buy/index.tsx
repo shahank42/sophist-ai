@@ -1,28 +1,100 @@
-import { Pricing } from "@/components/blocks/pricing";
 import { BillingAddress } from "@/components/forms/billing-address-form";
 import { HeroHeader } from "@/components/layout/landing/hero6-header";
+import MaxWidthWrapper from "@/components/max-width-wrapper";
+import {
+  PricingCard,
+  PricingTable,
+  Product,
+} from "@/components/pricing/pricing-table";
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { checkoutCreditPlanFn } from "@/lib/server/rpc/payments";
-import { GeoApiResponse } from "@/lib/types/geo-types";
 import {
   createFileRoute,
   getRouteApi,
   useNavigate,
 } from "@tanstack/react-router";
 import { useServerFn } from "@tanstack/react-start";
+import { AlertCircle } from "lucide-react";
 import React from "react";
 
-export const fetchGeoData = async (): Promise<GeoApiResponse> => {
-  const response = await fetch(
-    `${import.meta.env.VITE_NETLIFY_EDGE_FUNCTION_URL}/geo`
-  );
-
-  if (!response.ok) {
-    throw new Error(`Network response was not ok: ${response.statusText}`);
-  }
-
-  const data: GeoApiResponse = await response.json();
-  return data;
-};
+export const products: Product[] = [
+  {
+    id: "free-tier",
+    name: "Free Tier",
+    description: "Perfect for individuals and small projects",
+    buttonText: "You're Here",
+    buttonUrl: "#",
+    price: {
+      primaryText: "$0",
+      secondaryText: "per month",
+    },
+    priceAnnual: {
+      primaryText: "$0",
+      secondaryText: "per year",
+    },
+    items: [
+      {
+        primaryText: "Up to 10 syllabus uploads",
+      },
+      {
+        primaryText: "10 topic expansions per syllabus",
+      },
+    ],
+  },
+  {
+    id: "mega-tier",
+    name: "Mega Tier",
+    description: "Ideal for growing teams and businesses",
+    buttonText: "You already have this",
+    buttonUrl: "#",
+    recommendedText: "Popular",
+    price: {
+      primaryText: "$0",
+      secondaryText: "per month",
+    },
+    priceAnnual: {
+      primaryText: "$0",
+      secondaryText: "per year",
+    },
+    items: [
+      {
+        primaryText: "Up to 30 syllabus uploads",
+      },
+      {
+        primaryText: "30 topic expansions per syllabus",
+      },
+      {
+        primaryText: "Share mind maps",
+      },
+    ],
+  },
+  {
+    id: "giga-tier",
+    name: "Giga Tier",
+    description: "For large organizations with specific needs",
+    buttonText: "And this too!",
+    buttonUrl: "#",
+    price: {
+      primaryText: "$0",
+      secondaryText: "per month",
+    },
+    priceAnnual: {
+      primaryText: "$0",
+      secondaryText: "per year",
+    },
+    items: [
+      {
+        primaryText: "Unlimited syllabus uploads",
+      },
+      {
+        primaryText: "Unlimited topic expansions",
+      },
+      {
+        primaryText: "Share mind maps",
+      },
+    ],
+  },
+];
 
 // const getIpFromServerFn = createServerFn({ method: "GET" }).handler(
 //   async () => {
@@ -90,66 +162,53 @@ function RouteComponent() {
     navigate({ href: payment.payment_link ?? "/", reloadDocument: true });
   };
 
-  const demoPlans = [
-    {
-      name: "KILO",
-      price: "7.99",
-      yearlyPrice: "76.99",
-      period: "per month",
-      features: [
-        "Up to 10 syllabus uploads",
-        "10 topic expansions per syllabus",
-      ],
-      description: "Perfect for individuals and small projects",
-      buttonText: "Buy Now",
-      href: "https://test.checkout.dodopayments.com/buy/pdt_4tBCOyYd6sNfVFlqred1L?quantity=1",
-      isPopular: false,
-    },
-    {
-      name: "MEGA",
-      price: "9.99",
-      yearlyPrice: "95.99",
-      period: "per month",
-      features: [
-        "Up to 30 syllabus uploads",
-        "30 topic expansions per syllabus",
-        "Share mind maps",
-      ],
-      description: "Ideal for growing teams and businesses",
-      buttonText: "Buy Now",
-      href: "https://test.checkout.dodopayments.com/buy/pdt_ftbL6v20XXyArsERxbWd1?quantity=1",
-      isPopular: true,
-    },
-    {
-      name: "GIGA",
-      price: "15.99",
-      yearlyPrice: "153.99",
-      period: "per month",
-      features: [
-        "Unlimited syllabus uploads",
-        "Unlimited topic expansions",
-        "Share mind maps",
-      ],
-      description: "For large organizations with specific needs",
-      buttonText: "Buy Now",
-      href: "https://test.checkout.dodopayments.com/buy/pdt_mhDCvoLXp6UNcRQU4ycZ6?quantity=1",
-      isPopular: false,
-    },
-  ];
-
   return (
-    <>
+    <div className="flex flex-col w-full">
       <HeroHeader />
-      {/* <PricingSection
-        billing={billing}
-        onBillingChange={setBilling}
-        onCheckout={checkoutCreditBundleHandler}
-      /> */}
-      <Pricing
-        plans={demoPlans}
-        title="Simple, Transparent Pricing"
-        description="Choose the plan that works for you\nAll plans include access to our platform, lead generation tools, and dedicated support."
-      />
-    </>
+      <div className="flex flex-col items-center justify-center py-20 w-full">
+        <MaxWidthWrapper className="flex flex-col gap-10 w-full items-center">
+          <Alert variant="default" className="max-w-5xl">
+            <AlertCircle className="h-4 w-4" />
+            <AlertTitle>Limited Time:</AlertTitle>
+            <AlertDescription className="text-sm font-medium">
+              All premium features now available for free!
+            </AlertDescription>
+          </Alert>
+
+          <div className="flex flex-col gap-4">
+            <h2 className="text-4xl text-center font-bold tracking-tight sm:text-5xl pt-5 md:pt-10">
+              Unlock Your Academic Potential
+            </h2>
+            <p className="text-muted-foreground text-center text-lg whitespace-pre-line py-2">
+              Student-friendly pricing that fits your budget. Use SophistAI to
+              transform your learning experience without breaking the bank.
+            </p>
+          </div>
+
+          <div className="flex w-full justify-center max-w-7xl">
+            <PricingTable products={products} showFeatures={false}>
+              <PricingCard
+                productId="free-tier"
+                buttonProps={{
+                  disabled: true,
+                }}
+              />
+              <PricingCard
+                productId="mega-tier"
+                buttonProps={{
+                  disabled: true,
+                }}
+              />
+              <PricingCard
+                productId="giga-tier"
+                buttonProps={{
+                  disabled: true,
+                }}
+              />
+            </PricingTable>
+          </div>
+        </MaxWidthWrapper>
+      </div>
+    </div>
   );
 }
