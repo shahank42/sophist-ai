@@ -21,7 +21,6 @@ import {
 } from "@xyflow/react";
 import "@xyflow/react/dist/style.css";
 import React, { useCallback, useEffect, useMemo, useState } from "react";
-import { toast } from "sonner";
 import MindmapNode from "./mind-map-node";
 import {
   convertToReactFlowElements,
@@ -261,10 +260,10 @@ const Mindmap: React.FC<MindmapProps> = ({
         const node = getNode(nodeId);
         if (!node || generatingNodes[nodeId]) return;
 
-        if (userCredits && userCredits.credits < 10) {
-          toast.info("You don't have enough credits to generate children!");
-          return;
-        }
+        // if (userCredits && userCredits.credits < 10) {
+        //   toast.info("You don't have enough credits to generate children!");
+        //   return;
+        // }
 
         try {
           setGeneratingNodes((prev) => ({ ...prev, [nodeId]: true }));

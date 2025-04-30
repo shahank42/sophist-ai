@@ -16,7 +16,6 @@ import {
   setNodesCompleted,
 } from "../queries/nodes";
 import { querySubjectFn } from "./subjects";
-import { spendUserCreditsFn } from "./users";
 
 export const storeTreeFn = createServerFn({ method: "POST" })
   .validator((data: { subjectId: string; rootNode: HeadingNode }) => data)
@@ -140,13 +139,13 @@ export const appendNodesFn = createServerFn({ method: "POST" })
       `inserted nodes with ids ${children.map((n) => n.id).join(", ")} as ${insertedNodes.map((n) => n.id).join(", ")}`
     );
 
-    await spendUserCreditsFn({
-      data: {
-        userId,
-        credits: 10,
-        purpose: "generate-node-children",
-      },
-    });
+    // await spendUserCreditsFn({
+    //   data: {
+    //     userId,
+    //     credits: 10,
+    //     purpose: "generate-node-children",
+    //   },
+    // });
 
     return insertedNodes;
   });
