@@ -21,55 +21,6 @@ export const storeTreeFn = createServerFn({ method: "POST" })
   .validator((data: { subjectId: string; rootNode: HeadingNode }) => data)
   .handler(async ({ data: { subjectId, rootNode } }) => {
     const idMap = new Map<string, string>();
-
-    // Process nodes level by level
-    let currentLevel: Array<{
-      node: HeadingNode;
-      parentId: string | null;
-      position: number;
-    }> = [{ node: rootNode, parentId: null, position: 0 }];
-
-    while (currentLevel.length > 0) {
-      const nodesToInsert = currentLevel.map(
-        ({ node, parentId, position }) => ({
-          subjectId,
-          parentId,
-          title: node.title,
-          position,
-        })
-      );
-
-      // Insert current level
-      const insertedNodes = await insertNodes(nodesToInsert);
-      // if (error) throw error;
-      if (!insertedNodes) throw new Error("Bulk insert failed");
-
-      // Update ID map
-      currentLevel.forEach(({ node }, index) => {
-        idMap.set(node.id, insertedNodes[index].id);
-      });
-
-      // Prepare next level
-      const nextLevel: Array<{
-        node: HeadingNode;
-        parentId: string | null;
-        position: number;
-      }> = [];
-
-      currentLevel.forEach(({ node }) => {
-        if (node.children) {
-          node.children.forEach((child, index) => {
-            nextLevel.push({
-              node: child,
-              parentId: idMap.get(node.id)!,
-              position: index,
-            });
-          });
-        }
-      });
-
-      currentLevel = nextLevel;
-    }
   });
 
 export const getSubjectTreeFn = createServerFn({ method: "GET" })

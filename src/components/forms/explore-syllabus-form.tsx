@@ -2,7 +2,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { fetchInitialStructure } from "@/lib/server/prompts/generateInitialTopics";
-import { insertSubject } from "@/lib/server/queries/subjects";
+import { deleteSubject, insertSubject } from "@/lib/server/queries/subjects";
 import { storeTreeFn } from "@/lib/server/rpc/nodes";
 import { queryUserSubscriptionOptions } from "@/lib/server/rpc/payments";
 import { queryUserSubjectsOptions } from "@/lib/server/rpc/subjects";
@@ -30,28 +30,38 @@ export const registerSubjectAndTreeFn = createServerFn({ method: "POST" })
   .handler(async ({ data: { name, syllabus, userId } }) => {
     const registeredSubject = await insertSubject(name, syllabus, userId);
     if (!registeredSubject) {
-      throw new Error("Failed to register subject");
+      throw new Error("Couldn't register subject in database");
     }
 
-    const initialStructure = await fetchInitialStructure(
-      registeredSubject.name,
-      registeredSubject.rawSyllabus || ""
-    );
-    const rootNode = transformInitialStructure(initialStructure);
+    try {
+      const initialStructure = await fetchInitialStructure(
+        registeredSubject.name,
+        registeredSubject.rawSyllabus || ""
+      ).catch(() => {
+        throw new Error("Failed to generate course structure");
+      });
 
-    await storeTreeFn({
-      data: { subjectId: registeredSubject.id, rootNode },
-    });
+      const rootNode = transformInitialStructure(initialStructure);
 
-    // await spendUserCreditsFn({
-    //   data: {
-    //     userId,
-    //     credits: 50,
-    //     purpose: "generate-mindmap",
-    //   },
-    // });
+      await storeTreeFn({
+        data: { subjectId: registeredSubject.id, rootNode },
+      }).catch(() => {
+        throw new Error("Failed to save course structure");
+      });
 
-    return registeredSubject;
+      // // await spendUserCreditsFn({
+      // //   data: {
+      // //     userId,
+      // //     credits: 50,
+      // //     purpose: "generate-mindmap",
+      // //   },
+      // // });
+
+      return registeredSubject;
+    } catch (e) {
+      await deleteSubject(registeredSubject.id);
+      throw new Error(`${e}`);
+    }
   });
 
 const exploreSyllabusSchema = z.object({
@@ -108,7 +118,12 @@ export default function ExploreSyllabusForm() {
       });
       navigate({ to: `/study/${subject.id}` });
     } catch (error) {
-      toast.error("Failed to create subject. Please try again.");
+      const errorMessage =
+        error instanceof Error
+          ? error.message
+          : "Failed to create subject. Please try again.";
+
+      toast.error(errorMessage);
       setIsPending(false);
     }
   };
