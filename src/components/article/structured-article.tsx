@@ -23,12 +23,12 @@ export function StructuredArticle({ content }: StructuredArticleProps) {
       </h1>
       <Card className="my-4 transition-all duration-300 border flex flex-col border-transparent bg-transparent shadow-none py-0">
         <CardContent className="pb-0 px-4 self-center max-w-fit text-lg">
-          <p className="leading-7 mb-6 text-base font-atkinson-hyperlegible">
+          <span className="leading-7 mb-6 text-base font-atkinson-hyperlegible">
             <MarkdownContent
               id="markdown-content-intro"
               content={structuredArticle.intro ?? ""}
             />
-          </p>
+          </span>
         </CardContent>
       </Card>
 

@@ -56,15 +56,19 @@ function SkeletonContent() {
 
 export default function ContentPanel({
   selectedNode,
+  topic,
+  syllabus,
 }: {
   selectedNode: Node | null;
+  topic: string;
+  syllabus: string;
 }) {
   const {
     data: article,
     isPending,
     isError,
     refetch,
-  } = useArticleContent(selectedNode);
+  } = useArticleContent(selectedNode, topic, syllabus);
 
   // const isMobile = useIsMobile();
   // if (isMobile) {

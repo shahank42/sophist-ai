@@ -38,6 +38,14 @@ interface MindmapProps {
   selectedNode: Node | null;
   setSelectedNode: React.Dispatch<React.SetStateAction<Node | null>>;
   centeringOffset?: { x: number; y: number };
+  subject: {
+    id: string;
+    name: string;
+    rawSyllabus: string | null;
+    createdAt: Date;
+    createdBy: string;
+};
+  subjectTree: HeadingNode;
 }
 
 const nodeTypes = { mindmapNode: MindmapNode };
@@ -50,6 +58,8 @@ const Mindmap: React.FC<MindmapProps> = ({
   selectedNode,
   setSelectedNode,
   centeringOffset = DEFAULT_OFFSET,
+  subject,
+  subjectTree
 }) => {
   // const {
   //   subject: { name: topic, rawSyllabus: syllabus },
@@ -58,20 +68,24 @@ const Mindmap: React.FC<MindmapProps> = ({
   const rootContext = getRouteApi("__root__").useRouteContext();
   const user = rootContext.user!; // TODO: ts
 
-  const { subjectId } = getRouteApi("/study/$subjectId").useParams();
-  const { data: subjectTree } = useSuspenseQuery(
-    loadSubjectTreeQueryOptions(subjectId)
-  );
+  // const { subjectId } = getRouteApi("/study/$subjectId").useParams();
+  // const { data: subjectTree } = useSuspenseQuery(
+  //   loadSubjectTreeQueryOptions(subjectId)
+  // );
 
-  const {
-    subject: { name: topic, rawSyllabus: syllabus },
-  } = subjectTree;
+  // const {
+  //   subject: { name: topic, rawSyllabus: syllabus },
+  // } = subjectTree;
 
-  console.log(subjectTree);
+  const { name: topic, rawSyllabus: syllabus } = subject;
 
-  const { data: userCredits } = useQuery(getUserCreditsQueryOptions(user!.id));
+  // const topic = subjectTree.
 
-  const { data: currentArticle } = useArticleContent(selectedNode);
+  console.log("subject", subject);
+
+  // const { data: userCredits } = useQuery(getUserCreditsQueryOptions(user!.id));
+
+  const { data: currentArticle } = useArticleContent(selectedNode, topic, syllabus ?? "");
 
   const [expandedByLevel, setExpandedByLevel] = useState(
     () => new Map([[0, data.id]])
