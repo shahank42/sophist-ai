@@ -29,7 +29,7 @@ export const Route = createFileRoute("/study/$subjectId")({
   },
   loader: async ({ params: { subjectId }, context: { queryClient } }) => {
     await queryClient.ensureQueryData(loadSubjectTreeQueryOptions(subjectId));
-    return { subjectId, subjectTreePromise: loadSubjectTreeFn(subjectId) };
+    return { subjectId };
   },
   component: RouteComponent,
 });

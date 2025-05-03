@@ -62,7 +62,7 @@ Before finalizing your response, verify that:
 - Topics follow a logical learning progression
 - The hierarchy has appropriate depth (typically 3-5 levels)
 - Node relationships accurately reflect knowledge dependencies
-    `);
+    `)
 
   console.log(res);
 

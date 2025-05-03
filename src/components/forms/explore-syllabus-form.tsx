@@ -38,10 +38,12 @@ export const registerSubjectAndTreeFn = createServerFn({ method: "POST" })
         registeredSubject.name,
         registeredSubject.rawSyllabus || ""
       ).catch(() => {
-        throw new Error("Failed to generate course structure");
+        throw new Error("Failed to generate mind map, please try again");
       });
 
+      
       const rootNode = transformInitialStructure(initialStructure);
+      console.log("erorr root node", rootNode)
 
       await storeTreeFn({
         data: { subjectId: registeredSubject.id, rootNode },
