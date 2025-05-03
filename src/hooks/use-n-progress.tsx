@@ -6,6 +6,10 @@ import nProgress from 'nprogress';
 export const useNProgress = () => {
   const router = useRouter();
 
+  nProgress.configure({
+    showSpinner: false
+  })
+
   useEffect(() => {
     router.subscribe("onBeforeLoad", () => {
       nProgress.start()
