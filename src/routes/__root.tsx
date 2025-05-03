@@ -15,6 +15,7 @@ import {
 } from "@tanstack/react-router";
 import React, { ReactNode, Suspense } from "react";
 import appCss from "../styles/app.css?url";
+import { useNProgress } from "@/hooks/use-n-progress";
 
 // export const __filename = fileURLToPath(import.meta.url);
 // export const __dirname = dirname(__filename);
@@ -65,7 +66,7 @@ export const Route = createRootRouteWithContext<{
     scripts: [
       {
         defer: true,
-        src: "https://sophistai-analytics.vercel.app/script.js",
+        src:  process.env.NODE_ENV === "production" ? "https://sophistai-analytics.vercel.app/script.js" : "",
         "data-website-id": "48fb1526-8d79-4b62-b52c-b402775b37fa",
       },
       // {
@@ -120,6 +121,8 @@ function RootComponent() {
 }
 
 function RootDocument({ children }: Readonly<{ children: ReactNode }>) {
+  useNProgress()
+
   return (
     // suppress since we're updating the "dark" class in a custom script below
     <html suppressHydrationWarning>
