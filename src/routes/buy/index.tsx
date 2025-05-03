@@ -8,6 +8,7 @@ import {
 } from "@/components/pricing/pricing-table";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { checkoutCreditPlanFn } from "@/lib/server/rpc/payments";
+import { useQuery, useSuspenseQuery } from "@tanstack/react-query";
 import {
   createFileRoute,
   getRouteApi,
@@ -16,6 +17,7 @@ import {
 import { useServerFn } from "@tanstack/react-start";
 import { AlertCircle } from "lucide-react";
 import React from "react";
+import { getUserQueryOptions } from "../__root";
 
 export const products: Product[] = [
   {
@@ -96,38 +98,20 @@ export const products: Product[] = [
   },
 ];
 
-// const getIpFromServerFn = createServerFn({ method: "GET" }).handler(
-//   async () => {
-//     const request = getWebRequest();
-//     console.log("WEBREQ", request);
-//     const xForwardedForHeader = request?.headers.get("X-Forwarded-For");
-//     return xForwardedForHeader ?? "";
-//   }
-// );
 
-// export function getCountryCode(ip: string): string | null {
-//   const lookup = geoip.lookup(ip);
-//   return lookup?.country ?? null;
-// }
 export const Route = createFileRoute("/buy/")({
-  // beforeLoad: async () => {
-  //   const ipAdds = await getIpFromServerFn();
-  //   const req = await fetch(
-  //     `https://api.ipinfo.io/lite/${ipAdds}?token=${import.meta.env.VITE_IPINFO_TOKEN}`
-  //   );
-  //   const res = await req.json();
-  //   // const country = geoip.lookup(ipAdds)?.country ?? "";
-
-  //   return { ipAdds, country: (res.country_code as string) ?? "" };
-  // },
-
-  // loader: ({ request }) => {},
+  // loader: ({ context }) => {
+  //     return { user: context.user };
+  //   },
 
   component: RouteComponent,
 });
 
 function RouteComponent() {
-  const { user } = getRouteApi("__root__").useRouteContext();
+  // const { user } = Route.useLoaderData();
+  const { data: user } = useSuspenseQuery(getUserQueryOptions)
+
+
   const navigate = useNavigate();
   const checkoutCreditPlan = useServerFn(checkoutCreditPlanFn);
 

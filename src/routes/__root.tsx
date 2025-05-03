@@ -3,7 +3,7 @@ import { SidebarProvider } from "@/components/ui/sidebar";
 import { Toaster } from "@/components/ui/sonner";
 import { seo } from "@/lib/seo";
 import { getUser } from "@/lib/server/rpc/users";
-import { QueryClient } from "@tanstack/react-query";
+import { QueryClient, queryOptions } from "@tanstack/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import {
   createRootRouteWithContext,
@@ -31,15 +31,17 @@ const TanStackRouterDevtools =
         }))
       );
 
+export const getUserQueryOptions = queryOptions({
+  queryKey: ["user"],
+  queryFn: ({ signal }) => getUser({ signal }),
+})
+
 export const Route = createRootRouteWithContext<{
   queryClient: QueryClient;
 }>()({
   beforeLoad: async ({ context }) => {
     // const user = await getUser();
-    const user = await context.queryClient.fetchQuery({
-      queryKey: ["user"],
-      queryFn: ({ signal }) => getUser({ signal }),
-    });
+    const user = await context.queryClient.fetchQuery(getUserQueryOptions);
     return { user };
   },
 
@@ -61,11 +63,11 @@ export const Route = createRootRouteWithContext<{
       }),
     ],
     scripts: [
-      {
-        defer: true,
-        src: "https://sophistai-analytics.vercel.app/script.js",
-        "data-website-id": "48fb1526-8d79-4b62-b52c-b402775b37fa",
-      },
+      // {
+      //   defer: true,
+      //   src: "https://sophistai-analytics.vercel.app/script.js",
+      //   "data-website-id": "48fb1526-8d79-4b62-b52c-b402775b37fa",
+      // },
       // {
       //   src: "https://analytics.ahrefs.com/analytics.js",
       //   "data-key": "TGCXIlJ08CgTgavhRPRnQg",
@@ -148,7 +150,7 @@ function RootDocument({ children }: Readonly<{ children: ReactNode }>) {
         <Suspense>
           <ReactQueryDevtools
             initialIsOpen={false}
-            position="top"
+            position="bottom"
             buttonPosition="bottom-right"
           />
           <TanStackRouterDevtools position="bottom-right" />

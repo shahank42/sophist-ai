@@ -8,6 +8,7 @@ import { queryUserSubscriptionOptions } from "@/lib/server/rpc/payments";
 import { queryUserSubjectsOptions } from "@/lib/server/rpc/subjects";
 import { getUserCreditsQueryOptions } from "@/lib/server/rpc/users";
 import { transformInitialStructure } from "@/lib/utils";
+import { getUserQueryOptions } from "@/routes/__root";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useQuery, useSuspenseQuery } from "@tanstack/react-query";
 import { getRouteApi, useNavigate } from "@tanstack/react-router";
@@ -79,13 +80,15 @@ type ExploreSyllabusForm = z.infer<typeof exploreSyllabusSchema>;
 const FREE_TIER_MAX_SUBJECTS = 2;
 
 export default function ExploreSyllabusForm() {
-  const rootContext = getRouteApi("__root__").useRouteContext();
-  const user = rootContext.user!; // TODO: ts
-  const { data: userSubscription } = useSuspenseQuery(
-    queryUserSubscriptionOptions(user.id)
-  );
-  const { data: userSubjects } = useQuery(queryUserSubjectsOptions(user.id));
-  const { data: userCredits } = useQuery(getUserCreditsQueryOptions(user!.id));
+  // const rootContext = getRouteApi("__root__").useRouteContext();
+  // const user = rootContext.user!; // TODO: ts
+     const { data: user } = useSuspenseQuery(getUserQueryOptions)
+  
+  // const { data: userSubscription } = useSuspenseQuery(
+  //   queryUserSubscriptionOptions(user.id)
+  // );
+  const { data: userSubjects } = useQuery(queryUserSubjectsOptions(user!.id));
+  // const { data: userCredits } = useQuery(getUserCreditsQueryOptions(user!.id));
 
   const {
     register,
@@ -116,7 +119,7 @@ export default function ExploreSyllabusForm() {
     setIsPending(true);
     try {
       const subject = await registerSubjectAndTreeFn({
-        data: { name: data.subject, syllabus: data.syllabus, userId: user.id },
+        data: { name: data.subject, syllabus: data.syllabus, userId: user!.id },
       });
       navigate({ to: `/study/${subject.id}` });
     } catch (error) {

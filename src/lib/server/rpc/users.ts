@@ -11,7 +11,6 @@ export const getUser = createServerFn({ method: "GET" }).handler(async () => {
   const session = await auth.api.getSession({ headers });
 
   const user = session?.user || null;
-  console.log("User from server:", headers, session, user);
   return user;
 });
 

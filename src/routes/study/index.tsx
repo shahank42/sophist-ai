@@ -3,6 +3,8 @@ import { MainSection } from "@/components/layout/main-section";
 import { ThemeToggle } from "@/components/theme-toggle";
 import { SidebarInset, SidebarTrigger } from "@/components/ui/sidebar";
 import { createFileRoute, redirect } from "@tanstack/react-router";
+import { getUserQueryOptions } from "../__root";
+import { useSuspenseQuery } from "@tanstack/react-query";
 
 export const Route = createFileRoute("/study/")({
   beforeLoad: async ({ context: { user } }) => {
@@ -13,15 +15,23 @@ export const Route = createFileRoute("/study/")({
     }
   },
 
-  loader: async ({ context }) => {
-    return { user: context.user };
-  },
+  // loader: ({ context }) => {
+  //   if (!context.user) {
+  //     throw redirect({
+  //       to: "/",
+  //     });
+  //   }
+
+  //   return { user: context.user };
+  // },
   component: RouteComponent,
 });
 
 function RouteComponent() {
   // const { user } = getRouteApi("__root__").useRouteContext();
-  const { user } = Route.useLoaderData();
+  // const { user } = Route.useLoaderData();
+  const { data: user } = useSuspenseQuery(getUserQueryOptions)
+
   if (!user) {
     return <div>Error: User data is unavailable.</div>;
   }

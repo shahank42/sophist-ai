@@ -20,15 +20,16 @@ import { useState } from "react";
 
 export const Route = createFileRoute("/study/$subjectId")({
   // staleTime: 1000 * 60 * 5,
-  beforeLoad: async ({ params: { subjectId }, context: { user } }) => {
+  beforeLoad: ({ context: { user } }) => {
     if (!user) {
       throw redirect({
         to: "/",
       });
     }
   },
-  loader: async ({ params: { subjectId }, context: { queryClient } }) => {
-    await queryClient.ensureQueryData(loadSubjectTreeQueryOptions(subjectId));
+
+  loader: ({ params: { subjectId }, context: { queryClient, user } }) => {
+    queryClient.prefetchQuery(loadSubjectTreeQueryOptions(subjectId));
     return { subjectId };
   },
   component: RouteComponent,

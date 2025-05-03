@@ -4,11 +4,11 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
-import { DynamicIcon, type IconName } from "lucide-react/dynamic";
+import { CheckCheck, FileText, HelpCircle, Layers, LucideProps, Map } from "lucide-react";
 
 type FAQItem = {
   id: string;
-  icon: IconName;
+  Icon: React.ForwardRefExoticComponent<Omit<LucideProps, "ref"> & React.RefAttributes<SVGSVGElement>>;
   question: string;
   answer: string;
 };
@@ -17,49 +17,49 @@ export default function FAQsThree() {
   const faqItems: FAQItem[] = [
     {
       id: "item-1",
-      icon: "file-text",
+      Icon: FileText,
       question: "How do I input my syllabus?",
       answer:
         "Just copy and paste your syllabus in, simple as that! Don't worry about the formatting, our syllabus parser takes care of that. We have plans to support other types of syllabus input in the future.",
     },
     {
       id: "item-2",
-      icon: "map",
+      Icon: Map,
       question: "How does the interactive knowledge map work?",
       answer:
         "Once your syllabus is uploaded, our AI analyzes its structure and generates a navigable tree of topics and subtopics. Click any node to explore, read custom articles, or mark progress—no extra prompts needed.",
     },
     {
       id: "item-3",
-      icon: "layers",
+      Icon: Layers,
       question: "Can I customize or expand my syllabus map?",
       answer:
         "Absolutely. You can click the '+' button to auto-generate new subtopics at any level—keeping your study plan both flexible and comprehensive.",
     },
     {
       id: "item-4",
-      icon: "check-check",
+      Icon: CheckCheck,
       question: "How does progress tracking work?",
       answer:
         "Mark individual topics or subtopics as complete—finishing all children marks the parent done, and completing the parent checks off its descendants. It’s a seamless way to see what’s left and stay motivated.",
     },
     // {
     //   id: "item-5",
-    //   icon: "coins",
+    //   icon: coins",
     //   question: "What are credits?",
     //   answer:
     //     "Credits are what you use to perform actions in SophistAI. Currently, users require 50 credits to generate a syllabus and 10 credits to generate subtopics.",
     // },
     // {
     //   id: "item-6",
-    //   icon: "credit-card",
+    //   icon: credit-card",
     //   question: "How do I obtain credits?",
     //   answer:
     //     "Every new account is given 500 credits by default. If you need more credits, you can buy our credit bundles.",
     // },
     {
       id: "item-8",
-      icon: "help-circle",
+      Icon: HelpCircle,
       question: "I still need more help, what now?",
       answer:
         "Reach out to us at sophistai.team@gmail.com, or find us on X as @sophist_ai",
@@ -91,10 +91,11 @@ export default function FAQsThree() {
                   <AccordionTrigger className="cursor-pointer md:cursor-pointer items-center py-5 hover:no-underline">
                     <div className="flex items-center gap-3">
                       <div className="flex size-6">
-                        <DynamicIcon
+                        {/* <DynamicIcon
                           name={item.icon}
                           className="m-auto size-4"
-                        />
+                        /> */}
+                        <item.Icon className="m-auto size-4" />
                       </div>
                       <span className="text-base">{item.question}</span>
                     </div>

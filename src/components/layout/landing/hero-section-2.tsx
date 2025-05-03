@@ -60,7 +60,7 @@ export default function HeroSection() {
                     transition: {
                       type: "spring",
                       bounce: 0.3,
-                      duration: 2,
+                      duration: 1,
                     },
                   },
                 },
