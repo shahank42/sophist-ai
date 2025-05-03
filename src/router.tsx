@@ -20,25 +20,25 @@ export function createRouter() {
     queryClient
   );
 
-  nProgress.configure({
-    showSpinner: false
-  })
+  // nProgress.configure({
+  //   showSpinner: false
+  // })
 
-  const loadNProgress = async () => {
-    let nProgress = await import('nprogress');
-    await import('nprogress/nprogress.css');
+  // const loadNProgress = async () => {
+  //   let nProgress = await import('nprogress');
+  //   await import('nprogress/nprogress.css');
 
-    router.subscribe('onBeforeLoad', ({ pathChanged }) => {
-      if (pathChanged) {
-        nProgress.start();
-      }
-    });
+  //   router.subscribe('onBeforeLoad', ({ pathChanged }) => {
+  //     if (pathChanged) {
+  //       nProgress.start();
+  //     }
+  //   });
 
-    router.subscribe('onLoad', () => {
-      nProgress.done();
-    });
-  };
-  loadNProgress();
+  //   router.subscribe('onLoad', () => {
+  //     nProgress.done();
+  //   });
+  // };
+  // loadNProgress();
   
   return router;
 }
