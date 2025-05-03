@@ -15,6 +15,7 @@ import {
 } from "@tanstack/react-router";
 import React, { ReactNode, Suspense } from "react";
 import appCss from "../styles/app.css?url";
+import nProgressCss from "../styles/nprogress.css?url"
 import { useNProgress } from "@/hooks/use-n-progress";
 
 // export const __filename = fileURLToPath(import.meta.url);
@@ -24,13 +25,13 @@ const TanStackRouterDevtools =
   process.env.NODE_ENV === "production"
     ? () => null // Render nothing in production
     : React.lazy(() =>
-        // Lazy load in development
-        import("@tanstack/router-devtools").then((res) => ({
-          default: res.TanStackRouterDevtools,
-          // For Embedded Mode
-          // default: res.TanStackRouterDevtoolsPanel
-        }))
-      );
+      // Lazy load in development
+      import("@tanstack/router-devtools").then((res) => ({
+        default: res.TanStackRouterDevtools,
+        // For Embedded Mode
+        // default: res.TanStackRouterDevtoolsPanel
+      }))
+    );
 
 export const getUserQueryOptions = queryOptions({
   queryKey: ["user"],
@@ -66,7 +67,7 @@ export const Route = createRootRouteWithContext<{
     scripts: [
       {
         defer: true,
-        src:  process.env.NODE_ENV === "production" ? "https://sophistai-analytics.vercel.app/script.js" : "",
+        src: process.env.NODE_ENV === "production" ? "https://sophistai-analytics.vercel.app/script.js" : "",
         "data-website-id": "48fb1526-8d79-4b62-b52c-b402775b37fa",
       },
       // {
@@ -77,6 +78,7 @@ export const Route = createRootRouteWithContext<{
     ],
     links: [
       { rel: "stylesheet", href: appCss },
+      { rel: "stylesheet", href: nProgressCss },
       {
         rel: "stylesheet",
         href: "https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css",

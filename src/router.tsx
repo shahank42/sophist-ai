@@ -4,7 +4,6 @@ import { createRouter as createTanStackRouter } from "@tanstack/react-router";
 import { routerWithQueryClient } from "@tanstack/react-router-with-query";
 import { routeTree } from "./routeTree.gen";
 import nProgress from "nprogress";
-import "nprogress/nprogress.css";
 
 export function createRouter() {
   const queryClient = new QueryClient();
