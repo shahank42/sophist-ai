@@ -42,7 +42,7 @@ export const CTAButtons = () => {
         >
           <Button asChild size="lg" className={"rounded-xl px-5 text-base"}>
             <Link to="/study">
-              <span className="text-nowrap">Study Now</span>
+              <span className="text-nowrap">Get Started</span>
             </Link>
           </Button>
         </div>

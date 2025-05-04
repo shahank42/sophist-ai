@@ -99,6 +99,7 @@ export default function HeroSection() {
             <div className="absolute inset-0 -z-10 size-full [background:radial-gradient(125%_125%_at_50%_100%,transparent_0%,var(--color-background)_75%)]"></div>
             <div className="mx-auto max-w-7xl px-6">
               <div className="text-center sm:mx-auto lg:mr-auto lg:mt-0">
+               
                 <AnimatedGroup variants={transitionVariants}>
                   <ConfettiButton
                     options={{
@@ -109,7 +110,7 @@ export default function HeroSection() {
                     }}
                   >
                     <span className="text-foreground text-sm">
-                      We won Diversion 2k25!
+                      We just launched!
                     </span>
                     <span className="dark:border-background block h-4 w-0.5 border-l bg-white dark:bg-zinc-700"></span>
 
@@ -142,8 +143,7 @@ export default function HeroSection() {
                   as="p"
                   className="mx-auto mt-8 max-w-2xl text-balance text-md md:text-lg"
                 >
-                  Stop Cramming and start mastering with our interactive AI
-                  syllabus mapping.
+                  Visualize Your Syllabus, Conquer Your Coursework.
                 </TextEffect>
 
                 <AnimatedGroup

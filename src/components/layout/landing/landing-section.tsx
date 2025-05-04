@@ -4,13 +4,15 @@ import CallToAction from "./cta";
 import FAQsThree from "./faqs-3";
 import Features from "./features";
 import Footer from "./footer";
+import AppDemo from "./features-12";
+import VideoDemo from "./video-demo";
 
 export function LandingSection() {
   return (
     <div className="relative w-full">
       <HeroSection />
       <Features />
-      {/* <AppDemo /> */}
+      <VideoDemo />
       {/* <TestimonialsSection /> */}
       <FAQsThree />
       <CallToAction />

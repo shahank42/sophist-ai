@@ -10,46 +10,47 @@ import {
 const features = [
   {
     icon: <Brain className="size-4" />,
-    title: "Interactive Mind Map",
+    title: "Visualize Your Syllabus Instantly", 
     description:
-      "Transform your syllabus into a navigable tree of connected concepts.",
+      "Transform syllabus confusion into a clear, interactive map showing how every topic connects.",
   },
   {
     icon: <BookOpen className="size-4" />,
-    title: "Contextual Articles",
+    title: "Instant Topic Explanations", 
     description:
-      "Get detailed articles tailored to each topic, aligned with your progress.",
+      "Get Instant, Clear Explanations for Any Topic on Your Syllabus – Right When You Need Them.",
   },
   {
     icon: <Check className="size-4" />,
-    title: "Smart Progress Tracking",
-    description: "Mark topics as completed and watch your knowledge grow.",
+    title: "Track Your Study Progress Visually",
+    description:
+      "Visually Track Your Study Progress & Know Exactly What to Focus on for Exams.",
   },
   {
     icon: <GitBranch className="size-4" />,
-    title: "Deep Dive",
+    title: "Explore Topics Deeper, Stay Oriented", 
     description:
-      "Generate subtopics instantly while keeping the big picture in sight.",
+      "Explore Complex Topics in Depth Without Losing Sight of the Big Picture.", 
   },
   {
     icon: <Sparkles className="size-4" />,
-    title: "Auto-Complete Progress",
+    title: "Effortless Progress Updates", 
     description:
-      "Auto-completes child/parent topics — progress flows both ways!",
+      "Save time as your map automatically updates progress across related topics – up and down the structure.", 
   },
   {
     icon: <Network className="size-4" />,
-    title: "Big Picture Preservation",
+    title: "Never Lose Your Place", 
     description:
-      "Explore subtopics infinitely while maintaining an overview of your syllabus structure.",
+      "Dive deep into any topic, confident you'll always see how it fits within your overall course structure.", 
   },
 ];
 
 export default function Features() {
   return (
     <section className="py-12 md:py-20">
-      <div className="mx-auto max-w-5xl space-y-8 px-6 md:space-y-16">
-        <div className="relative z-10 mx-auto max-w-4xl space-y-6 text-center md:space-y-12">
+      <div className="mx-auto max-w-6xl space-y-8 px-6 md:space-y-16">
+        <div className="relative z-10 mx-auto max-w-6xl space-y-6 text-center md:space-y-12">
           <h2 className="text-balance text-3xl font-medium lg:text-5xl">
             {/* <HyperText
               characterSet={"abcdefghijklmnopqrstuvwxyzAbcdefghijklmnopqrstuvwxyz".split(
@@ -68,7 +69,7 @@ export default function Features() {
           </p>
         </div>
 
-        <div className="relative mx-auto grid max-w-4xl divide-x divide-y border *:p-12 sm:grid-cols-2 lg:grid-cols-3">
+        <div className="relative mx-auto grid max-w-6xl divide-x divide-y border *:p-12 sm:grid-cols-2 lg:grid-cols-3">
           {features.map((feature) => (
             <div key={feature.title} className="space-y-3">
               <div className="flex items-center gap-2">
