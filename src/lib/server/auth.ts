@@ -1,6 +1,7 @@
 import { betterAuth } from "better-auth";
 import { drizzleAdapter } from "better-auth/adapters/drizzle";
 import { db } from "./db";
+import { feedback } from "@better-auth-kit/feedback";
 
 export const auth = betterAuth({
   database: drizzleAdapter(db, {
@@ -13,6 +14,8 @@ export const auth = betterAuth({
       maxAge: 5 * 60, // 5 minutes
     },
   },
+
+  plugins: [feedback({minLength: 1})],
 
   user: {
     additionalFields: {
