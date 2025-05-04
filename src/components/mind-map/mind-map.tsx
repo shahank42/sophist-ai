@@ -286,7 +286,7 @@ const Mindmap: React.FC<MindmapProps> = ({
             data: {
               title: node.data.label as string,
               topic,
-              currentArticle,
+              currentArticle: currentArticle ?? "" ,
               syllabus,
             },
           });

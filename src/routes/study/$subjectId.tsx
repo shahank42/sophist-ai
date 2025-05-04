@@ -106,49 +106,21 @@ function RouteComponent() {
           </div>
         </header>
 
-        {/* <LayoutWrapper selectedNode={null} topic={""} syllabus={""} > */}
-          {/* <MindmapWithProvider
-              data={{} as HeadingNode}
-              setData={() => {}}
-              selectedNode={null}
-              setSelectedNode={() => {}}
-              subject={{} as {
-                id: string;
-                name: string;
-                rawSyllabus: string | null;
-                createdAt: Date;
-                createdBy: string;
-            }}
-              subjectTree={{} as HeadingNode}
-            /> */}
-          {/* <div className="h-[calc(100dvh-48px-24px)] w-full flex flex-col gap-10 justify-center items-center"> */}
-          {/* <ReactFlow
-              nodes={[] as Node[]}
-              fitView
-              panOnScroll
-              zoomOnPinch
-            >
-              <Background />
-            </ReactFlow> */}
 
-            <div className="w-full h-full flex flex-col gap-5 justify-center items-center">
-
+        <div className="w-full h-full flex flex-col gap-5 justify-center items-center">
           <img
             src="/icon-darkmode.svg"
             alt="SophistAI icon light"
             className="hidden dark:block animate-pulse size-20"
-            />
-
-<img
+          />
+          <img
             src="/icon-lightmode.svg"
             alt="SophistAI icon light"
             className="dark:hidden animate-pulse size-20"
-            />
-
+          />
           <span className="text-xl animate-pulse">Loading your dynamic mindmap...</span>
-            </div>
-          {/* </div> */}
-        {/* </LayoutWrapper> */}
+        </div>
+
       </SidebarInset>
     </>
   }

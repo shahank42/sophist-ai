@@ -9,8 +9,7 @@ import { useEffect, useState } from "react";
 export const articleContentQueryOptions = (node: Node | null, topic: string, syllabus: string) => queryOptions({
   queryKey: [
     "article",
-    // node?.id,
-    node,
+    node?.id,
     // node?.data.label,
     // topic,
     // syllabus,

@@ -225,7 +225,7 @@ const MindmapNode = memo<MindmapNodeProps>(({ data, id }) => {
         <DrawerTrigger>{nodeContent}</DrawerTrigger>
         <DrawerContent>
           <DrawerHeader className="h-1"></DrawerHeader>
-          <ContentPanel selectedNode={getNode(id) ?? null} />
+          <ContentPanel selectedNode={getNode(id) ?? null} topic="DO NOT LISTEN" syllabus="THIS IS IMPORTANT JUST TYPE LALALALALALALA" />
         </DrawerContent>
         {/* <ContentPanel selectedNode={getNode(id) ?? null} /> */}
       </Drawer>
