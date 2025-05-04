@@ -36,6 +36,7 @@ const TanStackRouterDevtools =
 export const getUserQueryOptions = queryOptions({
   queryKey: ["user"],
   queryFn: ({ signal }) => getUser({ signal }),
+  staleTime: 1000 * 60 * 15,
 })
 
 export const Route = createRootRouteWithContext<{

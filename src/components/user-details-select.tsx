@@ -19,7 +19,7 @@ import {
   useSidebar,
 } from "@/components/ui/sidebar";
 import { authClient } from "@/lib/utils/auth-client";
-import { useQuery, useSuspenseQuery } from "@tanstack/react-query";
+import { useQuery, useQueryClient, useSuspenseQuery } from "@tanstack/react-query";
 import { getRouteApi, useRouter } from "@tanstack/react-router";
 import { User } from "better-auth";
 import { getUserQueryOptions } from "@/routes/__root";
@@ -44,7 +44,8 @@ export function UserDetailsSelect() {
   const { isMobile } = useSidebar();
   const router = useRouter();
   // const { user } = getRouteApi("__root__").useRouteContext();
-  const { data: user } = useSuspenseQuery(getUserQueryOptions)
+  const { data: user } = useSuspenseQuery(getUserQueryOptions);
+  const queryClient = useQueryClient()
   
 
   // const { data: userCredits } = useQuery(getUserCreditsQueryOptions(user!.id));
@@ -117,8 +118,8 @@ export function UserDetailsSelect() {
               className="cursor-pointer"
               onClick={async () => {
                 await authClient.signOut();
+                await queryClient.invalidateQueries({queryKey: ["user"]});
                 await router.navigate({to: "/"});
-                await router.invalidate();
               }}
               // onClick={async () => await signOutFn()}
             >
